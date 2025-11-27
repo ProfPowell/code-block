@@ -1,0 +1,36 @@
+{
+  "name": "@profpowell/code-block",
+  "version": "1.0.0",
+  "description": "A simple code block web component with syntax highlighting and copy functionality",
+  "type": "module",
+  "main": "code-block.js",
+  "module": "code-block.js",
+  "types": "code-block.d.ts",
+  "exports": {
+    ".": {
+      "types": "./code-block.d.ts",
+      "import": "./code-block.js",
+      "default": "./code-block.js"
+    }
+  },
+  "files": [
+    "code-block.js",
+    "code-block.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "web-component",
+    "custom-element",
+    "code-block",
+    "syntax-highlighting",
+    "copy-code"
+  ],
+  "author": "Prof Thomas Powell",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProfPowell/code-block.git"
+  },
+  "private": true
+}
