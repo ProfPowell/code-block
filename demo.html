@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Block Component Demo</title>
+  <style>
+    :root {
+      --bg-light: #ffffff;
+      --bg-dark: #0d1117;
+      --text-light: #24292f;
+      --text-dark: #c9d1d9;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: var(--bg-light);
+      color: var(--text-light);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    h1 {
+      border-bottom: 2px solid #e1e4e8;
+      padding-bottom: 0.5rem;
+    }
+
+    body.dark h1 {
+      border-bottom-color: #30363d;
+    }
+
+    h2 {
+      margin-top: 2.5rem;
+      color: #0366d6;
+    }
+
+    body.dark h2 {
+      color: #58a6ff;
+    }
+
+    p {
+      margin: 1rem 0;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid #d1d5da;
+      border-radius: 6px;
+      background: #f6f8fa;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+
+    body.dark .theme-toggle {
+      background: #21262d;
+      border-color: #30363d;
+      color: #c9d1d9;
+    }
+
+    .theme-toggle:hover {
+      background: #e1e4e8;
+    }
+
+    body.dark .theme-toggle:hover {
+      background: #30363d;
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .feature {
+      display: block;
+      padding: 1rem;
+      background: #f6f8fa;
+      border-radius: 8px;
+      border: 1px solid #e1e4e8;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .feature:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #0366d6;
+    }
+
+    body.dark .feature {
+      background: #161b22;
+      border-color: #30363d;
+    }
+
+    body.dark .feature:hover {
+      border-color: #58a6ff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1rem;
+      color: #0366d6;
+    }
+
+    body.dark .feature h3 {
+      color: #58a6ff;
+    }
+
+    .feature p {
+      margin: 0;
+      font-size: 0.875rem;
+      opacity: 0.8;
+    }
+
+    .feature code {
+      font-size: 0.75rem;
+      padding: 0.1em 0.3em;
+    }
+
+    .side-by-side {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .side-by-side > * {
+      min-width: 0; /* Allow grid items to shrink below content width */
+    }
+
+    @media (max-width: 700px) {
+      .side-by-side {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    code {
+      background: #eff1f3;
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    body.dark code {
+      background: #343942;
+    }
+
+    .api-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    .api-table th,
+    .api-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e1e4e8;
+    }
+
+    body.dark .api-table th,
+    body.dark .api-table td {
+      border-bottom-color: #30363d;
+    }
+
+    .api-table th {
+      background: #f6f8fa;
+      font-weight: 600;
+    }
+
+    body.dark .api-table th {
+      background: #161b22;
+    }
+
+    /* Custom themed code block example */
+    .custom-theme {
+      --cb-border-radius: 12px;
+      --cb-header-bg: #2d3748;
+      --cb-code-bg: #1a202c;
+      --cb-text-color: #e2e8f0;
+      --cb-label-color: #a0aec0;
+      --cb-keyword: #f687b3;
+      --cb-string: #68d391;
+      --cb-comment: #718096;
+      --cb-function: #63b3ed;
+      --cb-number: #f6ad55;
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="togglePageTheme()">Toggle Page Theme</button>
+
+  <h1>Code Block Component</h1>
+  <p>A lightweight Web Component for displaying code with syntax highlighting, powered by <a href="https://highlightjs.org/">highlight.js</a>.</p>
+
+  <div class="feature-list">
+    <a href="#multi-file-tabs" class="feature">
+      <h3>Multi-File Tabs</h3>
+      <p>Tabbed interface for related files with <code>&lt;code-block-group&gt;</code></p>
+    </a>
+    <a href="#line-highlighting" class="feature">
+      <h3>Line Highlighting</h3>
+      <p>Draw attention to specific lines with <code>highlight-lines</code></p>
+    </a>
+    <a href="#share-download" class="feature">
+      <h3>Share &amp; Download</h3>
+      <p>One-click download or open in CodePen</p>
+    </a>
+    <a href="#collapsible" class="feature">
+      <h3>Collapsible Blocks</h3>
+      <p>Expandable code with "Show more" for long snippets</p>
+    </a>
+    <a href="#lazy-highlighting" class="feature">
+      <h3>Lazy Loading</h3>
+      <p>Defer syntax highlighting until visible for performance</p>
+    </a>
+    <a href="#diff-support" class="feature">
+      <h3>Diff Support</h3>
+      <p>Visualize code changes with +/- line highlighting</p>
+    </a>
+    <a href="#css-custom-properties" class="feature">
+      <h3>CSS Custom Properties</h3>
+      <p>Full theme customization via CSS variables</p>
+    </a>
+    <a href="#themes" class="feature">
+      <h3>Light &amp; Dark Themes</h3>
+      <p>GitHub-inspired color schemes</p>
+    </a>
+    <a href="#filename-header" class="feature">
+      <h3>Filename Header</h3>
+      <p>Display file paths in the header</p>
+    </a>
+    <a href="#word-wrap" class="feature">
+      <h3>Word Wrap</h3>
+      <p>Toggle between scroll and wrap for long lines</p>
+    </a>
+  </div>
+
+  <h2>Basic Usage</h2>
+  <p>Wrap your code in a <code>&lt;code-block&gt;</code> element with the appropriate language attribute:</p>
+
+  <code-block language="html" label="HTML Example">&lt;code-block language="javascript"&gt;
+  const greeting = "Hello, World!";
+  console.log(greeting);
+&lt;/code-block&gt;</code-block>
+
+  <h2>JavaScript</h2>
+  <code-block language="javascript" filename="src/api/users.js" show-lines highlight-lines="4-8,15">
+// Fetch user data from API
+async function fetchUserData(userId) {
+  try {
+    const response = await fetch(`/api/users/${userId}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch user:', error);
+    return null;
+  }
+}
+
+// Using the function
+const user = await fetchUserData(123);
+console.log(user?.name ?? 'Unknown');
+  </code-block>
+
+  <h2>CSS</h2>
+  <code-block language="css" filename="styles/components.css">
+/* Modern CSS with custom properties and grid */
+:root {
+  --primary-color: #3b82f6;
+  --secondary-color: #10b981;
+  --spacing-unit: 8px;
+  --border-radius: 12px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: calc(var(--spacing-unit) * 3);
+  padding: calc(var(--spacing-unit) * 4);
+}
+
+.card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: var(--border-radius);
+  padding: calc(var(--spacing-unit) * 3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+  </code-block>
+
+  <h2>HTML</h2>
+  <code-block language="html" filename="index.html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;My App&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header class="site-header"&gt;
+    &lt;nav aria-label="Main navigation"&gt;
+      &lt;a href="/" class="logo"&gt;Brand&lt;/a&gt;
+      &lt;ul class="nav-links"&gt;
+        &lt;li&gt;&lt;a href="/about"&gt;About&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/contact"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;main id="app"&gt;&lt;/main&gt;
+
+  &lt;script type="module" src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code-block>
+
+  <h2>XML</h2>
+  <code-block language="xml" filename="config/settings.xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;configuration&gt;
+  &lt;appSettings&gt;
+    &lt;add key="ApiEndpoint" value="https://api.example.com/v1" /&gt;
+    &lt;add key="MaxRetries" value="3" /&gt;
+    &lt;add key="TimeoutSeconds" value="30" /&gt;
+  &lt;/appSettings&gt;
+
+  &lt;connectionStrings&gt;
+    &lt;add name="DefaultConnection"
+         connectionString="Server=localhost;Database=myapp;Trusted_Connection=true;"
+         providerName="System.Data.SqlClient" /&gt;
+  &lt;/connectionStrings&gt;
+
+  &lt;logging level="info"&gt;
+    &lt;target name="file" path="/var/log/app.log" /&gt;
+    &lt;target name="console" colored="true" /&gt;
+  &lt;/logging&gt;
+&lt;/configuration&gt;</code-block>
+
+  <h2>SVG</h2>
+  <code-block language="svg" filename="assets/icon.svg">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"&gt;
+  &lt;defs&gt;
+    &lt;linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"&gt;
+      &lt;stop offset="0%" style="stop-color:#667eea;stop-opacity:1" /&gt;
+      &lt;stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" /&gt;
+    &lt;/linearGradient&gt;
+  &lt;/defs&gt;
+
+  &lt;circle cx="50" cy="50" r="45" fill="url(#grad)" /&gt;
+  &lt;path d="M30 50 L45 65 L70 35" stroke="white" stroke-width="6"
+        fill="none" stroke-linecap="round" stroke-linejoin="round" /&gt;
+&lt;/svg&gt;</code-block>
+
+  <h2>XHTML</h2>
+  <code-block language="xhtml" filename="page.xhtml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"&gt;
+&lt;head&gt;
+  &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;
+  &lt;title&gt;XHTML Document&lt;/title&gt;
+  &lt;link rel="stylesheet" type="text/css" href="styles.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="container"&gt;
+    &lt;h1&gt;Welcome&lt;/h1&gt;
+    &lt;p&gt;This is a valid XHTML 1.0 Strict document.&lt;/p&gt;
+    &lt;img src="logo.png" alt="Logo" /&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code-block>
+
+  <h2>JSON</h2>
+  <code-block language="json" filename="package.json">
+{
+  "name": "my-project",
+  "version": "2.0.0",
+  "description": "A sample project configuration",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "highlight.js": "^11.9.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
+  </code-block>
+
+  <h2>YAML</h2>
+  <code-block language="yaml" filename="docker-compose.yml">
+version: '3.8'
+
+services:
+  web:
+    build: ./app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://db:5432/myapp
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+
+volumes:
+  postgres_data:
+  </code-block>
+
+  <h2>PHP</h2>
+  <code-block language="php" filename="app/Controllers/UserController.php" show-lines highlight-lines="12-16">&lt;?php
+
+namespace App\Controllers;
+
+use App\Models\User;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+class UserController
+{
+    public function index(Request $request, Response $response): Response
+    {
+        $users = User::where('active', true)
+            ->orderBy('created_at', 'desc')
+            ->limit(50)
+            ->get();
+
+        $payload = json_encode(['users' => $users]);
+        $response->getBody()->write($payload);
+
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withStatus(200);
+    }
+}
+  </code-block>
+
+  <h2>HTTP</h2>
+  <code-block language="http" label="HTTP Request">
+POST /api/v1/users HTTP/1.1
+Host: api.example.com
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Accept: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "role": "admin"
+}
+  </code-block>
+
+  <h2>Plain Text / Logs</h2>
+  <code-block language="plaintext" label="Log Output">
+[2024-01-15 10:23:45] INFO  Starting application server...
+[2024-01-15 10:23:46] INFO  Connected to database (postgres://localhost:5432/myapp)
+[2024-01-15 10:23:46] INFO  Redis connection established
+[2024-01-15 10:23:47] INFO  Loading configuration from /etc/myapp/config.yaml
+[2024-01-15 10:23:47] WARN  Cache directory not found, creating: /var/cache/myapp
+[2024-01-15 10:23:48] INFO  Registered 24 routes
+[2024-01-15 10:23:48] INFO  Server listening on http://0.0.0.0:3000
+[2024-01-15 10:24:18] ERROR Failed to process request: Connection timeout
+  </code-block>
+
+  <h2>CSV Data</h2>
+  <code-block language="csv" label="CSV Data">
+id,name,email,department,salary
+1,Alice Johnson,alice@example.com,Engineering,95000
+2,Bob Smith,bob@example.com,Marketing,72000
+3,Carol Williams,carol@example.com,Engineering,105000
+4,David Brown,david@example.com,Sales,68000
+5,Eve Davis,eve@example.com,Engineering,98000
+  </code-block>
+
+  <h2 id="diff-support">Diff Support</h2>
+  <p>Show code changes with added and removed line highlighting using <code>language="diff"</code>:</p>
+
+  <code-block language="diff" show-lines label="Code Changes">
+--- a/config.js
++++ b/config.js
+@@ -1,8 +1,10 @@
+ module.exports = {
+   apiUrl: 'https://api.example.com',
+-  timeout: 5000,
+-  retries: 3,
++  timeout: 10000,
++  retries: 5,
++  cacheEnabled: true,
++  cacheTTL: 3600,
+   debug: false,
+-  logLevel: 'warn'
++  logLevel: 'info'
+ };
+  </code-block>
+
+  <div class="side-by-side">
+    <div>
+      <code-block language="diff" theme="light" label="Light Theme">
+- const oldValue = true;
++ const newValue = false;
+- import { deprecated } from 'old-lib';
++ import { updated } from 'new-lib';
+      </code-block>
+    </div>
+    <div>
+      <code-block language="diff" theme="dark" label="Dark Theme">
+- const oldValue = true;
++ const newValue = false;
+- import { deprecated } from 'old-lib';
++ import { updated } from 'new-lib';
+      </code-block>
+    </div>
+  </div>
+
+  <h2 id="collapsible">Collapsible Code Blocks</h2>
+  <p>Use <code>collapsed</code> and <code>max-lines</code> attributes to create expandable code blocks:</p>
+
+  <code-block language="javascript" collapsed max-lines="5" show-lines filename="src/longFile.js">
+// This is a long file with many lines
+function processData(items) {
+  const results = [];
+
+  for (const item of items) {
+    // Validate item
+    if (!item.id || !item.name) {
+      console.warn('Invalid item:', item);
+      continue;
+    }
+
+    // Transform item
+    const transformed = {
+      id: item.id,
+      name: item.name.toUpperCase(),
+      timestamp: Date.now(),
+      processed: true
+    };
+
+    results.push(transformed);
+  }
+
+  return results;
+}
+
+// Export the function
+export { processData };
+  </code-block>
+
+  <h2>Max Height with Scroll</h2>
+  <p>Use <code>max-height</code> attribute to constrain height with internal scrolling:</p>
+
+  <code-block language="json" max-height="200px" label="Scrollable JSON">
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Alice Johnson",
+      "email": "alice@example.com",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Bob Smith",
+      "email": "bob@example.com",
+      "role": "user"
+    },
+    {
+      "id": 3,
+      "name": "Carol Williams",
+      "email": "carol@example.com",
+      "role": "user"
+    },
+    {
+      "id": 4,
+      "name": "David Brown",
+      "email": "david@example.com",
+      "role": "moderator"
+    },
+    {
+      "id": 5,
+      "name": "Eve Davis",
+      "email": "eve@example.com",
+      "role": "user"
+    }
+  ],
+  "total": 5,
+  "page": 1
+}
+  </code-block>
+
+  <h2 id="word-wrap">Word Wrap</h2>
+  <p>Use the <code>wrap</code> attribute to wrap long lines instead of horizontal scrolling:</p>
+
+  <div class="side-by-side">
+    <div>
+      <code-block language="css" label="Without wrap (scroll)">
+.very-long-selector-name-that-goes-on-and-on .nested-element .another-level { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f64f59 100%); }
+      </code-block>
+    </div>
+    <div>
+      <code-block language="css" label="With wrap" wrap>
+.very-long-selector-name-that-goes-on-and-on .nested-element .another-level { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f64f59 100%); }
+      </code-block>
+    </div>
+  </div>
+
+  <h2>Copy Button Customization</h2>
+  <p>Customize the copy button text using <code>copy-text</code> and <code>copied-text</code> attributes:</p>
+
+  <div class="side-by-side">
+    <div>
+      <code-block language="javascript" copy-text="Copy Code" copied-text="Done!">
+const greeting = "Hello, World!";
+console.log(greeting);
+      </code-block>
+    </div>
+    <div>
+      <code-block language="javascript" copy-text="📋 Copy" copied-text="✓ Copied!">
+const greeting = "Hello, World!";
+console.log(greeting);
+      </code-block>
+    </div>
+  </div>
+
+  <h2 id="share-download">Share and Download</h2>
+  <p>Enable share and download buttons with <code>show-share</code> and <code>show-download</code> attributes:</p>
+
+  <code-block language="css" filename="button.css" show-share show-download>
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+  </code-block>
+
+  <p>The share button opens a menu with options to share via the native Share API (on supported devices) or open in CodePen. The download button saves the code as a file with the appropriate extension.</p>
+
+  <div class="side-by-side">
+    <div>
+      <code-block language="html" label="HTML Example" show-share show-download>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;Hello World&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello, World!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+      </code-block>
+    </div>
+    <div>
+      <code-block language="javascript" filename="app.js" show-share show-download theme="dark">
+document.addEventListener('DOMContentLoaded', () => {
+  const button = document.querySelector('.button');
+
+  button.addEventListener('click', () => {
+    console.log('Button clicked!');
+  });
+});
+      </code-block>
+    </div>
+  </div>
+
+  <h2 id="line-highlighting">Line Highlighting</h2>
+  <p>Use the <code>highlight-lines</code> attribute to draw attention to specific lines. Supports individual lines and ranges:</p>
+
+  <code-block language="javascript" show-lines highlight-lines="2,5-7" label="Lines 2 and 5-7 Highlighted">
+function processData(items) {
+  // This line is highlighted
+  const results = [];
+
+  for (const item of items) {
+    results.push(transform(item));
+  }
+
+  return results;
+}
+  </code-block>
+
+  <h2 id="filename-header">Filename Header</h2>
+  <p>Use the <code>filename</code> attribute to show a file path in the header:</p>
+
+  <code-block language="javascript" filename="src/utils/helpers.js">
+export function formatDate(date) {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+}
+  </code-block>
+
+  <h2 id="themes">Theme Comparison</h2>
+  <p>The component supports both light and dark themes via the <code>theme</code> attribute:</p>
+
+  <div class="side-by-side">
+    <div>
+      <code-block language="javascript" theme="light" label="Light Theme">
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+
+// Call the function
+const message = greet("World");
+console.log(message);
+      </code-block>
+    </div>
+    <div>
+      <code-block language="javascript" theme="dark" label="Dark Theme">
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+
+// Call the function
+const message = greet("World");
+console.log(message);
+      </code-block>
+    </div>
+  </div>
+
+  <h2 id="css-custom-properties">CSS Custom Properties</h2>
+  <p>Customize the appearance using CSS custom properties. Here's a purple/pink theme:</p>
+
+  <code-block class="custom-theme" language="javascript" label="Custom Themed">
+// Custom themed code block
+async function fetchData(url) {
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
+
+const API_URL = "https://api.example.com";
+const result = await fetchData(API_URL);
+console.log(result);
+  </code-block>
+
+  <p>The CSS custom properties used:</p>
+  <code-block language="css" label="Theme CSS">
+.custom-theme {
+  --cb-border-radius: 12px;
+  --cb-header-bg: #2d3748;
+  --cb-code-bg: #1a202c;
+  --cb-text-color: #e2e8f0;
+  --cb-label-color: #a0aec0;
+  --cb-keyword: #f687b3;
+  --cb-string: #68d391;
+  --cb-comment: #718096;
+  --cb-function: #63b3ed;
+  --cb-number: #f6ad55;
+}
+  </code-block>
+
+  <h2>Combined: Dark + Lines + Highlighting</h2>
+  <code-block language="javascript" theme="dark" show-lines highlight-lines="3-5,10" filename="src/services/auth.js">
+import { createHash } from 'crypto';
+
+export function hashPassword(password) {
+  return createHash('sha256')
+    .update(password)
+    .digest('hex');
+}
+
+export function verifyPassword(password, hash) {
+  return hashPassword(password) === hash;
+}
+  </code-block>
+
+  <h2 id="multi-file-tabs">Multi-File Tabs</h2>
+  <p>Use <code>&lt;code-block-group&gt;</code> to display multiple files in a tabbed interface:</p>
+
+  <code-block-group>
+    <code-block language="html" filename="index.html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;My App&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello World&lt;/h1&gt;
+  &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </code-block>
+    <code-block language="css" filename="styles.css">
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+h1 {
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+    </code-block>
+    <code-block language="js" filename="app.js">
+document.addEventListener('DOMContentLoaded', () => {
+  const h1 = document.querySelector('h1');
+
+  h1.addEventListener('click', () => {
+    h1.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+      h1.style.transform = 'scale(1)';
+    }, 200);
+  });
+});
+    </code-block>
+  </code-block-group>
+
+  <h3>Dark Theme</h3>
+  <p>The group inherits and propagates the theme to all child code blocks:</p>
+
+  <code-block-group theme="dark">
+    <code-block language="json" filename="package.json">
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
+    </code-block>
+    <code-block language="js" filename="vite.config.js">
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  build: {
+    outDir: 'dist',
+    minify: true
+  },
+  server: {
+    port: 3000
+  }
+});
+    </code-block>
+  </code-block-group>
+
+  <h3>With Line Numbers and Highlighting</h3>
+  <p>Child code blocks can have their own attributes like <code>show-lines</code> and <code>highlight-lines</code>:</p>
+
+  <code-block-group>
+    <code-block language="js" filename="before.js" show-lines>
+function greet(name) {
+  console.log('Hello, ' + name);
+}
+    </code-block>
+    <code-block language="js" filename="after.js" show-lines highlight-lines="2">
+function greet(name) {
+  console.log(`Hello, ${name}!`);
+}
+    </code-block>
+  </code-block-group>
+
+  <h3>Group with Share and Download</h3>
+  <p>Add <code>show-share</code> and <code>show-download</code> to the group. CodePen opens with all tabs combined (HTML, CSS, JS). Download saves the active tab's file:</p>
+
+  <code-block-group show-share show-download>
+    <code-block language="html" filename="index.html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello World&lt;/h1&gt;
+    &lt;script src="app.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code-block>
+    <code-block language="css" filename="styles.css">
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 2rem;
+}
+
+h1 {
+  color: #333;
+}
+    </code-block>
+    <code-block language="js" filename="app.js">
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Page loaded!');
+});
+    </code-block>
+  </code-block-group>
+
+  <h2 id="lazy-highlighting">Lazy Highlighting (Performance)</h2>
+  <p>Add the <code>lazy</code> attribute to defer syntax highlighting until the code block scrolls into view. This improves page load performance when you have many code blocks:</p>
+
+  <code-block language="javascript" lazy show-lines>
+// This code block uses lazy highlighting.
+// Syntax highlighting is applied only when visible.
+function fibonacci(n) {
+  if (n &lt;= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// Initial render shows plain text (fast)
+// Highlighting happens on scroll into view
+console.log(fibonacci(10));
+  </code-block>
+
+  <p><strong>How it works:</strong></p>
+  <ul style="margin: 1rem 0; padding-left: 2rem;">
+    <li>Initial render shows the code without syntax colors (very fast)</li>
+    <li>IntersectionObserver detects when the block enters the viewport</li>
+    <li>highlight.js is applied only when needed</li>
+    <li>Best for pages with 10+ code blocks</li>
+  </ul>
+
+  <h2>Supported Languages</h2>
+  <table class="api-table">
+    <thead>
+      <tr>
+        <th>Language</th>
+        <th>Attribute Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>HTML</td><td><code>html</code>, <code>markup</code></td></tr>
+      <tr><td>XML</td><td><code>xml</code></td></tr>
+      <tr><td>XHTML</td><td><code>xhtml</code></td></tr>
+      <tr><td>SVG</td><td><code>svg</code></td></tr>
+      <tr><td>CSS</td><td><code>css</code></td></tr>
+      <tr><td>JavaScript</td><td><code>javascript</code>, <code>js</code></td></tr>
+      <tr><td>JSON</td><td><code>json</code></td></tr>
+      <tr><td>YAML</td><td><code>yaml</code>, <code>yml</code></td></tr>
+      <tr><td>PHP</td><td><code>php</code></td></tr>
+      <tr><td>HTTP</td><td><code>http</code></td></tr>
+      <tr><td>Diff</td><td><code>diff</code></td></tr>
+      <tr><td>Plain Text</td><td><code>plaintext</code>, <code>text</code>, <code>txt</code></td></tr>
+      <tr><td>CSV</td><td><code>csv</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>API Reference</h2>
+
+  <h3>Attributes</h3>
+  <table class="api-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>language</code></td>
+        <td>string</td>
+        <td><code>plaintext</code></td>
+        <td>Programming language for highlighting</td>
+      </tr>
+      <tr>
+        <td><code>label</code></td>
+        <td>string</td>
+        <td>language name</td>
+        <td>Custom label in the header</td>
+      </tr>
+      <tr>
+        <td><code>theme</code></td>
+        <td><code>light</code> | <code>dark</code></td>
+        <td><code>light</code></td>
+        <td>Color theme</td>
+      </tr>
+      <tr>
+        <td><code>show-lines</code></td>
+        <td>boolean</td>
+        <td><code>false</code></td>
+        <td>Display line numbers</td>
+      </tr>
+      <tr>
+        <td><code>filename</code></td>
+        <td>string</td>
+        <td>—</td>
+        <td>Filename shown in header</td>
+      </tr>
+      <tr>
+        <td><code>highlight-lines</code></td>
+        <td>string</td>
+        <td>—</td>
+        <td>Lines to highlight (e.g., "1,3-5,8")</td>
+      </tr>
+      <tr>
+        <td><code>collapsed</code></td>
+        <td>boolean</td>
+        <td><code>false</code></td>
+        <td>Collapse code block (use with max-lines)</td>
+      </tr>
+      <tr>
+        <td><code>max-lines</code></td>
+        <td>number</td>
+        <td><code>10</code></td>
+        <td>Lines to show when collapsed</td>
+      </tr>
+      <tr>
+        <td><code>max-height</code></td>
+        <td>string</td>
+        <td>—</td>
+        <td>Max height with scrolling (e.g., "300px")</td>
+      </tr>
+      <tr>
+        <td><code>wrap</code></td>
+        <td>boolean</td>
+        <td><code>false</code></td>
+        <td>Wrap long lines instead of scrolling</td>
+      </tr>
+      <tr>
+        <td><code>copy-text</code></td>
+        <td>string</td>
+        <td><code>Copy</code></td>
+        <td>Custom copy button text</td>
+      </tr>
+      <tr>
+        <td><code>copied-text</code></td>
+        <td>string</td>
+        <td><code>Copied!</code></td>
+        <td>Custom text shown after copying</td>
+      </tr>
+      <tr>
+        <td><code>show-share</code></td>
+        <td>boolean</td>
+        <td><code>false</code></td>
+        <td>Show share button with CodePen integration</td>
+      </tr>
+      <tr>
+        <td><code>show-download</code></td>
+        <td>boolean</td>
+        <td><code>false</code></td>
+        <td>Show download button to save code as file</td>
+      </tr>
+      <tr>
+        <td><code>lazy</code></td>
+        <td>boolean</td>
+        <td><code>false</code></td>
+        <td>Defer syntax highlighting until visible (performance)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>CSS Custom Properties</h3>
+  <table class="api-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>--cb-border-radius</code></td><td>Border radius (default: 8px)</td></tr>
+      <tr><td><code>--cb-font-family</code></td><td>Code font family</td></tr>
+      <tr><td><code>--cb-font-size</code></td><td>Code font size (default: 0.875rem)</td></tr>
+      <tr><td><code>--cb-header-bg</code></td><td>Header background color</td></tr>
+      <tr><td><code>--cb-code-bg</code></td><td>Code area background</td></tr>
+      <tr><td><code>--cb-text-color</code></td><td>Default text color</td></tr>
+      <tr><td><code>--cb-highlight-bg</code></td><td>Highlighted line background</td></tr>
+      <tr><td><code>--cb-highlight-border</code></td><td>Highlighted line border color</td></tr>
+      <tr><td><code>--cb-keyword</code></td><td>Keyword color</td></tr>
+      <tr><td><code>--cb-string</code></td><td>String color</td></tr>
+      <tr><td><code>--cb-comment</code></td><td>Comment color</td></tr>
+      <tr><td><code>--cb-function</code></td><td>Function name color</td></tr>
+      <tr><td><code>--cb-diff-add-bg</code></td><td>Diff added line background</td></tr>
+      <tr><td><code>--cb-diff-remove-bg</code></td><td>Diff removed line background</td></tr>
+      <tr><td><code>--cb-expand-bg</code></td><td>Expand button background</td></tr>
+      <tr><td><code>--cb-expand-color</code></td><td>Expand button text color</td></tr>
+      <tr><td><code>--cb-scrollbar-thumb</code></td><td>Scrollbar thumb color</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Methods</h3>
+  <table class="api-table">
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Returns</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>copyCode()</code></td>
+        <td><code>Promise&lt;void&gt;</code></td>
+        <td>Copies code to clipboard with feedback</td>
+      </tr>
+      <tr>
+        <td><code>setCode(code)</code></td>
+        <td><code>void</code></td>
+        <td>Update the code content dynamically</td>
+      </tr>
+      <tr>
+        <td><code>getCode()</code></td>
+        <td><code>string</code></td>
+        <td>Get the current code content</td>
+      </tr>
+      <tr>
+        <td><code>toggleCollapsed()</code></td>
+        <td><code>void</code></td>
+        <td>Toggle the collapsed state</td>
+      </tr>
+      <tr>
+        <td><code>CodeBlock.getSupportedLanguages()</code></td>
+        <td><code>string[]</code></td>
+        <td>Static: returns supported language names</td>
+      </tr>
+      <tr>
+        <td><code>downloadCode()</code></td>
+        <td><code>void</code></td>
+        <td>Download code as a file</td>
+      </tr>
+      <tr>
+        <td><code>openInCodePen()</code></td>
+        <td><code>void</code></td>
+        <td>Open code in CodePen</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>&lt;code-block-group&gt; API Reference</h2>
+
+  <h3>Attributes</h3>
+  <table class="api-table">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>theme</code></td>
+        <td>string</td>
+        <td><code>"light"</code></td>
+        <td>Color theme: "light" or "dark". Propagates to all child code blocks.</td>
+      </tr>
+      <tr>
+        <td><code>show-share</code></td>
+        <td>boolean</td>
+        <td><code>false</code></td>
+        <td>Show share button that operates on the active tab</td>
+      </tr>
+      <tr>
+        <td><code>show-download</code></td>
+        <td>boolean</td>
+        <td><code>false</code></td>
+        <td>Show download button that operates on the active tab</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Properties</h3>
+  <table class="api-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>activeIndex</code></td>
+        <td><code>number</code></td>
+        <td>Get/set the currently active tab index</td>
+      </tr>
+      <tr>
+        <td><code>codeBlocks</code></td>
+        <td><code>CodeBlock[]</code></td>
+        <td>Get all child code-block elements</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Methods</h3>
+  <table class="api-table">
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Returns</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>selectTab(index)</code></td>
+        <td><code>void</code></td>
+        <td>Programmatically select a tab by index</td>
+      </tr>
+      <tr>
+        <td><code>getActiveBlock()</code></td>
+        <td><code>CodeBlock</code></td>
+        <td>Get the currently active code block</td>
+      </tr>
+      <tr>
+        <td><code>downloadCode()</code></td>
+        <td><code>void</code></td>
+        <td>Download code from the active block</td>
+      </tr>
+      <tr>
+        <td><code>openInCodePen()</code></td>
+        <td><code>void</code></td>
+        <td>Open all blocks in CodePen (aggregates HTML, CSS, JS)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Events</h3>
+  <table class="api-table">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Detail</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>tab-change</code></td>
+        <td><code>{ index: number, block: CodeBlock }</code></td>
+        <td>Fired when the active tab changes</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script type="module">
+    import './code-block.js';
+
+    // Make toggle function available globally
+    window.togglePageTheme = function() {
+      document.body.classList.toggle('dark');
+
+      // Update all code blocks without explicit theme to match page theme
+      const isDark = document.body.classList.contains('dark');
+      document.querySelectorAll('code-block:not([theme]), code-block-group:not([theme])').forEach(block => {
+        block.setAttribute('theme', isDark ? 'dark' : 'light');
+      });
+    };
+  </script>
+</body>
+</html>
