@@ -14,6 +14,9 @@ import php from 'highlight.js/lib/languages/php'
 import http from 'highlight.js/lib/languages/http'
 import plaintext from 'highlight.js/lib/languages/plaintext'
 import diff from 'highlight.js/lib/languages/diff'
+import bash from 'highlight.js/lib/languages/bash'
+import python from 'highlight.js/lib/languages/python'
+import typescript from 'highlight.js/lib/languages/typescript'
 
 // Register languages
 hljs.registerLanguage('javascript', javascript)
@@ -34,6 +37,14 @@ hljs.registerLanguage('text', plaintext)
 hljs.registerLanguage('txt', plaintext)
 hljs.registerLanguage('csv', plaintext)
 hljs.registerLanguage('diff', diff)
+hljs.registerLanguage('bash', bash)
+hljs.registerLanguage('shell', bash)
+hljs.registerLanguage('sh', bash)
+hljs.registerLanguage('zsh', bash)
+hljs.registerLanguage('python', python)
+hljs.registerLanguage('py', python)
+hljs.registerLanguage('typescript', typescript)
+hljs.registerLanguage('ts', typescript)
 
 export class CodeBlock extends HTMLElement {
   constructor() {
