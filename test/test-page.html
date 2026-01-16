@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>code-block Test Page</title>
+  <script type="module" src="../src/code-block.js"></script>
+</head>
+<body>
+  <h1>Test Page</h1>
+
+  <code-block language="javascript" filename="test.js">
+const greeting = "Hello, World!";
+console.log(greeting);
+  </code-block>
+
+  <code-block language="html" show-lines>
+&lt;div class="container"&gt;
+  &lt;p&gt;Test content&lt;/p&gt;
+&lt;/div&gt;
+  </code-block>
+
+  <code-block-group>
+    <code-block language="javascript" filename="app.js">
+console.log('App loaded');
+    </code-block>
+    <code-block language="css" filename="styles.css">
+body { margin: 0; }
+    </code-block>
+  </code-block-group>
+</body>
+</html>

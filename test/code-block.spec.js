@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 test.describe('code-block', () => {
   test('page loads and component exists', async ({ page }) => {
     // Navigate and don't wait for network idle
-    await page.goto('/demo/index.html')
+    await page.goto('/test/test-page.html')
 
     // Log the current URL
     console.log('Current URL:', page.url())
@@ -19,7 +19,7 @@ test.describe('code-block', () => {
   })
 
   test('component has shadow DOM', async ({ page }) => {
-    await page.goto('/demo/index.html')
+    await page.goto('/test/test-page.html')
     await page.waitForTimeout(2000)
 
     const hasShadow = await page.evaluate(() => {
@@ -30,7 +30,7 @@ test.describe('code-block', () => {
   })
 
   test('copy button exists in shadow DOM', async ({ page }) => {
-    await page.goto('/demo/index.html')
+    await page.goto('/test/test-page.html')
     await page.waitForTimeout(2000)
 
     const hasCopyButton = await page.evaluate(() => {
@@ -41,7 +41,7 @@ test.describe('code-block', () => {
   })
 
   test('getCode returns content', async ({ page }) => {
-    await page.goto('/demo/index.html')
+    await page.goto('/test/test-page.html')
     await page.waitForTimeout(2000)
 
     const hasCode = await page.evaluate(() => {
@@ -53,7 +53,7 @@ test.describe('code-block', () => {
   })
 
   test('language attribute is set', async ({ page }) => {
-    await page.goto('/demo/index.html')
+    await page.goto('/test/test-page.html')
     await page.waitForTimeout(2000)
 
     const language = await page.evaluate(() => {
