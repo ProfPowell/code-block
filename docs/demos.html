@@ -24,52 +24,418 @@
 
   <main>
     <h1>Interactive Demos</h1>
-    <p class="demo-description">Explore the full capabilities of the <code>&lt;code-block&gt;</code> component with these interactive examples.</p>
+    <p class="demo-description">Explore the full capabilities of the <code>&lt;code-block&gt;</code> component. Each demo shows the markup and the rendered result.</p>
 
+    <!-- BASIC USAGE -->
     <section class="demo-section">
-      <h2>Language Support</h2>
-      <p class="demo-description">Syntax highlighting for 13+ popular languages powered by highlight.js.</p>
+      <h2>Basic Usage</h2>
+      <p class="demo-description">The simplest usage - just wrap your code in a <code>&lt;code-block&gt;</code> element with a language attribute.</p>
 
-      <h3>JavaScript</h3>
-      <code-block language="javascript" filename="example.js">
-class EventEmitter {
-  constructor() {
-    this.events = new Map();
-  }
+      <h3>Usage</h3>
+      <code-block language="html">&lt;code-block language="javascript"&gt;
+const greeting = "Hello, World!";
+console.log(greeting);
+&lt;/code-block&gt;</code-block>
 
-  on(event, callback) {
-    if (!this.events.has(event)) {
-      this.events.set(event, []);
+      <h3>Result</h3>
+      <code-block language="javascript">
+const greeting = "Hello, World!";
+console.log(greeting);
+      </code-block>
+    </section>
+
+    <!-- FILENAME -->
+    <section class="demo-section">
+      <h2>Filename Display</h2>
+      <p class="demo-description">Add a <code>filename</code> attribute to show a filename in the header.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;code-block language="javascript" filename="app.js"&gt;
+export function init() {
+  console.log('App initialized');
+}
+&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block language="javascript" filename="app.js">
+export function init() {
+  console.log('App initialized');
+}
+      </code-block>
+    </section>
+
+    <!-- LINE NUMBERS -->
+    <section class="demo-section">
+      <h2>Line Numbers</h2>
+      <p class="demo-description">Add line numbers with the <code>show-lines</code> attribute.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;code-block language="javascript" show-lines filename="fibonacci.js"&gt;
+function fibonacci(n) {
+  if (n &lt;= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+for (let i = 0; i &lt; 10; i++) {
+  console.log(`F(${i}) = ${fibonacci(i)}`);
+}
+&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block language="javascript" show-lines filename="fibonacci.js">
+function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+for (let i = 0; i < 10; i++) {
+  console.log(`F(${i}) = ${fibonacci(i)}`);
+}
+      </code-block>
+    </section>
+
+    <!-- CUSTOM START LINE -->
+    <section class="demo-section">
+      <h2>Custom Starting Line</h2>
+      <p class="demo-description">Use <code>start-line</code> to begin numbering from a specific line (useful for showing excerpts).</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;code-block language="javascript" show-lines start-line="42" filename="app.js:42-50"&gt;
+// Continuing from line 42...
+function handleSubmit(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData);
+  submitToAPI(data);
+}
+&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block language="javascript" show-lines start-line="42" filename="app.js:42-50">
+// Continuing from line 42...
+function handleSubmit(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData);
+  submitToAPI(data);
+}
+      </code-block>
+    </section>
+
+    <!-- LINE HIGHLIGHTING -->
+    <section class="demo-section">
+      <h2>Line Highlighting</h2>
+      <p class="demo-description">Draw attention to specific lines with <code>highlight-lines</code>. Supports individual lines and ranges.</p>
+
+      <h3>Single Lines</h3>
+      <h4>Usage</h4>
+      <code-block language="html">&lt;code-block language="javascript" show-lines highlight-lines="3,7"&gt;
+async function fetchUser(id) {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    if (!response.ok) {
+      throw new Error('User not found');
     }
-    this.events.get(event).push(callback);
-    return () => this.off(event, callback);
+    return await response.json();
+  } catch (error) {
+    console.error('Failed:', error);
   }
+}
+&lt;/code-block&gt;</code-block>
 
-  emit(event, ...args) {
-    const callbacks = this.events.get(event) || [];
-    callbacks.forEach(cb => cb(...args));
+      <h4>Result</h4>
+      <code-block language="javascript" show-lines highlight-lines="3,7">
+async function fetchUser(id) {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    if (!response.ok) {
+      throw new Error('User not found');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Failed:', error);
   }
 }
       </code-block>
 
-      <h3>TypeScript</h3>
-      <code-block language="typescript" filename="types.ts">
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  roles: Role[];
+      <h3>Line Ranges</h3>
+      <h4>Usage</h4>
+      <code-block language="html">&lt;code-block language="javascript" show-lines highlight-lines="2-4,9-11"&gt;
+class Calculator {
+  add(a, b) {
+    return a + b;
+  }
+
+  subtract(a, b) {
+    return a - b;
+  }
+
+  multiply(a, b) {
+    return a * b;
+  }
 }
+&lt;/code-block&gt;</code-block>
 
-type Role = 'admin' | 'editor' | 'viewer';
+      <h4>Result</h4>
+      <code-block language="javascript" show-lines highlight-lines="2-4,9-11">
+class Calculator {
+  add(a, b) {
+    return a + b;
+  }
 
-function hasPermission(user: User, requiredRole: Role): boolean {
-  return user.roles.includes(requiredRole);
+  subtract(a, b) {
+    return a - b;
+  }
+
+  multiply(a, b) {
+    return a * b;
+  }
 }
       </code-block>
+    </section>
+
+    <!-- MULTI-FILE TABS -->
+    <section class="demo-section">
+      <h2>Multi-File Tabs</h2>
+      <p class="demo-description">Group related files with <code>&lt;code-block-group&gt;</code> for a tabbed interface. Each child needs a <code>filename</code>.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;code-block-group&gt;
+  &lt;code-block language="html" filename="index.html"&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;&lt;link rel="stylesheet" href="styles.css"&gt;&lt;/head&gt;
+  &lt;body&gt;&lt;h1&gt;Hello&lt;/h1&gt;&lt;/body&gt;
+&lt;/html&gt;
+  &lt;/code-block&gt;
+  &lt;code-block language="css" filename="styles.css"&gt;
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 2rem;
+}
+  &lt;/code-block&gt;
+&lt;/code-block-group&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block-group>
+        <code-block language="html" filename="index.html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;&lt;link rel="stylesheet" href="styles.css"&gt;&lt;/head&gt;
+  &lt;body&gt;&lt;h1&gt;Hello&lt;/h1&gt;&lt;/body&gt;
+&lt;/html&gt;</code-block>
+        <code-block language="css" filename="styles.css">body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 2rem;
+}</code-block>
+      </code-block-group>
+    </section>
+
+    <!-- COLLAPSIBLE -->
+    <section class="demo-section">
+      <h2>Collapsible Code</h2>
+      <p class="demo-description">Long code blocks can be collapsed by default with the <code>collapsed</code> attribute. Click to expand.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;code-block language="javascript" collapsed filename="utils.js"&gt;
+// This content is collapsed by default
+export function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i &lt; array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
+export function unique(array) {
+  return [...new Set(array)];
+}
+&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block language="javascript" collapsed filename="utils.js">
+// This content is collapsed by default
+export function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
+export function unique(array) {
+  return [...new Set(array)];
+}
+      </code-block>
+    </section>
+
+    <!-- THEME SUPPORT -->
+    <section class="demo-section">
+      <h2>Theme Support</h2>
+      <p class="demo-description">Set a specific theme with the <code>theme</code> attribute. Values: <code>light</code>, <code>dark</code>, or <code>auto</code>.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;!-- Force light theme --&gt;
+&lt;code-block language="javascript" theme="light"&gt;
+const theme = 'light';
+&lt;/code-block&gt;
+
+&lt;!-- Force dark theme --&gt;
+&lt;code-block language="javascript" theme="dark"&gt;
+const theme = 'dark';
+&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <div class="side-by-side">
+        <div>
+          <p><strong>Light Theme</strong></p>
+          <code-block language="javascript" theme="light" filename="light.js">
+const theme = 'light';
+document.body.classList.add(theme);
+          </code-block>
+        </div>
+        <div>
+          <p><strong>Dark Theme</strong></p>
+          <code-block language="javascript" theme="dark" filename="dark.js">
+const theme = 'dark';
+document.body.classList.add(theme);
+          </code-block>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIFF SUPPORT -->
+    <section class="demo-section">
+      <h2>Diff Support</h2>
+      <p class="demo-description">Use <code>language="diff"</code> to show code changes. Lines with <code>+</code> are additions, <code>-</code> are removals.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;code-block language="diff" filename="changes.diff"&gt;
+ function greet(name) {
+-  console.log('Hello ' + name);
++  console.log(`Hello, ${name}!`);
+ }
+
+-greet('world');
++greet('World');
+&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block language="diff" filename="changes.diff">
+ function greet(name) {
+-  console.log('Hello ' + name);
++  console.log(`Hello, ${name}!`);
+ }
+
+-greet('world');
++greet('World');
+      </code-block>
+    </section>
+
+    <!-- DOWNLOAD BUTTON -->
+    <section class="demo-section">
+      <h2>Download Button</h2>
+      <p class="demo-description">Add the <code>download</code> attribute to show a download button. Uses the <code>filename</code> for the downloaded file.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;code-block language="javascript" filename="snippet.js" download&gt;
+// Click the download button to save this file
+export const config = {
+  apiUrl: 'https://api.example.com',
+  timeout: 5000
+};
+&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block language="javascript" filename="snippet.js" download>
+// Click the download button to save this file
+export const config = {
+  apiUrl: 'https://api.example.com',
+  timeout: 5000
+};
+      </code-block>
+    </section>
+
+    <!-- NO COPY BUTTON -->
+    <section class="demo-section">
+      <h2>Hide Copy Button</h2>
+      <p class="demo-description">Use <code>no-copy</code> to hide the copy button.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;code-block language="javascript" no-copy&gt;
+// This block has no copy button
+const secret = 'hidden';
+&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block language="javascript" no-copy>
+// This block has no copy button
+const secret = 'hidden';
+      </code-block>
+    </section>
+
+    <!-- CUSTOM STYLING -->
+    <section class="demo-section">
+      <h2>Custom Styling</h2>
+      <p class="demo-description">Customize appearance with CSS custom properties.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;style&gt;
+  .ocean-theme {
+    --cb-border-radius: 16px;
+    --cb-header-bg: #1e3a5f;
+    --cb-code-bg: #0f1c2e;
+    --cb-text-color: #e0f0ff;
+    --cb-keyword: #ff7eb6;
+    --cb-string: #7ee787;
+    --cb-function: #79c0ff;
+  }
+&lt;/style&gt;
+
+&lt;code-block language="javascript" class="ocean-theme"&gt;
+function hello() {
+  return "Custom themed!";
+}
+&lt;/code-block&gt;</code-block>
+
+      <style>
+        .ocean-theme {
+          --cb-border-radius: 16px;
+          --cb-header-bg: #1e3a5f;
+          --cb-code-bg: #0f1c2e;
+          --cb-text-color: #e0f0ff;
+          --cb-label-color: #7eb8ff;
+          --cb-keyword: #ff7eb6;
+          --cb-string: #7ee787;
+          --cb-comment: #6e8898;
+          --cb-function: #79c0ff;
+          --cb-number: #f2cc60;
+        }
+      </style>
+
+      <h3>Result</h3>
+      <code-block language="javascript" class="ocean-theme" filename="custom.js">
+// Custom ocean theme
+function createGradient(colors) {
+  const stops = colors.map((c, i) =>
+    `${c} ${(i / (colors.length - 1)) * 100}%`
+  );
+  return `linear-gradient(90deg, ${stops.join(', ')})`;
+}
+
+const gradient = createGradient(['#ff0080', '#7928ca']);
+console.log(gradient);
+      </code-block>
+    </section>
+
+    <!-- LANGUAGE EXAMPLES -->
+    <section class="demo-section">
+      <h2>Supported Languages</h2>
+      <p class="demo-description">Examples of syntax highlighting for various languages.</p>
 
       <h3>Python</h3>
-      <code-block language="python" filename="data_processor.py">
+      <code-block language="python" filename="example.py">
 import asyncio
 from dataclasses import dataclass
 from typing import List, Optional
@@ -84,86 +450,48 @@ async def process_records(records: List[DataRecord]) -> List[str]:
     """Process a list of records asynchronously."""
     tasks = [process_single(r) for r in records]
     return await asyncio.gather(*tasks)
+      </code-block>
 
-async def process_single(record: DataRecord) -> str:
-    await asyncio.sleep(0.1)  # Simulate I/O
-    return f"Processed: {record.value}"
+      <h3>TypeScript</h3>
+      <code-block language="typescript" filename="types.ts">
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  roles: Role[];
+}
+
+type Role = 'admin' | 'editor' | 'viewer';
+
+function hasPermission(user: User, role: Role): boolean {
+  return user.roles.includes(role);
+}
       </code-block>
 
       <h3>CSS</h3>
       <code-block language="css" filename="styles.css">
 :root {
-  --primary-color: #0969da;
+  --primary: #0969da;
   --background: #ffffff;
-  --text-color: #24292f;
 }
 
 .card {
   background: var(--background);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
   transition: transform 0.2s ease;
 }
 
 .card:hover {
   transform: translateY(-2px);
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0d1117;
-    --text-color: #c9d1d9;
-  }
-}
-      </code-block>
-
-      <h3>HTML</h3>
-      <code-block language="html" filename="template.html">
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-  &lt;meta charset="UTF-8"&gt;
-  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-  &lt;title&gt;My Page&lt;/title&gt;
-  &lt;link rel="stylesheet" href="styles.css"&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;header&gt;
-    &lt;nav&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/nav&gt;
-  &lt;/header&gt;
-  &lt;main&gt;
-    &lt;h1&gt;Welcome&lt;/h1&gt;
-  &lt;/main&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-      </code-block>
-
-      <h3>JSON</h3>
-      <code-block language="json" filename="package.json">
-{
-  "name": "@profpowell/code-block",
-  "version": "2.3.0",
-  "type": "module",
-  "main": "dist/code-block.js",
-  "exports": {
-    ".": "./dist/code-block.js"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "test": "playwright test"
-  }
-}
       </code-block>
 
       <h3>YAML</h3>
-      <code-block language="yaml" filename=".github/workflows/ci.yml">
-name: CI
+      <code-block language="yaml" filename="config.yml">
+name: CI Pipeline
 on:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
 
 jobs:
@@ -171,9 +499,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
       - run: npm ci
       - run: npm test
       </code-block>
@@ -189,352 +514,8 @@ npm run build
 echo "Running tests..."
 npm test
 
-echo "Deploying to production..."
-rsync -avz --delete dist/ server:/var/www/app/
-
-echo "✅ Deployment complete!"
-      </code-block>
-    </section>
-
-    <section class="demo-section">
-      <h2>Line Numbers</h2>
-      <p class="demo-description">Add line numbers with the <code>show-lines</code> attribute. Optionally specify a starting line with <code>start-line</code>.</p>
-
-      <h3>Basic Line Numbers</h3>
-      <code-block language="javascript" show-lines filename="with-lines.js">
-function fibonacci(n) {
-  if (n <= 1) return n;
-  return fibonacci(n - 1) + fibonacci(n - 2);
-}
-
-// Calculate first 10 Fibonacci numbers
-for (let i = 0; i < 10; i++) {
-  console.log(`F(${i}) = ${fibonacci(i)}`);
-}
-      </code-block>
-
-      <h3>Custom Starting Line</h3>
-      <code-block language="javascript" show-lines start-line="42" filename="app.js:42-52">
-// Continuing from line 42...
-function handleSubmit(event) {
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const data = Object.fromEntries(formData);
-
-  submitToAPI(data)
-    .then(response => showSuccess(response))
-    .catch(error => showError(error));
-}
-      </code-block>
-    </section>
-
-    <section class="demo-section">
-      <h2>Line Highlighting</h2>
-      <p class="demo-description">Draw attention to specific lines with the <code>highlight-lines</code> attribute. Supports individual lines and ranges.</p>
-
-      <h3>Highlight Single Lines</h3>
-      <code-block language="javascript" show-lines highlight-lines="3,7" filename="highlight-single.js">
-async function fetchUser(id) {
-  try {
-    const response = await fetch(`/api/users/${id}`);
-    if (!response.ok) {
-      throw new Error('User not found');
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Failed to fetch user:', error);
-    return null;
-  }
-}
-      </code-block>
-
-      <h3>Highlight Ranges</h3>
-      <code-block language="javascript" show-lines highlight-lines="2-4,8-10" filename="highlight-ranges.js">
-class Calculator {
-  add(a, b) {
-    return a + b;
-  }
-
-  subtract(a, b) {
-    return a - b;
-  }
-
-  multiply(a, b) {
-    return a * b;
-  }
-
-  divide(a, b) {
-    if (b === 0) throw new Error('Division by zero');
-    return a / b;
-  }
-}
-      </code-block>
-    </section>
-
-    <section class="demo-section">
-      <h2>Multi-File Tabs</h2>
-      <p class="demo-description">Group related files together with <code>&lt;code-block-group&gt;</code> for a tabbed interface.</p>
-
-      <h3>Component Files</h3>
-      <code-block-group>
-        <code-block language="javascript" filename="Counter.js">
-class Counter extends HTMLElement {
-  constructor() {
-    super();
-    this.count = 0;
-    this.attachShadow({ mode: 'open' });
-  }
-
-  connectedCallback() {
-    this.render();
-    this.shadowRoot.querySelector('button')
-      .addEventListener('click', () => this.increment());
-  }
-
-  increment() {
-    this.count++;
-    this.render();
-  }
-
-  render() {
-    this.shadowRoot.innerHTML = `
-      <style>${this.styles}</style>
-      <button>Count: ${this.count}</button>
-    `;
-  }
-
-  get styles() {
-    return `
-      button {
-        font-size: 1.25rem;
-        padding: 0.5rem 1rem;
-        cursor: pointer;
-      }
-    `;
-  }
-}
-
-customElements.define('my-counter', Counter);
-        </code-block>
-        <code-block language="html" filename="index.html">
-&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-  &lt;meta charset="UTF-8"&gt;
-  &lt;title&gt;Counter Demo&lt;/title&gt;
-  &lt;script type="module" src="Counter.js"&gt;&lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;h1&gt;Web Component Counter&lt;/h1&gt;
-  &lt;my-counter&gt;&lt;/my-counter&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-        </code-block>
-      </code-block-group>
-
-      <h3>Configuration Files</h3>
-      <code-block-group>
-        <code-block language="json" filename="package.json">
-{
-  "name": "my-project",
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint src",
-    "test": "vitest"
-  }
-}
-        </code-block>
-        <code-block language="javascript" filename="vite.config.js">
-import { defineConfig } from 'vite';
-
-export default defineConfig({
-  build: {
-    lib: {
-      entry: 'src/index.js',
-      formats: ['es']
-    }
-  }
-});
-        </code-block>
-        <code-block language="javascript" filename="eslint.config.js">
-export default [
-  {
-    languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module'
-    },
-    rules: {
-      'no-unused-vars': 'error',
-      'no-console': 'warn'
-    }
-  }
-];
-        </code-block>
-      </code-block-group>
-    </section>
-
-    <section class="demo-section">
-      <h2>Collapsible Code</h2>
-      <p class="demo-description">Long code blocks can be collapsed by default with the <code>collapsed</code> attribute.</p>
-
-      <code-block language="javascript" show-lines collapsed filename="long-file.js">
-/**
- * A comprehensive utility library for common operations.
- * This file demonstrates the collapsed feature for long code blocks.
- */
-
-// Array utilities
-export function chunk(array, size) {
-  const chunks = [];
-  for (let i = 0; i < array.length; i += size) {
-    chunks.push(array.slice(i, i + size));
-  }
-  return chunks;
-}
-
-export function unique(array) {
-  return [...new Set(array)];
-}
-
-export function flatten(array, depth = 1) {
-  return depth > 0
-    ? array.reduce((acc, val) =>
-        acc.concat(Array.isArray(val) ? flatten(val, depth - 1) : val), [])
-    : array.slice();
-}
-
-// Object utilities
-export function pick(obj, keys) {
-  return keys.reduce((result, key) => {
-    if (key in obj) result[key] = obj[key];
-    return result;
-  }, {});
-}
-
-export function omit(obj, keys) {
-  const result = { ...obj };
-  keys.forEach(key => delete result[key]);
-  return result;
-}
-
-export function deepClone(obj) {
-  if (obj === null || typeof obj !== 'object') return obj;
-  if (Array.isArray(obj)) return obj.map(deepClone);
-  return Object.fromEntries(
-    Object.entries(obj).map(([k, v]) => [k, deepClone(v)])
-  );
-}
-
-// String utilities
-export function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-export function truncate(str, length, suffix = '...') {
-  return str.length > length
-    ? str.slice(0, length - suffix.length) + suffix
-    : str;
-}
-
-export function slugify(str) {
-  return str
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-      </code-block>
-    </section>
-
-    <section class="demo-section">
-      <h2>Theme Support</h2>
-      <p class="demo-description">Choose between light and dark themes, or let it follow the system preference.</p>
-
-      <div class="side-by-side">
-        <div>
-          <h3>Light Theme</h3>
-          <code-block language="javascript" theme="light" filename="light.js">
-const theme = 'light';
-document.body.classList.add(theme);
-console.log('Light theme activated');
-          </code-block>
-        </div>
-        <div>
-          <h3>Dark Theme</h3>
-          <code-block language="javascript" theme="dark" filename="dark.js">
-const theme = 'dark';
-document.body.classList.add(theme);
-console.log('Dark theme activated');
-          </code-block>
-        </div>
-      </div>
-    </section>
-
-    <section class="demo-section">
-      <h2>Diff Support</h2>
-      <p class="demo-description">Show code changes with the <code>diff</code> language. Lines starting with <code>+</code> are additions, <code>-</code> are removals.</p>
-
-      <code-block language="diff" filename="changes.diff">
- function greet(name) {
--  console.log('Hello ' + name);
-+  console.log(`Hello, ${name}!`);
- }
-
--greet('world');
-+greet('World');
-      </code-block>
-    </section>
-
-    <section class="demo-section">
-      <h2>Copy & Download</h2>
-      <p class="demo-description">Every code block includes a copy button. Add the <code>download</code> attribute for a download option.</p>
-
-      <code-block language="html" filename="snippet.html" download>
-&lt;!-- This code block has a download button --&gt;
-&lt;script type="module"&gt;
-  import '@profpowell/code-block';
-&lt;/script&gt;
-
-&lt;code-block language="javascript"&gt;
-console.log('Hello, World!');
-&lt;/code-block&gt;
-      </code-block>
-    </section>
-
-    <section class="demo-section">
-      <h2>Custom Styling</h2>
-      <p class="demo-description">Customize the appearance using CSS custom properties.</p>
-
-      <style>
-        .custom-styled {
-          --cb-border-radius: 16px;
-          --cb-header-bg: #1e3a5f;
-          --cb-code-bg: #0f1c2e;
-          --cb-text-color: #e0f0ff;
-          --cb-label-color: #7eb8ff;
-          --cb-keyword: #ff7eb6;
-          --cb-string: #7ee787;
-          --cb-comment: #6e8898;
-          --cb-function: #79c0ff;
-          --cb-number: #f2cc60;
-        }
-      </style>
-
-      <code-block language="javascript" class="custom-styled" filename="custom.js">
-// Custom styled code block
-function createGradient(colors) {
-  const stops = colors.map((c, i) =>
-    `${c} ${(i / (colors.length - 1)) * 100}%`
-  );
-  return `linear-gradient(90deg, ${stops.join(', ')})`;
-}
-
-const gradient = createGradient(['#ff0080', '#7928ca', '#0070f3']);
-console.log(gradient);
+echo "Deploying..."
+rsync -avz dist/ server:/var/www/app/
       </code-block>
     </section>
   </main>
