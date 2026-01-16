@@ -819,6 +819,19 @@ export class CodeBlock extends HTMLElement {
         white-space: pre-wrap;
         word-break: break-word;
       }
+
+      /* No-copy: prevent text selection */
+      :host([no-copy]) code {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      :host([no-copy]) .code-line {
+        user-select: none;
+        -webkit-user-select: none;
+      }
     `
   }
 

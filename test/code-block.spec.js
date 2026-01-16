@@ -62,4 +62,44 @@ test.describe('code-block', () => {
     })
     expect(language).toBeTruthy()
   })
+
+  test('no-copy attribute hides copy button', async ({ page }) => {
+    await page.goto('/test/test-page.html')
+    await page.waitForTimeout(2000)
+
+    const result = await page.evaluate(() => {
+      const el = document.querySelector('#no-copy-block')
+      if (!el) return { found: false }
+      const copyButton = el.shadowRoot?.querySelector('.copy-button')
+      return {
+        found: true,
+        hasNoCopyAttr: el.hasAttribute('no-copy'),
+        copyButtonExists: copyButton !== null
+      }
+    })
+
+    expect(result.found).toBe(true)
+    expect(result.hasNoCopyAttr).toBe(true)
+    expect(result.copyButtonExists).toBe(false)
+  })
+
+  test('show-download attribute shows download button', async ({ page }) => {
+    await page.goto('/test/test-page.html')
+    await page.waitForTimeout(2000)
+
+    const result = await page.evaluate(() => {
+      const el = document.querySelector('#download-block')
+      if (!el) return { found: false }
+      const downloadButton = el.shadowRoot?.querySelector('.download-button')
+      return {
+        found: true,
+        hasShowDownloadAttr: el.hasAttribute('show-download'),
+        downloadButtonExists: downloadButton !== null
+      }
+    })
+
+    expect(result.found).toBe(true)
+    expect(result.hasShowDownloadAttr).toBe(true)
+    expect(result.downloadButtonExists).toBe(true)
+  })
 })
