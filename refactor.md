@@ -39,8 +39,11 @@ repo/
 │   └── component-name.js        # Main source with JSDoc comments
 ├── dist/
 │   └── component-name.js        # Built ES module (committed)
-├── demo/
-│   └── index.html               # Interactive demo → GitHub Pages
+├── docs/
+│   ├── index.html               # Home page → GitHub Pages
+│   ├── demos.html               # Interactive demos
+│   ├── api.html                 # API documentation
+│   └── styles.css               # Shared styles
 ├── test/
 │   └── component-name.spec.js   # Playwright E2E tests
 ├── component-name.d.ts          # Manual TypeScript definitions
@@ -106,7 +109,7 @@ export default defineConfig({
     }
   },
   server: {
-    open: '/demo/index.html'
+    open: '/docs/index.html'
   }
 })
 ```
@@ -170,7 +173,7 @@ export default [
     }
   },
   {
-    ignores: ['dist/', 'node_modules/', 'demo/', 'test/']
+    ignores: ['dist/', 'node_modules/', 'docs/', 'test/']
   }
 ]
 ```
@@ -194,19 +197,20 @@ import { defineConfig } from '@playwright/test'
 
 export default defineConfig({
   testDir: './test',
-  fullyParallel: true,
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://localhost:5174',
     trace: 'on-first-retry'
   },
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI
+    command: 'npx vite --port 5174',
+    url: 'http://localhost:5174/test/test-page.html',
+    reuseExistingServer: !process.env.CI,
+    timeout: 30000
   }
 })
 ```
@@ -385,14 +389,30 @@ declare global {
 
 ## Playwright Test Template
 
-Create `test/COMPONENT_NAME.spec.js`:
+Create `test/COMPONENT_NAME.spec.js` and `test/test-page.html`:
 
+**test/test-page.html** (loads local source for testing):
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>COMPONENT_NAME Test Page</title>
+  <script type="module" src="../src/COMPONENT_NAME.js"></script>
+</head>
+<body>
+  <COMPONENT_NAME>Test content</COMPONENT_NAME>
+</body>
+</html>
+```
+
+**test/COMPONENT_NAME.spec.js**:
 ```js
 import { test, expect } from '@playwright/test'
 
 test.describe('COMPONENT_NAME', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/demo/index.html')
+    await page.goto('/test/test-page.html')
   })
 
   test('renders correctly', async ({ page }) => {
@@ -421,12 +441,14 @@ test.describe('COMPONENT_NAME', () => {
 ### Required Site Structure
 
 ```
-demo/
+docs/
 ├── index.html          # Home page with overview, features, quick start
 ├── demos.html          # Interactive examples and use cases
 ├── api.html            # Full API documentation
-└── (assets if needed)
+└── styles.css          # Shared styles
 ```
+
+**IMPORTANT**: The `docs/` folder uses CDN links (jsdelivr) for production GitHub Pages. The `test/test-page.html` file uses local `../src/` paths for testing.
 
 ### Required Pages
 
@@ -474,7 +496,8 @@ Must include:
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>COMPONENT_NAME - Description</title>
-  <script type="module" src="../src/COMPONENT_NAME.js"></script>
+  <!-- Use CDN for production GitHub Pages -->
+  <script type="module" src="https://cdn.jsdelivr.net/gh/ProfPowell/COMPONENT_NAME@main/dist/COMPONENT_NAME.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -564,11 +587,23 @@ Must include:
 
 1. Go to repo **Settings** → **Pages**
 2. Source: **Deploy from a branch**
-3. Branch: **main** (or master)
-4. Folder: **/demo** (or /docs if you rename demo to docs)
+3. Branch: **main**
+4. Folder: **/docs**
 5. Save
 
-The demo page will be available at `https://profpowell.github.io/COMPONENT_NAME/`
+Or via CLI:
+```bash
+gh api repos/ProfPowell/COMPONENT_NAME/pages -X POST --input - <<EOF
+{
+  "source": {
+    "branch": "main",
+    "path": "/docs"
+  }
+}
+EOF
+```
+
+The site will be available at `https://profpowell.github.io/COMPONENT_NAME/`
 
 ---
 
@@ -601,8 +636,8 @@ Use this checklist when standardizing a repository:
 
 ### Structure
 - [ ] Source in `src/` directory
-- [ ] Demo in `demo/index.html`
-- [ ] Tests in `test/` directory
+- [ ] Docs site in `docs/` (index.html, demos.html, api.html, styles.css)
+- [ ] Tests in `test/` directory (test-page.html + spec files)
 - [ ] Built output in `dist/` (ES module only)
 
 ### Configuration
@@ -629,9 +664,11 @@ Use this checklist when standardizing a repository:
 - [ ] Cross-links to sibling components
 
 ### Documentation Site (GitHub Pages)
-- [ ] demo/index.html - Home page with hero, features, quick start
-- [ ] demo/demos.html - Interactive examples page
-- [ ] demo/api.html - Full API documentation
+- [ ] docs/index.html - Home page with hero, features, quick start
+- [ ] docs/demos.html - Interactive examples page
+- [ ] docs/api.html - Full API documentation
+- [ ] docs/styles.css - Shared styles
+- [ ] Uses CDN links for component (not local src)
 - [ ] Header navigation on all pages
 - [ ] Footer with license and links
 - [ ] Dark/light theme support
@@ -660,13 +697,14 @@ git mv component-name.js src/
 # Update vite.config.js entry point
 ```
 
-### Moving demo to demo/
+### Moving demo to docs/
 
 ```bash
-mkdir -p demo
-git mv demo.html demo/index.html
-# Or: git mv demos/index.html demo/index.html
-# Update vite.config.js server.open
+mkdir -p docs
+git mv demo.html docs/index.html
+# Or: git mv demos/index.html docs/index.html
+# Update vite.config.js server.open to /docs/index.html
+# Update HTML to use CDN links for production
 ```
 
 ### Removing unnecessary devDependencies
@@ -696,7 +734,7 @@ Change `formats: ['es', 'umd']` to `formats: ['es']` and remove UMD-related conf
 Every component should reference siblings in:
 
 1. **README.md** - "Related Components" section
-2. **demo/index.html** - Navigation links at top
+2. **docs/index.html** - "Related Components" section at bottom
 3. **package.json** - keywords include "profpowell-web-components"
 
 This promotes the vanilla web component ecosystem and helps users discover related tools.
