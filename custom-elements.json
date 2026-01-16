@@ -1,0 +1,435 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/code-block.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CodeBlock",
+          "members": [
+            {
+              "kind": "method",
+              "name": "_setupLazyObserver",
+              "description": "Set up IntersectionObserver for lazy highlighting"
+            },
+            {
+              "kind": "field",
+              "name": "language",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "theme",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "showLines",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "filename",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "highlightLines",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "collapsed",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "maxLines",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "maxHeight",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "wrap",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "copyText",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "copiedText",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "showShare",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "showDownload",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "lazy",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "copyCode"
+            },
+            {
+              "kind": "method",
+              "name": "downloadCode",
+              "description": "Download code as a file"
+            },
+            {
+              "kind": "method",
+              "name": "_getFileExtension",
+              "description": "Get file extension based on language"
+            },
+            {
+              "kind": "method",
+              "name": "toggleShareMenu",
+              "description": "Toggle share menu visibility"
+            },
+            {
+              "kind": "method",
+              "name": "_handleOutsideClick",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "shareViaWebAPI",
+              "description": "Share via Web Share API"
+            },
+            {
+              "kind": "method",
+              "name": "openInCodePen",
+              "description": "Open code in CodePen"
+            },
+            {
+              "kind": "method",
+              "name": "getStyles"
+            },
+            {
+              "kind": "method",
+              "name": "renderPlaceholder",
+              "description": "Render a placeholder without syntax highlighting (for lazy loading)"
+            },
+            {
+              "kind": "method",
+              "name": "toggleCollapsed"
+            },
+            {
+              "kind": "method",
+              "name": "escapeHtml",
+              "parameters": [
+                {
+                  "name": "text"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "setCode",
+              "parameters": [
+                {
+                  "name": "code"
+                }
+              ],
+              "description": "Update the code content programmatically"
+            },
+            {
+              "kind": "method",
+              "name": "getCode",
+              "description": "Get the current code content"
+            },
+            {
+              "kind": "method",
+              "name": "getSupportedLanguages",
+              "static": true,
+              "description": "Get list of supported languages"
+            },
+            {
+              "kind": "field",
+              "name": "_codeContent",
+              "type": {
+                "text": "null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_showShareMenu",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_observer",
+              "type": {
+                "text": "null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_highlighted",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "language"
+            },
+            {
+              "name": "label"
+            },
+            {
+              "name": "theme"
+            },
+            {
+              "name": "show-lines"
+            },
+            {
+              "name": "filename"
+            },
+            {
+              "name": "highlight-lines"
+            },
+            {
+              "name": "collapsed"
+            },
+            {
+              "name": "max-lines"
+            },
+            {
+              "name": "max-height"
+            },
+            {
+              "name": "wrap"
+            },
+            {
+              "name": "copy-text"
+            },
+            {
+              "name": "copied-text"
+            },
+            {
+              "name": "show-share"
+            },
+            {
+              "name": "show-download"
+            },
+            {
+              "name": "lazy"
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "code-block",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "Code Block Group - Tabbed interface for multiple code blocks",
+          "name": "CodeBlockGroup",
+          "members": [
+            {
+              "kind": "field",
+              "name": "theme",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "showShare",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "showDownload",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "codeBlocks",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "activeIndex"
+            },
+            {
+              "kind": "method",
+              "name": "getStyles"
+            },
+            {
+              "kind": "method",
+              "name": "setupEventListeners"
+            },
+            {
+              "kind": "method",
+              "name": "updateActiveTab"
+            },
+            {
+              "kind": "method",
+              "name": "escapeHtml",
+              "parameters": [
+                {
+                  "name": "text"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "selectTab",
+              "parameters": [
+                {
+                  "name": "index"
+                }
+              ],
+              "description": "Programmatically select a tab by index"
+            },
+            {
+              "kind": "method",
+              "name": "getActiveBlock",
+              "description": "Get the currently active code block"
+            },
+            {
+              "kind": "method",
+              "name": "toggleShareMenu",
+              "description": "Toggle share menu visibility"
+            },
+            {
+              "kind": "method",
+              "name": "_handleOutsideClick",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ],
+              "description": "Handle clicks outside share menu"
+            },
+            {
+              "kind": "method",
+              "name": "downloadCode",
+              "description": "Download code from the active block"
+            },
+            {
+              "kind": "method",
+              "name": "openInCodePen",
+              "description": "Open all blocks' code in CodePen (aggregates HTML, CSS, JS)"
+            },
+            {
+              "kind": "method",
+              "name": "shareViaWebAPI",
+              "description": "Share all blocks' code via Web Share API"
+            },
+            {
+              "kind": "field",
+              "name": "_activeIndex",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_showShareMenu",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            }
+          ],
+          "events": [
+            {
+              "name": "tab-change",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "theme"
+            },
+            {
+              "name": "show-share"
+            },
+            {
+              "name": "show-download"
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "code-block-group",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CodeBlock",
+          "declaration": {
+            "name": "CodeBlock",
+            "module": "src/code-block.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "code-block",
+          "declaration": {
+            "name": "CodeBlock",
+            "module": "src/code-block.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "code-block-group",
+          "declaration": {
+            "name": "CodeBlockGroup",
+            "module": "src/code-block.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "CodeBlockGroup",
+          "declaration": {
+            "name": "CodeBlockGroup",
+            "module": "src/code-block.js"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -240,7 +240,7 @@ function Jt() {
       return h;
     }).map((m) => `(${m})`).join(n);
   }
-  const q = /\b\B/, ie = "[a-zA-Z]\\w*", D = "[a-zA-Z_]\\w*", Y = "\\b\\d+(\\.\\d+)?", J = "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)", ne = "\\b(0b[01]+)", j = "!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~", G = (t = {}) => {
+  const q = /\b\B/, ie = "[a-zA-Z]\\w*", B = "[a-zA-Z_]\\w*", Y = "\\b\\d+(\\.\\d+)?", J = "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)", ne = "\\b(0b[01]+)", j = "!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~", G = (t = {}) => {
     const n = /^#![ ]*\//;
     return t.binary && (t.begin = L(
       n,
@@ -371,11 +371,11 @@ function Jt() {
     relevance: 0
   }, ht = {
     scope: "title",
-    begin: D,
+    begin: B,
     relevance: 0
   }, gt = {
     // excludes method names from keyword processing
-    begin: "\\.\\s*" + D,
+    begin: "\\.\\s*" + B,
     relevance: 0
   };
   var ye = /* @__PURE__ */ Object.freeze({
@@ -416,7 +416,7 @@ function Jt() {
     RE_STARTERS_RE: j,
     SHEBANG: G,
     TITLE_MODE: ut,
-    UNDERSCORE_IDENT_RE: D,
+    UNDERSCORE_IDENT_RE: B,
     UNDERSCORE_TITLE_MODE: ht
   });
   function bt(t, n) {
@@ -553,8 +553,8 @@ function Jt() {
         const f = this.matcherRe.exec(d);
         if (!f)
           return null;
-        const B = f.findIndex((_e, Ie) => Ie > 0 && _e !== void 0), T = this.matchIndexes[B];
-        return f.splice(0, B), Object.assign(f, T);
+        const D = f.findIndex((_e, Ie) => Ie > 0 && _e !== void 0), T = this.matchIndexes[D];
+        return f.splice(0, D), Object.assign(f, T);
       }
     }
     class m {
@@ -565,7 +565,7 @@ function Jt() {
       getMatcher(d) {
         if (this.multiRegexes[d]) return this.multiRegexes[d];
         const f = new s();
-        return this.rules.slice(d).forEach(([B, T]) => f.addRule(B, T)), f.compile(), this.multiRegexes[d] = f, f;
+        return this.rules.slice(d).forEach(([D, T]) => f.addRule(D, T)), f.compile(), this.multiRegexes[d] = f, f;
       }
       resumingScanAtSamePosition() {
         return this.regexIndex !== 0;
@@ -581,12 +581,12 @@ function Jt() {
       exec(d) {
         const f = this.getMatcher(this.regexIndex);
         f.lastIndex = this.lastIndex;
-        let B = f.exec(d);
-        if (this.resumingScanAtSamePosition() && !(B && B.index === this.lastIndex)) {
+        let D = f.exec(d);
+        if (this.resumingScanAtSamePosition() && !(D && D.index === this.lastIndex)) {
           const T = this.getMatcher(0);
-          T.lastIndex = this.lastIndex + 1, B = T.exec(d);
+          T.lastIndex = this.lastIndex + 1, D = T.exec(d);
         }
-        return B && (this.regexIndex += B.position + 1, this.regexIndex === this.count && this.considerAll()), B;
+        return D && (this.regexIndex += D.position + 1, this.regexIndex === this.count && this.considerAll()), D;
       }
     }
     function C(h) {
@@ -614,8 +614,8 @@ function Jt() {
         // default to 1 relevance if not specified
         Et
       ].forEach((T) => T(h, d)), h.isCompiled = !0;
-      let B = null;
-      return typeof h.keywords == "object" && h.keywords.$pattern && (h.keywords = Object.assign({}, h.keywords), B = h.keywords.$pattern, delete h.keywords.$pattern), B = B || /\w+/, h.keywords && (h.keywords = He(h.keywords, t.case_insensitive)), f.keywordPatternRe = n(B, !0), d && (h.begin || (h.begin = /\B|\b/), f.beginRe = n(f.begin), !h.end && !h.endsWithParent && (h.end = /\B|\b/), h.end && (f.endRe = n(f.end)), f.terminatorEnd = N(f.end) || "", h.endsWithParent && d.terminatorEnd && (f.terminatorEnd += (h.end ? "|" : "") + d.terminatorEnd)), h.illegal && (f.illegalRe = n(
+      let D = null;
+      return typeof h.keywords == "object" && h.keywords.$pattern && (h.keywords = Object.assign({}, h.keywords), D = h.keywords.$pattern, delete h.keywords.$pattern), D = D || /\w+/, h.keywords && (h.keywords = He(h.keywords, t.case_insensitive)), f.keywordPatternRe = n(D, !0), d && (h.begin || (h.begin = /\B|\b/), f.beginRe = n(f.begin), !h.end && !h.endsWithParent && (h.end = /\B|\b/), h.end && (f.endRe = n(f.end)), f.terminatorEnd = N(f.end) || "", h.endsWithParent && d.terminatorEnd && (f.terminatorEnd += (h.end ? "|" : "") + d.terminatorEnd)), h.illegal && (f.illegalRe = n(
         /** @type {RegExp | string} */
         h.illegal
       )), h.contains || (h.contains = []), h.contains = [].concat(...h.contains.map(function(T) {
@@ -668,7 +668,7 @@ function Jt() {
     function f(a) {
       return d.noHighlightRe.test(a);
     }
-    function B(a) {
+    function D(a) {
       let b = a.className + " ";
       b += a.parentNode ? a.parentNode.className : "";
       const w = d.languageDetectRe.exec(b);
@@ -919,7 +919,7 @@ https://github.com/highlightjs/highlight.js/issues/2277`), $ = a, S = b), w === 
     }
     function $e(a) {
       let b = null;
-      const w = B(a);
+      const w = D(a);
       if (f(w)) return;
       if (Ae(
         "before:highlightElement",
@@ -1441,7 +1441,7 @@ function st(o) {
         }
       }
     ]
-  }, D = {
+  }, B = {
     relevance: 0,
     match: e.either(
       // Hard coded exceptions
@@ -1568,7 +1568,7 @@ function st(o) {
     aliases: ["js", "jsx", "mjs", "cjs"],
     keywords: E,
     // this will be extended by TypeScript
-    exports: { PARAMS_CONTAINS: W, CLASS_REFERENCE: D },
+    exports: { PARAMS_CONTAINS: W, CLASS_REFERENCE: B },
     illegal: /#(?![$_A-z])/,
     contains: [
       o.SHEBANG({
@@ -1587,7 +1587,7 @@ function st(o) {
       // Skip numbers when they are part of a variable name
       { match: /\$\d+/ },
       N,
-      D,
+      B,
       {
         scope: "attr",
         match: i + e.lookahead(":"),
@@ -3361,7 +3361,7 @@ function fn(o) {
         4: "title.class"
       }
     }
-  ] }, ie = e.concat(i, "\\b(?!\\()"), D = { variants: [
+  ] }, ie = e.concat(i, "\\b(?!\\()"), B = { variants: [
     {
       match: [
         e.concat(
@@ -3425,7 +3425,7 @@ function fn(o) {
     contains: [
       Y,
       p,
-      D,
+      B,
       o.C_BLOCK_COMMENT_MODE,
       z,
       L,
@@ -3447,7 +3447,7 @@ function fn(o) {
   J.contains.push(ne);
   const j = [
     Y,
-    D,
+    B,
     o.C_BLOCK_COMMENT_MODE,
     z,
     L,
@@ -3535,7 +3535,7 @@ function fn(o) {
       },
       p,
       ne,
-      D,
+      B,
       {
         match: [
           /const/,
@@ -3574,7 +3574,7 @@ function fn(o) {
               "self",
               G,
               p,
-              D,
+              B,
               o.C_BLOCK_COMMENT_MODE,
               z,
               L
@@ -3815,7 +3815,23 @@ class En extends HTMLElement {
     ), this._observer.observe(this));
   }
   static get observedAttributes() {
-    return ["language", "label", "theme", "show-lines", "filename", "highlight-lines", "collapsed", "max-lines", "max-height", "wrap", "copy-text", "copied-text", "show-share", "show-download", "lazy"];
+    return [
+      "language",
+      "label",
+      "theme",
+      "show-lines",
+      "filename",
+      "highlight-lines",
+      "collapsed",
+      "max-lines",
+      "max-height",
+      "wrap",
+      "copy-text",
+      "copied-text",
+      "show-share",
+      "show-download",
+      "lazy"
+    ];
   }
   attributeChangedCallback(e, r, i) {
     this.shadowRoot && r !== i && this.render();
@@ -4452,14 +4468,14 @@ class En extends HTMLElement {
       u = this.escapeHtml(e);
     }
     const p = u.split(`
-`), E = p.map((D, Y) => {
+`), E = p.map((B, Y) => {
       const J = Y + 1, ne = i.has(J), j = ["code-line"];
       if (ne && j.push("highlighted"), c) {
         const G = r[Y] || "";
         G.startsWith("+") && !G.startsWith("+++") ? j.push("diff-add") : G.startsWith("-") && !G.startsWith("---") && j.push("diff-remove");
       }
-      return `<span class="${j.join(" ")}">${D || " "}</span>`;
-    }).join(""), _ = this.showLines ? `<div class="line-numbers" aria-hidden="true">${p.map((D, Y) => {
+      return `<span class="${j.join(" ")}">${B || " "}</span>`;
+    }).join(""), _ = this.showLines ? `<div class="line-numbers" aria-hidden="true">${p.map((B, Y) => {
       const J = Y + 1, ne = i.has(J), j = [];
       if (ne && j.push("highlighted"), c) {
         const G = r[Y] || "";
@@ -4529,8 +4545,8 @@ class En extends HTMLElement {
     const le = this.shadowRoot.querySelector(".expand-button");
     le && le.addEventListener("click", () => this.toggleCollapsed());
     const te = this.shadowRoot.querySelector(".share-button");
-    te && te.addEventListener("click", (D) => {
-      D.stopPropagation(), this.toggleShareMenu();
+    te && te.addEventListener("click", (B) => {
+      B.stopPropagation(), this.toggleShareMenu();
     });
     const W = this.shadowRoot.querySelector(".share-native");
     W && W.addEventListener("click", () => this.shareViaWebAPI());
@@ -4922,10 +4938,12 @@ class _n extends HTMLElement {
       i.setAttribute("aria-selected", u), i.setAttribute("tabindex", u ? "0" : "-1");
     }), r.forEach((i, c) => {
       c === this._activeIndex ? i.classList.add("active") : i.classList.remove("active");
-    }), this.dispatchEvent(new CustomEvent("tab-change", {
-      detail: { index: this._activeIndex, block: r[this._activeIndex] },
-      bubbles: !0
-    }));
+    }), this.dispatchEvent(
+      new CustomEvent("tab-change", {
+        detail: { index: this._activeIndex, block: r[this._activeIndex] },
+        bubbles: !0
+      })
+    );
   }
   escapeHtml(e) {
     const r = document.createElement("div");

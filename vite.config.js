@@ -1,16 +1,14 @@
-import { defineConfig } from 'vite';
-import { resolve } from 'path';
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'code-block.js'),
-      name: 'CodeBlock',
-      fileName: 'code-block',
-      formats: ['es', 'umd']
+      entry: 'src/code-block.js',
+      formats: ['es'],
+      fileName: () => 'code-block.js'
     },
     rollupOptions: {
-      // Don't externalize highlight.js - bundle it in
+      // Bundle highlight.js - don't externalize
       external: [],
       output: {
         globals: {}
@@ -18,6 +16,6 @@ export default defineConfig({
     }
   },
   server: {
-    open: '/demo.html'
+    open: '/demo/index.html'
   }
-});
+})

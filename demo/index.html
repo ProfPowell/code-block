@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>code-block - Syntax Highlighted Code Blocks Web Component</title>
+  <meta name="description" content="A lightweight Web Component for displaying code with syntax highlighting, powered by highlight.js">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="../src/code-block.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">&lt;code-block&gt;</a>
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="demos.html">Demos</a>
+        <a href="api.html">API</a>
+        <a href="https://github.com/ProfPowell/code-block">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>&lt;code-block&gt;</h1>
+      <p class="tagline">A lightweight Web Component for displaying code with syntax highlighting, copy functionality, line numbers, and theme support.</p>
+      <div class="hero-actions">
+        <a href="demos.html" class="btn primary">View Demos</a>
+        <a href="api.html" class="btn secondary">API Documentation</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2>Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Syntax Highlighting</h3>
+          <p>13+ languages supported via highlight.js including JavaScript, CSS, HTML, JSON, YAML, PHP, and more.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Multi-File Tabs</h3>
+          <p>Group related files in a tabbed interface with <code>&lt;code-block-group&gt;</code>.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Line Highlighting</h3>
+          <p>Draw attention to specific lines with the <code>highlight-lines</code> attribute.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Share & Download</h3>
+          <p>One-click download or open in CodePen with built-in share functionality.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Light & Dark Themes</h3>
+          <p>GitHub-inspired color schemes with full CSS custom property support.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Lazy Loading</h3>
+          <p>Defer syntax highlighting until visible for optimal page performance.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-start">
+      <h2>Quick Start</h2>
+
+      <h3>Installation</h3>
+      <p>Install via npm:</p>
+      <code-block language="bash">npm install @profpowell/code-block</code-block>
+
+      <p>Or include via CDN:</p>
+      <code-block language="html">&lt;script type="module" src="https://unpkg.com/@profpowell/code-block"&gt;&lt;/script&gt;</code-block>
+
+      <h3>Basic Usage</h3>
+      <p>Import and use the component:</p>
+      <code-block language="javascript">import '@profpowell/code-block'</code-block>
+
+      <code-block language="html">&lt;code-block language="javascript"&gt;
+const greeting = "Hello, World!";
+console.log(greeting);
+&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block language="javascript">
+const greeting = "Hello, World!";
+console.log(greeting);
+      </code-block>
+
+      <h3>With Line Numbers and Highlighting</h3>
+      <code-block language="javascript" show-lines highlight-lines="2-4" filename="example.js">
+async function fetchData(url) {
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
+      </code-block>
+
+      <h3>Multi-File Tabs</h3>
+      <code-block-group>
+        <code-block language="html" filename="index.html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;&lt;link rel="stylesheet" href="styles.css"&gt;&lt;/head&gt;
+  &lt;body&gt;&lt;h1&gt;Hello&lt;/h1&gt;&lt;/body&gt;
+&lt;/html&gt;</code-block>
+        <code-block language="css" filename="styles.css">body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 2rem;
+}</code-block>
+      </code-block-group>
+    </section>
+
+    <section class="related">
+      <h2>Related Components</h2>
+      <p>Part of the ProfPowell vanilla web components suite:</p>
+      <div class="related-grid">
+        <a href="https://profpowell.github.io/browser-window/" class="related-card">
+          <strong>browser-window</strong>
+          <span>Safari-style browser window frames</span>
+        </a>
+        <a href="https://profpowell.github.io/terminal-window/" class="related-card">
+          <strong>terminal-window</strong>
+          <span>Interactive terminal emulator</span>
+        </a>
+        <a href="https://profpowell.github.io/browser-console/" class="related-card">
+          <strong>browser-console</strong>
+          <span>Console log display component</span>
+        </a>
+        <a href="https://profpowell.github.io/http-component/" class="related-card">
+          <strong>http-component</strong>
+          <span>HTTP request/response viewer</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>MIT License · <a href="https://github.com/ProfPowell/code-block">View on GitHub</a> · Powered by <a href="https://highlightjs.org/">highlight.js</a></p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      document.querySelectorAll('code-block:not([theme]), code-block-group:not([theme])').forEach(block => {
+        block.setAttribute('theme', isDark ? 'dark' : 'light');
+      });
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    // Load saved theme
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+      document.querySelectorAll('code-block:not([theme]), code-block-group:not([theme])').forEach(block => {
+        block.setAttribute('theme', 'dark');
+      });
+    }
+  </script>
+</body>
+</html>

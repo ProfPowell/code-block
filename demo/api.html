@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Reference - code-block Web Component</title>
+  <meta name="description" content="Complete API documentation for the code-block web component">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="../src/code-block.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">&lt;code-block&gt;</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="demos.html">Demos</a>
+        <a href="api.html" class="active">API</a>
+        <a href="https://github.com/ProfPowell/code-block">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>API Reference</h1>
+    <p class="demo-description">Complete documentation for the <code>&lt;code-block&gt;</code> and <code>&lt;code-block-group&gt;</code> custom elements.</p>
+
+    <section>
+      <h2>&lt;code-block&gt;</h2>
+      <p>The main component for displaying syntax-highlighted code.</p>
+
+      <h3>Attributes</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>language</code></td>
+            <td>string</td>
+            <td><code>"plaintext"</code></td>
+            <td>Programming language for syntax highlighting. Supports: javascript, typescript, python, css, html, json, yaml, bash, shell, php, ruby, go, rust, sql, xml, markdown, diff, plaintext.</td>
+          </tr>
+          <tr>
+            <td><code>filename</code></td>
+            <td>string</td>
+            <td>—</td>
+            <td>Displays a filename in the header. Also used as the default download filename.</td>
+          </tr>
+          <tr>
+            <td><code>show-lines</code></td>
+            <td>boolean</td>
+            <td><code>false</code></td>
+            <td>Shows line numbers in the gutter.</td>
+          </tr>
+          <tr>
+            <td><code>start-line</code></td>
+            <td>number</td>
+            <td><code>1</code></td>
+            <td>Starting line number when <code>show-lines</code> is enabled.</td>
+          </tr>
+          <tr>
+            <td><code>highlight-lines</code></td>
+            <td>string</td>
+            <td>—</td>
+            <td>Lines to highlight. Comma-separated list of line numbers or ranges. Example: <code>"1,3-5,8"</code></td>
+          </tr>
+          <tr>
+            <td><code>theme</code></td>
+            <td>string</td>
+            <td><code>"light"</code></td>
+            <td>Color theme. Values: <code>"light"</code>, <code>"dark"</code>, or <code>"auto"</code> (follows system preference).</td>
+          </tr>
+          <tr>
+            <td><code>collapsed</code></td>
+            <td>boolean</td>
+            <td><code>false</code></td>
+            <td>Renders the code block in a collapsed state. Click to expand.</td>
+          </tr>
+          <tr>
+            <td><code>download</code></td>
+            <td>boolean</td>
+            <td><code>false</code></td>
+            <td>Adds a download button to save the code as a file.</td>
+          </tr>
+          <tr>
+            <td><code>no-copy</code></td>
+            <td>boolean</td>
+            <td><code>false</code></td>
+            <td>Hides the copy button.</td>
+          </tr>
+          <tr>
+            <td><code>lazy</code></td>
+            <td>boolean</td>
+            <td><code>false</code></td>
+            <td>Defers syntax highlighting until the element is visible in the viewport.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>CSS Custom Properties</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default (Light)</th>
+            <th>Default (Dark)</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-border-radius</code></td>
+            <td><code>8px</code></td>
+            <td><code>8px</code></td>
+            <td>Border radius of the code block container.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-header-bg</code></td>
+            <td><code>#f6f8fa</code></td>
+            <td><code>#161b22</code></td>
+            <td>Background color of the header bar.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-code-bg</code></td>
+            <td><code>#ffffff</code></td>
+            <td><code>#0d1117</code></td>
+            <td>Background color of the code area.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-border-color</code></td>
+            <td><code>#d0d7de</code></td>
+            <td><code>#30363d</code></td>
+            <td>Border color around the code block.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-text-color</code></td>
+            <td><code>#24292f</code></td>
+            <td><code>#c9d1d9</code></td>
+            <td>Default text color for code.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-label-color</code></td>
+            <td><code>#57606a</code></td>
+            <td><code>#8b949e</code></td>
+            <td>Color for filename and language labels.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-line-number-color</code></td>
+            <td><code>#6e7781</code></td>
+            <td><code>#6e7681</code></td>
+            <td>Color for line numbers.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-highlight-bg</code></td>
+            <td><code>#fff8c5</code></td>
+            <td><code>#2d333b</code></td>
+            <td>Background color for highlighted lines.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-keyword</code></td>
+            <td><code>#cf222e</code></td>
+            <td><code>#ff7b72</code></td>
+            <td>Color for language keywords.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-string</code></td>
+            <td><code>#0a3069</code></td>
+            <td><code>#a5d6ff</code></td>
+            <td>Color for string literals.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-comment</code></td>
+            <td><code>#6e7781</code></td>
+            <td><code>#8b949e</code></td>
+            <td>Color for comments.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-function</code></td>
+            <td><code>#8250df</code></td>
+            <td><code>#d2a8ff</code></td>
+            <td>Color for function names.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-number</code></td>
+            <td><code>#0550ae</code></td>
+            <td><code>#79c0ff</code></td>
+            <td>Color for numeric literals.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-operator</code></td>
+            <td><code>#cf222e</code></td>
+            <td><code>#ff7b72</code></td>
+            <td>Color for operators.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-class</code></td>
+            <td><code>#953800</code></td>
+            <td><code>#ffa657</code></td>
+            <td>Color for class names.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Events</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Detail</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>code-copied</code></td>
+            <td><code>{ code: string }</code></td>
+            <td>Fired when code is copied to clipboard.</td>
+          </tr>
+          <tr>
+            <td><code>code-expanded</code></td>
+            <td>—</td>
+            <td>Fired when a collapsed code block is expanded.</td>
+          </tr>
+          <tr>
+            <td><code>code-collapsed</code></td>
+            <td>—</td>
+            <td>Fired when a code block is collapsed.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Methods</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Parameters</th>
+            <th>Returns</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>copyCode()</code></td>
+            <td>—</td>
+            <td><code>Promise&lt;void&gt;</code></td>
+            <td>Copies the code content to clipboard.</td>
+          </tr>
+          <tr>
+            <td><code>getCode()</code></td>
+            <td>—</td>
+            <td><code>string</code></td>
+            <td>Returns the raw code content.</td>
+          </tr>
+          <tr>
+            <td><code>highlight()</code></td>
+            <td>—</td>
+            <td><code>void</code></td>
+            <td>Manually triggers syntax highlighting.</td>
+          </tr>
+          <tr>
+            <td><code>expand()</code></td>
+            <td>—</td>
+            <td><code>void</code></td>
+            <td>Expands a collapsed code block.</td>
+          </tr>
+          <tr>
+            <td><code>collapse()</code></td>
+            <td>—</td>
+            <td><code>void</code></td>
+            <td>Collapses the code block.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Slots</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Slot</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>(default)</td>
+            <td>The code content to display. Can be plain text or pre-formatted.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>&lt;code-block-group&gt;</h2>
+      <p>Container component for displaying multiple code blocks in a tabbed interface.</p>
+
+      <h3>Attributes</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>theme</code></td>
+            <td>string</td>
+            <td><code>"light"</code></td>
+            <td>Color theme applied to all child code blocks.</td>
+          </tr>
+          <tr>
+            <td><code>active</code></td>
+            <td>number</td>
+            <td><code>0</code></td>
+            <td>Index of the initially active tab (0-based).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Events</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th>Detail</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>tab-changed</code></td>
+            <td><code>{ index: number, filename: string }</code></td>
+            <td>Fired when the active tab changes.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Methods</h3>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Parameters</th>
+            <th>Returns</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>setActiveTab(index)</code></td>
+            <td><code>index: number</code></td>
+            <td><code>void</code></td>
+            <td>Programmatically switches to the specified tab.</td>
+          </tr>
+          <tr>
+            <td><code>getActiveTab()</code></td>
+            <td>—</td>
+            <td><code>number</code></td>
+            <td>Returns the index of the currently active tab.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Usage Notes</h3>
+      <ul>
+        <li>Child <code>&lt;code-block&gt;</code> elements should have a <code>filename</code> attribute for tab labels.</li>
+        <li>Theme is automatically propagated to all child code blocks.</li>
+        <li>Tabs are generated from child elements in DOM order.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Supported Languages</h2>
+      <p>The following languages are bundled and available for syntax highlighting:</p>
+
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Language</th>
+            <th>Aliases</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>javascript</code></td>
+            <td>js</td>
+            <td>JavaScript (ES6+)</td>
+          </tr>
+          <tr>
+            <td><code>typescript</code></td>
+            <td>ts</td>
+            <td>TypeScript</td>
+          </tr>
+          <tr>
+            <td><code>python</code></td>
+            <td>py</td>
+            <td>Python</td>
+          </tr>
+          <tr>
+            <td><code>css</code></td>
+            <td>—</td>
+            <td>CSS (including modern features)</td>
+          </tr>
+          <tr>
+            <td><code>html</code></td>
+            <td>—</td>
+            <td>HTML</td>
+          </tr>
+          <tr>
+            <td><code>json</code></td>
+            <td>—</td>
+            <td>JSON</td>
+          </tr>
+          <tr>
+            <td><code>yaml</code></td>
+            <td>yml</td>
+            <td>YAML</td>
+          </tr>
+          <tr>
+            <td><code>bash</code></td>
+            <td>sh, shell</td>
+            <td>Bash/Shell scripts</td>
+          </tr>
+          <tr>
+            <td><code>php</code></td>
+            <td>—</td>
+            <td>PHP</td>
+          </tr>
+          <tr>
+            <td><code>ruby</code></td>
+            <td>rb</td>
+            <td>Ruby</td>
+          </tr>
+          <tr>
+            <td><code>go</code></td>
+            <td>golang</td>
+            <td>Go</td>
+          </tr>
+          <tr>
+            <td><code>rust</code></td>
+            <td>rs</td>
+            <td>Rust</td>
+          </tr>
+          <tr>
+            <td><code>sql</code></td>
+            <td>—</td>
+            <td>SQL</td>
+          </tr>
+          <tr>
+            <td><code>xml</code></td>
+            <td>—</td>
+            <td>XML</td>
+          </tr>
+          <tr>
+            <td><code>markdown</code></td>
+            <td>md</td>
+            <td>Markdown</td>
+          </tr>
+          <tr>
+            <td><code>diff</code></td>
+            <td>patch</td>
+            <td>Unified diff format</td>
+          </tr>
+          <tr>
+            <td><code>plaintext</code></td>
+            <td>text, txt</td>
+            <td>Plain text (no highlighting)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Installation</h2>
+
+      <h3>npm</h3>
+      <code-block language="bash">npm install @profpowell/code-block</code-block>
+
+      <h3>Import in JavaScript</h3>
+      <code-block language="javascript">import '@profpowell/code-block';</code-block>
+
+      <h3>CDN</h3>
+      <code-block language="html">&lt;script type="module" src="https://unpkg.com/@profpowell/code-block"&gt;&lt;/script&gt;</code-block>
+    </section>
+
+    <section>
+      <h2>Browser Support</h2>
+      <p>The component works in all modern browsers that support:</p>
+      <ul>
+        <li>Custom Elements v1</li>
+        <li>Shadow DOM v1</li>
+        <li>ES Modules</li>
+        <li>CSS Custom Properties</li>
+      </ul>
+      <p>This includes Chrome 67+, Firefox 63+, Safari 12.1+, and Edge 79+.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>MIT License · <a href="https://github.com/ProfPowell/code-block">View on GitHub</a> · Powered by <a href="https://highlightjs.org/">highlight.js</a></p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      document.querySelectorAll('code-block:not([theme]), code-block-group:not([theme])').forEach(block => {
+        block.setAttribute('theme', isDark ? 'dark' : 'light');
+      });
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    // Load saved theme
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+      document.querySelectorAll('code-block:not([theme]), code-block-group:not([theme])').forEach(block => {
+        block.setAttribute('theme', 'dark');
+      });
+    }
+  </script>
+</body>
+</html>

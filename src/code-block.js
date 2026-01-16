@@ -4,227 +4,243 @@
  */
 
 // Import highlight.js core and specific languages only
-import hljs from 'highlight.js/lib/core';
-import javascript from 'highlight.js/lib/languages/javascript';
-import css from 'highlight.js/lib/languages/css';
-import xml from 'highlight.js/lib/languages/xml'; // HTML/XML
-import json from 'highlight.js/lib/languages/json';
-import yaml from 'highlight.js/lib/languages/yaml';
-import php from 'highlight.js/lib/languages/php';
-import http from 'highlight.js/lib/languages/http';
-import plaintext from 'highlight.js/lib/languages/plaintext';
-import diff from 'highlight.js/lib/languages/diff';
+import hljs from 'highlight.js/lib/core'
+import javascript from 'highlight.js/lib/languages/javascript'
+import css from 'highlight.js/lib/languages/css'
+import xml from 'highlight.js/lib/languages/xml' // HTML/XML
+import json from 'highlight.js/lib/languages/json'
+import yaml from 'highlight.js/lib/languages/yaml'
+import php from 'highlight.js/lib/languages/php'
+import http from 'highlight.js/lib/languages/http'
+import plaintext from 'highlight.js/lib/languages/plaintext'
+import diff from 'highlight.js/lib/languages/diff'
 
 // Register languages
-hljs.registerLanguage('javascript', javascript);
-hljs.registerLanguage('js', javascript);
-hljs.registerLanguage('css', css);
-hljs.registerLanguage('html', xml);
-hljs.registerLanguage('xml', xml);
-hljs.registerLanguage('xhtml', xml);
-hljs.registerLanguage('svg', xml);
-hljs.registerLanguage('markup', xml);
-hljs.registerLanguage('json', json);
-hljs.registerLanguage('yaml', yaml);
-hljs.registerLanguage('yml', yaml);
-hljs.registerLanguage('php', php);
-hljs.registerLanguage('http', http);
-hljs.registerLanguage('plaintext', plaintext);
-hljs.registerLanguage('text', plaintext);
-hljs.registerLanguage('txt', plaintext);
-hljs.registerLanguage('csv', plaintext);
-hljs.registerLanguage('diff', diff);
+hljs.registerLanguage('javascript', javascript)
+hljs.registerLanguage('js', javascript)
+hljs.registerLanguage('css', css)
+hljs.registerLanguage('html', xml)
+hljs.registerLanguage('xml', xml)
+hljs.registerLanguage('xhtml', xml)
+hljs.registerLanguage('svg', xml)
+hljs.registerLanguage('markup', xml)
+hljs.registerLanguage('json', json)
+hljs.registerLanguage('yaml', yaml)
+hljs.registerLanguage('yml', yaml)
+hljs.registerLanguage('php', php)
+hljs.registerLanguage('http', http)
+hljs.registerLanguage('plaintext', plaintext)
+hljs.registerLanguage('text', plaintext)
+hljs.registerLanguage('txt', plaintext)
+hljs.registerLanguage('csv', plaintext)
+hljs.registerLanguage('diff', diff)
 
 export class CodeBlock extends HTMLElement {
   constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this._codeContent = null;
-    this._showShareMenu = false;
-    this._handleOutsideClick = this._handleOutsideClick.bind(this);
-    this._observer = null;
-    this._highlighted = false;
+    super()
+    this.attachShadow({ mode: 'open' })
+    this._codeContent = null
+    this._showShareMenu = false
+    this._handleOutsideClick = this._handleOutsideClick.bind(this)
+    this._observer = null
+    this._highlighted = false
   }
 
   connectedCallback() {
     // Capture the original text content before rendering
-    this._codeContent = this.textContent;
+    this._codeContent = this.textContent
 
     // Use lazy loading if attribute is set
     if (this.hasAttribute('lazy')) {
-      this.renderPlaceholder();
-      this._setupLazyObserver();
+      this.renderPlaceholder()
+      this._setupLazyObserver()
     } else {
-      this.render();
+      this.render()
     }
   }
 
   disconnectedCallback() {
     if (this._observer) {
-      this._observer.disconnect();
-      this._observer = null;
+      this._observer.disconnect()
+      this._observer = null
     }
-    document.removeEventListener('click', this._handleOutsideClick);
+    document.removeEventListener('click', this._handleOutsideClick)
   }
 
   /**
    * Set up IntersectionObserver for lazy highlighting
    */
   _setupLazyObserver() {
-    if (this._observer) return;
+    if (this._observer) return
 
     this._observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !this._highlighted) {
-          this._highlighted = true;
-          this.render();
-          this._observer.disconnect();
-          this._observer = null;
+          this._highlighted = true
+          this.render()
+          this._observer.disconnect()
+          this._observer = null
         }
       },
       { rootMargin: '100px' } // Start loading slightly before visible
-    );
+    )
 
-    this._observer.observe(this);
+    this._observer.observe(this)
   }
 
   static get observedAttributes() {
-    return ['language', 'label', 'theme', 'show-lines', 'filename', 'highlight-lines', 'collapsed', 'max-lines', 'max-height', 'wrap', 'copy-text', 'copied-text', 'show-share', 'show-download', 'lazy'];
+    return [
+      'language',
+      'label',
+      'theme',
+      'show-lines',
+      'filename',
+      'highlight-lines',
+      'collapsed',
+      'max-lines',
+      'max-height',
+      'wrap',
+      'copy-text',
+      'copied-text',
+      'show-share',
+      'show-download',
+      'lazy'
+    ]
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (this.shadowRoot && oldValue !== newValue) {
-      this.render();
+      this.render()
     }
   }
 
   get language() {
-    return this.getAttribute('language') || 'plaintext';
+    return this.getAttribute('language') || 'plaintext'
   }
 
   get label() {
-    return this.getAttribute('label') || this.filename || this.language.toUpperCase();
+    return this.getAttribute('label') || this.filename || this.language.toUpperCase()
   }
 
   get theme() {
-    return this.getAttribute('theme') || 'light';
+    return this.getAttribute('theme') || 'light'
   }
 
   get showLines() {
-    return this.hasAttribute('show-lines');
+    return this.hasAttribute('show-lines')
   }
 
   get filename() {
-    return this.getAttribute('filename') || '';
+    return this.getAttribute('filename') || ''
   }
 
   get highlightLines() {
-    const attr = this.getAttribute('highlight-lines');
-    if (!attr) return new Set();
+    const attr = this.getAttribute('highlight-lines')
+    if (!attr) return new Set()
 
-    const lines = new Set();
-    const parts = attr.split(',');
+    const lines = new Set()
+    const parts = attr.split(',')
 
     for (const part of parts) {
-      const trimmed = part.trim();
+      const trimmed = part.trim()
       if (trimmed.includes('-')) {
-        const [start, end] = trimmed.split('-').map(Number);
+        const [start, end] = trimmed.split('-').map(Number)
         for (let i = start; i <= end; i++) {
-          lines.add(i);
+          lines.add(i)
         }
       } else {
-        lines.add(Number(trimmed));
+        lines.add(Number(trimmed))
       }
     }
 
-    return lines;
+    return lines
   }
 
   get collapsed() {
-    return this.hasAttribute('collapsed');
+    return this.hasAttribute('collapsed')
   }
 
   get maxLines() {
-    const attr = this.getAttribute('max-lines');
-    return attr ? parseInt(attr, 10) : 10;
+    const attr = this.getAttribute('max-lines')
+    return attr ? parseInt(attr, 10) : 10
   }
 
   get maxHeight() {
-    return this.getAttribute('max-height') || '';
+    return this.getAttribute('max-height') || ''
   }
 
   get wrap() {
-    return this.hasAttribute('wrap');
+    return this.hasAttribute('wrap')
   }
 
   get copyText() {
-    return this.getAttribute('copy-text') || 'Copy';
+    return this.getAttribute('copy-text') || 'Copy'
   }
 
   get copiedText() {
-    return this.getAttribute('copied-text') || 'Copied!';
+    return this.getAttribute('copied-text') || 'Copied!'
   }
 
   get showShare() {
-    return this.hasAttribute('show-share');
+    return this.hasAttribute('show-share')
   }
 
   get showDownload() {
-    return this.hasAttribute('show-download');
+    return this.hasAttribute('show-download')
   }
 
   get lazy() {
-    return this.hasAttribute('lazy');
+    return this.hasAttribute('lazy')
   }
 
   async copyCode() {
-    const rawCode = (this._codeContent || this.textContent).trim();
+    const rawCode = (this._codeContent || this.textContent).trim()
 
     // Unescape HTML entities
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = rawCode;
-    const unescapedCode = tempDiv.textContent;
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = rawCode
+    const unescapedCode = tempDiv.textContent
 
-    const button = this.shadowRoot.querySelector('.copy-button');
-    const originalText = this.copyText;
-    const successText = this.copiedText;
+    const button = this.shadowRoot.querySelector('.copy-button')
+    const originalText = this.copyText
+    const successText = this.copiedText
 
     try {
-      await navigator.clipboard.writeText(unescapedCode);
-      button.textContent = successText;
-      button.classList.add('copied');
-      button.setAttribute('aria-label', 'Code copied to clipboard');
+      await navigator.clipboard.writeText(unescapedCode)
+      button.textContent = successText
+      button.classList.add('copied')
+      button.setAttribute('aria-label', 'Code copied to clipboard')
     } catch (err) {
-      console.error('Failed to copy code:', err);
-      button.textContent = 'Failed';
-      button.classList.add('failed');
-      button.setAttribute('aria-label', 'Failed to copy code');
+      console.error('Failed to copy code:', err)
+      button.textContent = 'Failed'
+      button.classList.add('failed')
+      button.setAttribute('aria-label', 'Failed to copy code')
     }
 
     setTimeout(() => {
-      button.textContent = originalText;
-      button.classList.remove('copied', 'failed');
-      button.setAttribute('aria-label', 'Copy code to clipboard');
-    }, 2000);
+      button.textContent = originalText
+      button.classList.remove('copied', 'failed')
+      button.setAttribute('aria-label', 'Copy code to clipboard')
+    }, 2000)
   }
 
   /**
    * Download code as a file
    */
   downloadCode() {
-    const code = this.getCode();
-    const filename = this.filename || `code.${this._getFileExtension()}`;
+    const code = this.getCode()
+    const filename = this.filename || `code.${this._getFileExtension()}`
 
-    const blob = new Blob([code], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
+    const blob = new Blob([code], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
 
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
   }
 
   /**
@@ -252,35 +268,35 @@ export class CodeBlock extends HTMLElement {
       plaintext: 'txt',
       text: 'txt',
       txt: 'txt'
-    };
-    return extensions[this.language] || 'txt';
+    }
+    return extensions[this.language] || 'txt'
   }
 
   /**
    * Toggle share menu visibility
    */
   toggleShareMenu() {
-    this._showShareMenu = !this._showShareMenu;
-    const menu = this.shadowRoot.querySelector('.share-menu');
-    const shareBtn = this.shadowRoot.querySelector('.share-button');
+    this._showShareMenu = !this._showShareMenu
+    const menu = this.shadowRoot.querySelector('.share-menu')
+    const shareBtn = this.shadowRoot.querySelector('.share-button')
 
     if (this._showShareMenu) {
-      menu.style.display = 'block';
-      shareBtn.classList.add('active');
+      menu.style.display = 'block'
+      shareBtn.classList.add('active')
       setTimeout(() => {
-        document.addEventListener('click', this._handleOutsideClick);
-      }, 0);
+        document.addEventListener('click', this._handleOutsideClick)
+      }, 0)
     } else {
-      menu.style.display = 'none';
-      shareBtn.classList.remove('active');
-      document.removeEventListener('click', this._handleOutsideClick);
+      menu.style.display = 'none'
+      shareBtn.classList.remove('active')
+      document.removeEventListener('click', this._handleOutsideClick)
     }
   }
 
   _handleOutsideClick(e) {
-    const menu = this.shadowRoot.querySelector('.share-menu');
+    const menu = this.shadowRoot.querySelector('.share-menu')
     if (menu && !menu.contains(e.target)) {
-      this.toggleShareMenu();
+      this.toggleShareMenu()
     }
   }
 
@@ -288,20 +304,20 @@ export class CodeBlock extends HTMLElement {
    * Share via Web Share API
    */
   async shareViaWebAPI() {
-    if (!navigator.share) return;
+    if (!navigator.share) return
 
-    const code = this.getCode();
-    const title = this.filename || this.label;
+    const code = this.getCode()
+    const title = this.filename || this.label
 
     try {
       await navigator.share({
         title: title,
         text: code
-      });
-      this.toggleShareMenu();
+      })
+      this.toggleShareMenu()
     } catch (error) {
       if (error.name !== 'AbortError') {
-        console.error('Error sharing:', error);
+        console.error('Error sharing:', error)
       }
     }
   }
@@ -310,52 +326,52 @@ export class CodeBlock extends HTMLElement {
    * Open code in CodePen
    */
   openInCodePen() {
-    const code = this.getCode();
-    const lang = this.language;
+    const code = this.getCode()
+    const lang = this.language
 
     let data = {
       title: this.filename || this.label || 'Code Block Demo',
       description: 'Code shared from code-block component',
       editors: '111'
-    };
+    }
 
     // Assign code to the appropriate CodePen field based on language
     if (['html', 'markup', 'xhtml', 'xml', 'svg'].includes(lang)) {
-      data.html = code;
-      data.editors = '100';
+      data.html = code
+      data.editors = '100'
     } else if (lang === 'css') {
-      data.css = code;
-      data.editors = '010';
+      data.css = code
+      data.editors = '010'
     } else if (['javascript', 'js'].includes(lang)) {
-      data.js = code;
-      data.editors = '001';
+      data.js = code
+      data.editors = '001'
     } else {
       // For other languages, put in HTML as preformatted
-      data.html = `<pre><code>${this.escapeHtml(code)}</code></pre>`;
-      data.editors = '100';
+      data.html = `<pre><code>${this.escapeHtml(code)}</code></pre>`
+      data.editors = '100'
     }
 
     // Create form and submit to CodePen
-    const form = document.createElement('form');
-    form.action = 'https://codepen.io/pen/define';
-    form.method = 'POST';
-    form.target = '_blank';
+    const form = document.createElement('form')
+    form.action = 'https://codepen.io/pen/define'
+    form.method = 'POST'
+    form.target = '_blank'
 
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'data';
-    input.value = JSON.stringify(data);
+    const input = document.createElement('input')
+    input.type = 'hidden'
+    input.name = 'data'
+    input.value = JSON.stringify(data)
 
-    form.appendChild(input);
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
+    form.appendChild(input)
+    document.body.appendChild(form)
+    form.submit()
+    document.body.removeChild(form)
 
-    this.toggleShareMenu();
+    this.toggleShareMenu()
   }
 
   getStyles() {
-    const isDark = this.theme === 'dark';
+    const isDark = this.theme === 'dark'
 
     return `
       :host {
@@ -798,33 +814,38 @@ export class CodeBlock extends HTMLElement {
         white-space: pre-wrap;
         word-break: break-word;
       }
-    `;
+    `
   }
 
   /**
    * Render a placeholder without syntax highlighting (for lazy loading)
    */
   renderPlaceholder() {
-    const code = (this._codeContent || this.textContent).trim();
-    const lines = code.split('\n');
-    const escapedCode = this.escapeHtml(code);
+    const code = (this._codeContent || this.textContent).trim()
+    const lines = code.split('\n')
+    const escapedCode = this.escapeHtml(code)
 
     // Simple wrapped lines without highlighting
-    const wrappedLines = escapedCode.split('\n').map(line => {
-      return `<span class="code-line">${line || ' '}</span>`;
-    }).join('');
+    const wrappedLines = escapedCode
+      .split('\n')
+      .map((line) => {
+        return `<span class="code-line">${line || ' '}</span>`
+      })
+      .join('')
 
     // Generate line numbers if enabled
     const lineNumbersHtml = this.showLines
-      ? `<div class="line-numbers" aria-hidden="true">${lines.map((_, i) => {
-          return `<span>${i + 1}</span>`;
-        }).join('')}</div>`
-      : '';
+      ? `<div class="line-numbers" aria-hidden="true">${lines
+          .map((_, i) => {
+            return `<span>${i + 1}</span>`
+          })
+          .join('')}</div>`
+      : ''
 
     // Build header content
     const labelHtml = this.filename
       ? `<span class="label">${this.escapeHtml(this.language.toUpperCase())}</span><span class="filename">${this.escapeHtml(this.filename)}</span>`
-      : `<span class="label">${this.escapeHtml(this.label)}</span>`;
+      : `<span class="label">${this.escapeHtml(this.label)}</span>`
 
     this.shadowRoot.innerHTML = `
       <style>${this.getStyles()}</style>
@@ -842,100 +863,109 @@ export class CodeBlock extends HTMLElement {
           <pre><code class="hljs">${wrappedLines}</code></pre>
         </div>
       </div>
-    `;
+    `
 
     // Add copy button listener
-    const copyButton = this.shadowRoot.querySelector('.copy-button');
+    const copyButton = this.shadowRoot.querySelector('.copy-button')
     if (copyButton) {
-      copyButton.addEventListener('click', () => this.copyCode());
+      copyButton.addEventListener('click', () => this.copyCode())
     }
   }
 
   render() {
-    const code = (this._codeContent || this.textContent).trim();
-    const rawLines = code.split('\n');
-    const highlightedLines = this.highlightLines;
-    const isDiff = this.language === 'diff';
+    const code = (this._codeContent || this.textContent).trim()
+    const rawLines = code.split('\n')
+    const highlightedLines = this.highlightLines
+    const isDiff = this.language === 'diff'
 
     // Apply syntax highlighting
-    let highlightedCode;
+    let highlightedCode
     try {
-      if (this.language && this.language !== 'plaintext' && this.language !== 'text' && this.language !== 'txt') {
-        const result = hljs.highlight(code, { language: this.language, ignoreIllegals: true });
-        highlightedCode = result.value;
+      if (
+        this.language &&
+        this.language !== 'plaintext' &&
+        this.language !== 'text' &&
+        this.language !== 'txt'
+      ) {
+        const result = hljs.highlight(code, { language: this.language, ignoreIllegals: true })
+        highlightedCode = result.value
       } else {
-        highlightedCode = this.escapeHtml(code);
+        highlightedCode = this.escapeHtml(code)
       }
-    } catch (e) {
+    } catch {
       // Fallback if language not supported
-      highlightedCode = this.escapeHtml(code);
+      highlightedCode = this.escapeHtml(code)
     }
 
     // Split into lines and wrap each line for highlighting
-    const lines = highlightedCode.split('\n');
-    const wrappedLines = lines.map((line, i) => {
-      const lineNum = i + 1;
-      const isHighlighted = highlightedLines.has(lineNum);
-      const classes = ['code-line'];
+    const lines = highlightedCode.split('\n')
+    const wrappedLines = lines
+      .map((line, i) => {
+        const lineNum = i + 1
+        const isHighlighted = highlightedLines.has(lineNum)
+        const classes = ['code-line']
 
-      if (isHighlighted) classes.push('highlighted');
+        if (isHighlighted) classes.push('highlighted')
 
-      // Detect diff lines from raw code
-      if (isDiff) {
-        const rawLine = rawLines[i] || '';
-        if (rawLine.startsWith('+') && !rawLine.startsWith('+++')) {
-          classes.push('diff-add');
-        } else if (rawLine.startsWith('-') && !rawLine.startsWith('---')) {
-          classes.push('diff-remove');
+        // Detect diff lines from raw code
+        if (isDiff) {
+          const rawLine = rawLines[i] || ''
+          if (rawLine.startsWith('+') && !rawLine.startsWith('+++')) {
+            classes.push('diff-add')
+          } else if (rawLine.startsWith('-') && !rawLine.startsWith('---')) {
+            classes.push('diff-remove')
+          }
         }
-      }
 
-      return `<span class="${classes.join(' ')}">${line || ' '}</span>`;
-    }).join('');
+        return `<span class="${classes.join(' ')}">${line || ' '}</span>`
+      })
+      .join('')
 
     // Generate line numbers if enabled
     const lineNumbersHtml = this.showLines
-      ? `<div class="line-numbers" aria-hidden="true">${lines.map((_, i) => {
-          const lineNum = i + 1;
-          const isHighlighted = highlightedLines.has(lineNum);
-          const classes = [];
+      ? `<div class="line-numbers" aria-hidden="true">${lines
+          .map((_, i) => {
+            const lineNum = i + 1
+            const isHighlighted = highlightedLines.has(lineNum)
+            const classes = []
 
-          if (isHighlighted) classes.push('highlighted');
+            if (isHighlighted) classes.push('highlighted')
 
-          // Add diff classes to line numbers too
-          if (isDiff) {
-            const rawLine = rawLines[i] || '';
-            if (rawLine.startsWith('+') && !rawLine.startsWith('+++')) {
-              classes.push('diff-add');
-            } else if (rawLine.startsWith('-') && !rawLine.startsWith('---')) {
-              classes.push('diff-remove');
+            // Add diff classes to line numbers too
+            if (isDiff) {
+              const rawLine = rawLines[i] || ''
+              if (rawLine.startsWith('+') && !rawLine.startsWith('+++')) {
+                classes.push('diff-add')
+              } else if (rawLine.startsWith('-') && !rawLine.startsWith('---')) {
+                classes.push('diff-remove')
+              }
             }
-          }
 
-          return `<span class="${classes.join(' ')}">${lineNum}</span>`;
-        }).join('')}</div>`
-      : '';
+            return `<span class="${classes.join(' ')}">${lineNum}</span>`
+          })
+          .join('')}</div>`
+      : ''
 
     // Build header content
     const labelHtml = this.filename
       ? `<span class="label">${this.escapeHtml(this.language.toUpperCase())}</span><span class="filename">${this.escapeHtml(this.filename)}</span>`
-      : `<span class="label">${this.escapeHtml(this.label)}</span>`;
+      : `<span class="label">${this.escapeHtml(this.label)}</span>`
 
     // Calculate collapsed height based on max-lines
-    const isCollapsible = this.hasAttribute('collapsed') || this.hasAttribute('max-lines');
-    const totalLines = lines.length;
-    const maxLines = this.maxLines;
-    const needsExpand = isCollapsible && totalLines > maxLines;
-    const isCurrentlyCollapsed = this.collapsed;
+    const isCollapsible = this.hasAttribute('collapsed') || this.hasAttribute('max-lines')
+    const totalLines = lines.length
+    const maxLines = this.maxLines
+    const needsExpand = isCollapsible && totalLines > maxLines
+    const isCurrentlyCollapsed = this.collapsed
 
     // Calculate line height for collapsed state (approx 1.6 * font-size)
-    const collapsedHeight = isCurrentlyCollapsed ? `calc(${maxLines} * 1.6em + 2rem)` : 'none';
+    const collapsedHeight = isCurrentlyCollapsed ? `calc(${maxLines} * 1.6em + 2rem)` : 'none'
 
     // Set max-height CSS variable if provided
-    const maxHeightStyle = this.maxHeight ? `--cb-max-height: ${this.maxHeight};` : '';
+    const maxHeightStyle = this.maxHeight ? `--cb-max-height: ${this.maxHeight};` : ''
 
     // Set collapsed height
-    const codeStyle = isCurrentlyCollapsed ? `max-height: ${collapsedHeight};` : '';
+    const codeStyle = isCurrentlyCollapsed ? `max-height: ${collapsedHeight};` : ''
 
     this.shadowRoot.innerHTML = `
       <style>${this.getStyles()}</style>
@@ -944,7 +974,9 @@ export class CodeBlock extends HTMLElement {
           ${labelHtml}
         </div>
         <div class="header-actions">
-          ${this.showShare ? `
+          ${
+            this.showShare
+              ? `
             <div class="share-container">
               <button class="action-button share-button" title="Share code">
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -953,7 +985,9 @@ export class CodeBlock extends HTMLElement {
                 </svg>
               </button>
               <div class="share-menu">
-                ${typeof navigator !== 'undefined' && navigator.share ? `
+                ${
+                  typeof navigator !== 'undefined' && navigator.share
+                    ? `
                   <button class="share-menu-item share-native">
                     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="12" cy="4" r="2"/>
@@ -963,7 +997,9 @@ export class CodeBlock extends HTMLElement {
                     </svg>
                     Share...
                   </button>
-                ` : ''}
+                `
+                    : ''
+                }
                 <button class="share-menu-item share-codepen">
                   <svg viewBox="0 0 16 16" fill="currentColor">
                     <path d="M8 0L0 5v6l8 5 8-5V5L8 0zM7 10.5L2 7.5v-2l5 3v2zm1-3l-5-3L8 2l5 2.5-5 3zm1 3v-2l5-3v2l-5 3z"/>
@@ -972,15 +1008,21 @@ export class CodeBlock extends HTMLElement {
                 </button>
               </div>
             </div>
-          ` : ''}
-          ${this.showDownload ? `
+          `
+              : ''
+          }
+          ${
+            this.showDownload
+              ? `
             <button class="action-button download-button" title="Download code">
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M8 1v10M8 11l-3-3M8 11l3-3"/>
                 <path d="M2 12v2a1 1 0 001 1h10a1 1 0 001-1v-2"/>
               </svg>
             </button>
-          ` : ''}
+          `
+              : ''
+          }
           <button class="copy-button"
                   aria-label="Copy code to clipboard"
                   title="Copy code">${this.escapeHtml(this.copyText)}</button>
@@ -990,159 +1032,163 @@ export class CodeBlock extends HTMLElement {
         ${lineNumbersHtml}
         <pre><code class="language-${this.language}" tabindex="0">${wrappedLines}</code></pre>
       </div>
-      ${needsExpand ? `
+      ${
+        needsExpand
+          ? `
         <button class="expand-button" aria-expanded="${!isCurrentlyCollapsed}">
           ${isCurrentlyCollapsed ? `Show all ${totalLines} lines` : 'Show less'}
         </button>
-      ` : ''}
-    `;
+      `
+          : ''
+      }
+    `
 
     // Mark as expandable for CSS
     if (needsExpand) {
-      this.setAttribute('data-expandable', '');
+      this.setAttribute('data-expandable', '')
     } else {
-      this.removeAttribute('data-expandable');
+      this.removeAttribute('data-expandable')
     }
 
     // Add copy button event listener
-    const copyBtn = this.shadowRoot.querySelector('.copy-button');
-    copyBtn.addEventListener('click', () => this.copyCode());
+    const copyBtn = this.shadowRoot.querySelector('.copy-button')
+    copyBtn.addEventListener('click', () => this.copyCode())
 
     // Add expand button event listener
-    const expandBtn = this.shadowRoot.querySelector('.expand-button');
+    const expandBtn = this.shadowRoot.querySelector('.expand-button')
     if (expandBtn) {
-      expandBtn.addEventListener('click', () => this.toggleCollapsed());
+      expandBtn.addEventListener('click', () => this.toggleCollapsed())
     }
 
     // Add share button event listeners
-    const shareBtn = this.shadowRoot.querySelector('.share-button');
+    const shareBtn = this.shadowRoot.querySelector('.share-button')
     if (shareBtn) {
       shareBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.toggleShareMenu();
-      });
+        e.stopPropagation()
+        this.toggleShareMenu()
+      })
     }
 
-    const shareNative = this.shadowRoot.querySelector('.share-native');
+    const shareNative = this.shadowRoot.querySelector('.share-native')
     if (shareNative) {
-      shareNative.addEventListener('click', () => this.shareViaWebAPI());
+      shareNative.addEventListener('click', () => this.shareViaWebAPI())
     }
 
-    const shareCodepen = this.shadowRoot.querySelector('.share-codepen');
+    const shareCodepen = this.shadowRoot.querySelector('.share-codepen')
     if (shareCodepen) {
-      shareCodepen.addEventListener('click', () => this.openInCodePen());
+      shareCodepen.addEventListener('click', () => this.openInCodePen())
     }
 
     // Add download button event listener
-    const downloadBtn = this.shadowRoot.querySelector('.download-button');
+    const downloadBtn = this.shadowRoot.querySelector('.download-button')
     if (downloadBtn) {
-      downloadBtn.addEventListener('click', () => this.downloadCode());
+      downloadBtn.addEventListener('click', () => this.downloadCode())
     }
   }
 
   toggleCollapsed() {
     if (this.collapsed) {
-      this.removeAttribute('collapsed');
+      this.removeAttribute('collapsed')
     } else {
-      this.setAttribute('collapsed', '');
+      this.setAttribute('collapsed', '')
     }
   }
 
   escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    const div = document.createElement('div')
+    div.textContent = text
+    return div.innerHTML
   }
 
   /**
    * Update the code content programmatically
    */
   setCode(code) {
-    this._codeContent = code;
-    this.render();
+    this._codeContent = code
+    this.render()
   }
 
   /**
    * Get the current code content
    */
   getCode() {
-    return (this._codeContent || this.textContent).trim();
+    return (this._codeContent || this.textContent).trim()
   }
 
   /**
    * Get list of supported languages
    */
   static getSupportedLanguages() {
-    return hljs.listLanguages();
+    return hljs.listLanguages()
   }
 }
 
-customElements.define('code-block', CodeBlock);
+customElements.define('code-block', CodeBlock)
 
 /**
  * Code Block Group - Tabbed interface for multiple code blocks
  */
 class CodeBlockGroup extends HTMLElement {
   constructor() {
-    super();
-    this.attachShadow({ mode: 'open' });
-    this._activeIndex = 0;
-    this._showShareMenu = false;
-    this._handleOutsideClick = this._handleOutsideClick.bind(this);
+    super()
+    this.attachShadow({ mode: 'open' })
+    this._activeIndex = 0
+    this._showShareMenu = false
+    this._handleOutsideClick = this._handleOutsideClick.bind(this)
   }
 
   connectedCallback() {
     // Wait for children to be parsed
     requestAnimationFrame(() => {
-      this.render();
-      this.setupEventListeners();
-    });
+      this.render()
+      this.setupEventListeners()
+    })
   }
 
   disconnectedCallback() {
-    document.removeEventListener('click', this._handleOutsideClick);
+    document.removeEventListener('click', this._handleOutsideClick)
   }
 
   static get observedAttributes() {
-    return ['theme', 'show-share', 'show-download'];
+    return ['theme', 'show-share', 'show-download']
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (this.shadowRoot && oldValue !== newValue) {
-      this.render();
+      this.render()
     }
   }
 
   get theme() {
-    return this.getAttribute('theme') || 'light';
+    return this.getAttribute('theme') || 'light'
   }
 
   get showShare() {
-    return this.hasAttribute('show-share');
+    return this.hasAttribute('show-share')
   }
 
   get showDownload() {
-    return this.hasAttribute('show-download');
+    return this.hasAttribute('show-download')
   }
 
   get codeBlocks() {
-    return Array.from(this.querySelectorAll('code-block'));
+    return Array.from(this.querySelectorAll('code-block'))
   }
 
   get activeIndex() {
-    return this._activeIndex;
+    return this._activeIndex
   }
 
   set activeIndex(value) {
-    const blocks = this.codeBlocks;
+    const blocks = this.codeBlocks
     if (value >= 0 && value < blocks.length) {
-      this._activeIndex = value;
-      this.updateActiveTab();
+      this._activeIndex = value
+      this.updateActiveTab()
     }
   }
 
   getStyles() {
-    const isDark = this.theme === 'dark';
+    const isDark = this.theme === 'dark'
 
     return `
       :host {
@@ -1335,31 +1381,32 @@ class CodeBlockGroup extends HTMLElement {
         height: 16px;
         flex-shrink: 0;
       }
-    `;
+    `
   }
 
   render() {
-    const blocks = this.codeBlocks;
-    if (blocks.length === 0) return;
+    const blocks = this.codeBlocks
+    if (blocks.length === 0) return
 
     // Propagate theme to child code-blocks
     blocks.forEach((block, index) => {
-      block.setAttribute('theme', this.theme);
+      block.setAttribute('theme', this.theme)
       if (index === this._activeIndex) {
-        block.classList.add('active');
+        block.classList.add('active')
       } else {
-        block.classList.remove('active');
+        block.classList.remove('active')
       }
-    });
+    })
 
-    const tabs = blocks.map((block, index) => {
-      const filename = block.getAttribute('filename');
-      const label = block.getAttribute('label');
-      const language = block.getAttribute('language') || 'plaintext';
-      const displayName = filename || label || language.toUpperCase();
-      const isActive = index === this._activeIndex;
+    const tabs = blocks
+      .map((block, index) => {
+        const filename = block.getAttribute('filename')
+        const label = block.getAttribute('label')
+        const language = block.getAttribute('language') || 'plaintext'
+        const displayName = filename || label || language.toUpperCase()
+        const isActive = index === this._activeIndex
 
-      return `
+        return `
         <button
           class="tab"
           role="tab"
@@ -1371,21 +1418,29 @@ class CodeBlockGroup extends HTMLElement {
           <span class="tab-label">${this.escapeHtml(displayName)}</span>
           ${filename ? `<span class="language-badge">${language}</span>` : ''}
         </button>
-      `;
-    }).join('');
+      `
+      })
+      .join('')
 
-    const hasActions = this.showShare || this.showDownload;
-    const actionsHtml = hasActions ? `
+    const hasActions = this.showShare || this.showDownload
+    const actionsHtml = hasActions
+      ? `
       <div class="header-actions">
-        ${this.showDownload ? `
+        ${
+          this.showDownload
+            ? `
           <button class="action-button download-button" aria-label="Download code" title="Download">
             <svg viewBox="0 0 16 16" fill="currentColor">
               <path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"/>
               <path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.969Z"/>
             </svg>
           </button>
-        ` : ''}
-        ${this.showShare ? `
+        `
+            : ''
+        }
+        ${
+          this.showShare
+            ? `
           <div class="share-container">
             <button class="action-button share-button" aria-label="Share code" title="Share" aria-haspopup="true" aria-expanded="${this._showShareMenu}">
               <svg viewBox="0 0 16 16" fill="currentColor">
@@ -1393,14 +1448,18 @@ class CodeBlockGroup extends HTMLElement {
               </svg>
             </button>
             <div class="share-menu ${this._showShareMenu ? 'open' : ''}" role="menu">
-              ${typeof navigator !== 'undefined' && navigator.share ? `
+              ${
+                typeof navigator !== 'undefined' && navigator.share
+                  ? `
                 <button class="share-menu-item web-share-button" role="menuitem">
                   <svg viewBox="0 0 16 16" fill="currentColor">
                     <path d="M13.5 3a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0ZM15 3a3 3 0 0 1-5.175 2.066l-3.92 2.179a3.005 3.005 0 0 1 0 1.51l3.92 2.179a3 3 0 1 1-.73 1.31l-3.92-2.178a3 3 0 1 1 0-4.133l3.92-2.178A3 3 0 1 1 15 3Zm-1.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Zm-9-5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z"/>
                   </svg>
                   Share...
                 </button>
-              ` : ''}
+              `
+                  : ''
+              }
               <button class="share-menu-item codepen-button" role="menuitem">
                 <svg viewBox="0 0 16 16" fill="currentColor">
                   <path d="M8 0L0 5.333v5.334L8 16l8-5.333V5.333L8 0zm5.714 9.703L8 13.297l-5.714-3.594V6.297L8 2.703l5.714 3.594v3.406z"/>
@@ -1410,9 +1469,12 @@ class CodeBlockGroup extends HTMLElement {
               </button>
             </div>
           </div>
-        ` : ''}
+        `
+            : ''
+        }
       </div>
-    ` : '';
+    `
+      : ''
 
     this.shadowRoot.innerHTML = `
       <style>${this.getStyles()}</style>
@@ -1425,144 +1487,146 @@ class CodeBlockGroup extends HTMLElement {
       <div class="content">
         <slot></slot>
       </div>
-    `;
+    `
   }
 
   setupEventListeners() {
-    const tabList = this.shadowRoot.querySelector('.tabs');
-    if (!tabList) return;
+    const tabList = this.shadowRoot.querySelector('.tabs')
+    if (!tabList) return
 
     // Click handler for tabs
     tabList.addEventListener('click', (e) => {
-      const tab = e.target.closest('.tab');
+      const tab = e.target.closest('.tab')
       if (tab) {
-        const index = parseInt(tab.dataset.index, 10);
-        this.activeIndex = index;
+        const index = parseInt(tab.dataset.index, 10)
+        this.activeIndex = index
       }
-    });
+    })
 
     // Keyboard navigation
     tabList.addEventListener('keydown', (e) => {
-      const tabs = this.shadowRoot.querySelectorAll('.tab');
-      const currentIndex = this._activeIndex;
-      let newIndex = currentIndex;
+      const tabs = this.shadowRoot.querySelectorAll('.tab')
+      const currentIndex = this._activeIndex
+      let newIndex = currentIndex
 
       switch (e.key) {
         case 'ArrowLeft':
-          newIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
-          break;
+          newIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1
+          break
         case 'ArrowRight':
-          newIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0;
-          break;
+          newIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0
+          break
         case 'Home':
-          newIndex = 0;
-          break;
+          newIndex = 0
+          break
         case 'End':
-          newIndex = tabs.length - 1;
-          break;
+          newIndex = tabs.length - 1
+          break
         default:
-          return;
+          return
       }
 
-      e.preventDefault();
-      this.activeIndex = newIndex;
-      tabs[newIndex].focus();
-    });
+      e.preventDefault()
+      this.activeIndex = newIndex
+      tabs[newIndex].focus()
+    })
 
     // Action button handlers
-    const downloadBtn = this.shadowRoot.querySelector('.download-button');
+    const downloadBtn = this.shadowRoot.querySelector('.download-button')
     if (downloadBtn) {
-      downloadBtn.addEventListener('click', () => this.downloadCode());
+      downloadBtn.addEventListener('click', () => this.downloadCode())
     }
 
-    const shareBtn = this.shadowRoot.querySelector('.share-button');
+    const shareBtn = this.shadowRoot.querySelector('.share-button')
     if (shareBtn) {
       shareBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        this.toggleShareMenu();
-      });
+        e.stopPropagation()
+        this.toggleShareMenu()
+      })
     }
 
-    const webShareBtn = this.shadowRoot.querySelector('.web-share-button');
+    const webShareBtn = this.shadowRoot.querySelector('.web-share-button')
     if (webShareBtn) {
       webShareBtn.addEventListener('click', () => {
-        this.shareViaWebAPI();
-        this.toggleShareMenu();
-      });
+        this.shareViaWebAPI()
+        this.toggleShareMenu()
+      })
     }
 
-    const codepenBtn = this.shadowRoot.querySelector('.codepen-button');
+    const codepenBtn = this.shadowRoot.querySelector('.codepen-button')
     if (codepenBtn) {
       codepenBtn.addEventListener('click', () => {
-        this.openInCodePen();
-        this.toggleShareMenu();
-      });
+        this.openInCodePen()
+        this.toggleShareMenu()
+      })
     }
   }
 
   updateActiveTab() {
-    const tabs = this.shadowRoot.querySelectorAll('.tab');
-    const blocks = this.codeBlocks;
+    const tabs = this.shadowRoot.querySelectorAll('.tab')
+    const blocks = this.codeBlocks
 
     tabs.forEach((tab, index) => {
-      const isActive = index === this._activeIndex;
-      tab.setAttribute('aria-selected', isActive);
-      tab.setAttribute('tabindex', isActive ? '0' : '-1');
-    });
+      const isActive = index === this._activeIndex
+      tab.setAttribute('aria-selected', isActive)
+      tab.setAttribute('tabindex', isActive ? '0' : '-1')
+    })
 
     blocks.forEach((block, index) => {
       if (index === this._activeIndex) {
-        block.classList.add('active');
+        block.classList.add('active')
       } else {
-        block.classList.remove('active');
+        block.classList.remove('active')
       }
-    });
+    })
 
     // Dispatch event for external listeners
-    this.dispatchEvent(new CustomEvent('tab-change', {
-      detail: { index: this._activeIndex, block: blocks[this._activeIndex] },
-      bubbles: true
-    }));
+    this.dispatchEvent(
+      new CustomEvent('tab-change', {
+        detail: { index: this._activeIndex, block: blocks[this._activeIndex] },
+        bubbles: true
+      })
+    )
   }
 
   escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    const div = document.createElement('div')
+    div.textContent = text
+    return div.innerHTML
   }
 
   /**
    * Programmatically select a tab by index
    */
   selectTab(index) {
-    this.activeIndex = index;
+    this.activeIndex = index
   }
 
   /**
    * Get the currently active code block
    */
   getActiveBlock() {
-    return this.codeBlocks[this._activeIndex];
+    return this.codeBlocks[this._activeIndex]
   }
 
   /**
    * Toggle share menu visibility
    */
   toggleShareMenu() {
-    this._showShareMenu = !this._showShareMenu;
-    const menu = this.shadowRoot.querySelector('.share-menu');
-    const button = this.shadowRoot.querySelector('.share-button');
+    this._showShareMenu = !this._showShareMenu
+    const menu = this.shadowRoot.querySelector('.share-menu')
+    const button = this.shadowRoot.querySelector('.share-button')
     if (menu) {
-      menu.classList.toggle('open', this._showShareMenu);
+      menu.classList.toggle('open', this._showShareMenu)
     }
     if (button) {
-      button.setAttribute('aria-expanded', this._showShareMenu);
+      button.setAttribute('aria-expanded', this._showShareMenu)
     }
 
     if (this._showShareMenu) {
-      document.addEventListener('click', this._handleOutsideClick);
+      document.addEventListener('click', this._handleOutsideClick)
     } else {
-      document.removeEventListener('click', this._handleOutsideClick);
+      document.removeEventListener('click', this._handleOutsideClick)
     }
   }
 
@@ -1570,14 +1634,14 @@ class CodeBlockGroup extends HTMLElement {
    * Handle clicks outside share menu
    */
   _handleOutsideClick(e) {
-    const shareContainer = this.shadowRoot.querySelector('.share-container');
+    const shareContainer = this.shadowRoot.querySelector('.share-container')
     if (shareContainer && !e.composedPath().includes(shareContainer)) {
-      this._showShareMenu = false;
-      const menu = this.shadowRoot.querySelector('.share-menu');
-      const button = this.shadowRoot.querySelector('.share-button');
-      if (menu) menu.classList.remove('open');
-      if (button) button.setAttribute('aria-expanded', 'false');
-      document.removeEventListener('click', this._handleOutsideClick);
+      this._showShareMenu = false
+      const menu = this.shadowRoot.querySelector('.share-menu')
+      const button = this.shadowRoot.querySelector('.share-button')
+      if (menu) menu.classList.remove('open')
+      if (button) button.setAttribute('aria-expanded', 'false')
+      document.removeEventListener('click', this._handleOutsideClick)
     }
   }
 
@@ -1585,9 +1649,9 @@ class CodeBlockGroup extends HTMLElement {
    * Download code from the active block
    */
   downloadCode() {
-    const block = this.getActiveBlock();
+    const block = this.getActiveBlock()
     if (block && typeof block.downloadCode === 'function') {
-      block.downloadCode();
+      block.downloadCode()
     }
   }
 
@@ -1595,45 +1659,45 @@ class CodeBlockGroup extends HTMLElement {
    * Open all blocks' code in CodePen (aggregates HTML, CSS, JS)
    */
   openInCodePen() {
-    const blocks = this.codeBlocks;
-    if (blocks.length === 0) return;
+    const blocks = this.codeBlocks
+    if (blocks.length === 0) return
 
-    let html = '';
-    let css = '';
-    let js = '';
-    let title = 'Code Block Group';
+    let html = ''
+    let css = ''
+    let js = ''
+    let title = 'Code Block Group'
 
     // Aggregate code from all blocks by language
-    blocks.forEach(block => {
-      const lang = block.language;
-      const code = block.getCode();
-      const filename = block.filename;
+    blocks.forEach((block) => {
+      const lang = block.language
+      const code = block.getCode()
+      const filename = block.filename
 
       if (['html', 'markup', 'xhtml', 'xml', 'svg'].includes(lang)) {
-        if (html) html += '\n\n';
-        if (filename) html += `<!-- ${filename} -->\n`;
-        html += code;
+        if (html) html += '\n\n'
+        if (filename) html += `<!-- ${filename} -->\n`
+        html += code
       } else if (lang === 'css') {
-        if (css) css += '\n\n';
-        if (filename) css += `/* ${filename} */\n`;
-        css += code;
+        if (css) css += '\n\n'
+        if (filename) css += `/* ${filename} */\n`
+        css += code
       } else if (['javascript', 'js'].includes(lang)) {
-        if (js) js += '\n\n';
-        if (filename) js += `// ${filename}\n`;
-        js += code;
+        if (js) js += '\n\n'
+        if (filename) js += `// ${filename}\n`
+        js += code
       }
 
       // Use first filename as title if available
       if (!title || title === 'Code Block Group') {
-        title = filename || block.label || 'Code Block Group';
+        title = filename || block.label || 'Code Block Group'
       }
-    });
+    })
 
     // Determine which editors to show
-    let editors = '';
-    editors += html ? '1' : '0';
-    editors += css ? '1' : '0';
-    editors += js ? '1' : '0';
+    let editors = ''
+    editors += html ? '1' : '0'
+    editors += css ? '1' : '0'
+    editors += js ? '1' : '0'
 
     const data = {
       title: title,
@@ -1642,55 +1706,55 @@ class CodeBlockGroup extends HTMLElement {
       css: css,
       js: js,
       editors: editors
-    };
+    }
 
-    const form = document.createElement('form');
-    form.action = 'https://codepen.io/pen/define';
-    form.method = 'POST';
-    form.target = '_blank';
+    const form = document.createElement('form')
+    form.action = 'https://codepen.io/pen/define'
+    form.method = 'POST'
+    form.target = '_blank'
 
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'data';
-    input.value = JSON.stringify(data);
+    const input = document.createElement('input')
+    input.type = 'hidden'
+    input.name = 'data'
+    input.value = JSON.stringify(data)
 
-    form.appendChild(input);
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
+    form.appendChild(input)
+    document.body.appendChild(form)
+    form.submit()
+    document.body.removeChild(form)
   }
 
   /**
    * Share all blocks' code via Web Share API
    */
   async shareViaWebAPI() {
-    if (!navigator.share) return;
+    if (!navigator.share) return
 
-    const blocks = this.codeBlocks;
-    if (blocks.length === 0) return;
+    const blocks = this.codeBlocks
+    if (blocks.length === 0) return
 
     // Combine all code with filename headers
-    let combinedCode = '';
-    blocks.forEach(block => {
-      const filename = block.filename || block.label || block.language;
-      const code = block.getCode();
-      if (combinedCode) combinedCode += '\n\n';
-      combinedCode += `// === ${filename} ===\n${code}`;
-    });
+    let combinedCode = ''
+    blocks.forEach((block) => {
+      const filename = block.filename || block.label || block.language
+      const code = block.getCode()
+      if (combinedCode) combinedCode += '\n\n'
+      combinedCode += `// === ${filename} ===\n${code}`
+    })
 
     try {
       await navigator.share({
         title: 'Code from code-block-group',
         text: combinedCode
-      });
+      })
     } catch (err) {
       if (err.name !== 'AbortError') {
-        console.error('Share failed:', err);
+        console.error('Share failed:', err)
       }
     }
   }
 }
 
-customElements.define('code-block-group', CodeBlockGroup);
+customElements.define('code-block-group', CodeBlockGroup)
 
-export { CodeBlockGroup };
+export { CodeBlockGroup }

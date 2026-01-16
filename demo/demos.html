@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demos - code-block Web Component</title>
+  <meta name="description" content="Interactive examples and demos of the code-block web component">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="../src/code-block.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav>
+      <a href="index.html" class="nav-brand">&lt;code-block&gt;</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="demos.html" class="active">Demos</a>
+        <a href="api.html">API</a>
+        <a href="https://github.com/ProfPowell/code-block">GitHub</a>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Interactive Demos</h1>
+    <p class="demo-description">Explore the full capabilities of the <code>&lt;code-block&gt;</code> component with these interactive examples.</p>
+
+    <section class="demo-section">
+      <h2>Language Support</h2>
+      <p class="demo-description">Syntax highlighting for 13+ popular languages powered by highlight.js.</p>
+
+      <h3>JavaScript</h3>
+      <code-block language="javascript" filename="example.js">
+class EventEmitter {
+  constructor() {
+    this.events = new Map();
+  }
+
+  on(event, callback) {
+    if (!this.events.has(event)) {
+      this.events.set(event, []);
+    }
+    this.events.get(event).push(callback);
+    return () => this.off(event, callback);
+  }
+
+  emit(event, ...args) {
+    const callbacks = this.events.get(event) || [];
+    callbacks.forEach(cb => cb(...args));
+  }
+}
+      </code-block>
+
+      <h3>TypeScript</h3>
+      <code-block language="typescript" filename="types.ts">
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  roles: Role[];
+}
+
+type Role = 'admin' | 'editor' | 'viewer';
+
+function hasPermission(user: User, requiredRole: Role): boolean {
+  return user.roles.includes(requiredRole);
+}
+      </code-block>
+
+      <h3>Python</h3>
+      <code-block language="python" filename="data_processor.py">
+import asyncio
+from dataclasses import dataclass
+from typing import List, Optional
+
+@dataclass
+class DataRecord:
+    id: int
+    value: str
+    metadata: Optional[dict] = None
+
+async def process_records(records: List[DataRecord]) -> List[str]:
+    """Process a list of records asynchronously."""
+    tasks = [process_single(r) for r in records]
+    return await asyncio.gather(*tasks)
+
+async def process_single(record: DataRecord) -> str:
+    await asyncio.sleep(0.1)  # Simulate I/O
+    return f"Processed: {record.value}"
+      </code-block>
+
+      <h3>CSS</h3>
+      <code-block language="css" filename="styles.css">
+:root {
+  --primary-color: #0969da;
+  --background: #ffffff;
+  --text-color: #24292f;
+}
+
+.card {
+  background: var(--background);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0d1117;
+    --text-color: #c9d1d9;
+  }
+}
+      </code-block>
+
+      <h3>HTML</h3>
+      <code-block language="html" filename="template.html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;My Page&lt;/title&gt;
+  &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;nav&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/nav&gt;
+  &lt;/header&gt;
+  &lt;main&gt;
+    &lt;h1&gt;Welcome&lt;/h1&gt;
+  &lt;/main&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+      </code-block>
+
+      <h3>JSON</h3>
+      <code-block language="json" filename="package.json">
+{
+  "name": "@profpowell/code-block",
+  "version": "2.3.0",
+  "type": "module",
+  "main": "dist/code-block.js",
+  "exports": {
+    ".": "./dist/code-block.js"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "playwright test"
+  }
+}
+      </code-block>
+
+      <h3>YAML</h3>
+      <code-block language="yaml" filename=".github/workflows/ci.yml">
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: npm test
+      </code-block>
+
+      <h3>Bash</h3>
+      <code-block language="bash" filename="deploy.sh">
+#!/bin/bash
+set -e
+
+echo "Building project..."
+npm run build
+
+echo "Running tests..."
+npm test
+
+echo "Deploying to production..."
+rsync -avz --delete dist/ server:/var/www/app/
+
+echo "✅ Deployment complete!"
+      </code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2>Line Numbers</h2>
+      <p class="demo-description">Add line numbers with the <code>show-lines</code> attribute. Optionally specify a starting line with <code>start-line</code>.</p>
+
+      <h3>Basic Line Numbers</h3>
+      <code-block language="javascript" show-lines filename="with-lines.js">
+function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// Calculate first 10 Fibonacci numbers
+for (let i = 0; i < 10; i++) {
+  console.log(`F(${i}) = ${fibonacci(i)}`);
+}
+      </code-block>
+
+      <h3>Custom Starting Line</h3>
+      <code-block language="javascript" show-lines start-line="42" filename="app.js:42-52">
+// Continuing from line 42...
+function handleSubmit(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData);
+
+  submitToAPI(data)
+    .then(response => showSuccess(response))
+    .catch(error => showError(error));
+}
+      </code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2>Line Highlighting</h2>
+      <p class="demo-description">Draw attention to specific lines with the <code>highlight-lines</code> attribute. Supports individual lines and ranges.</p>
+
+      <h3>Highlight Single Lines</h3>
+      <code-block language="javascript" show-lines highlight-lines="3,7" filename="highlight-single.js">
+async function fetchUser(id) {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    if (!response.ok) {
+      throw new Error('User not found');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to fetch user:', error);
+    return null;
+  }
+}
+      </code-block>
+
+      <h3>Highlight Ranges</h3>
+      <code-block language="javascript" show-lines highlight-lines="2-4,8-10" filename="highlight-ranges.js">
+class Calculator {
+  add(a, b) {
+    return a + b;
+  }
+
+  subtract(a, b) {
+    return a - b;
+  }
+
+  multiply(a, b) {
+    return a * b;
+  }
+
+  divide(a, b) {
+    if (b === 0) throw new Error('Division by zero');
+    return a / b;
+  }
+}
+      </code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2>Multi-File Tabs</h2>
+      <p class="demo-description">Group related files together with <code>&lt;code-block-group&gt;</code> for a tabbed interface.</p>
+
+      <h3>Component Files</h3>
+      <code-block-group>
+        <code-block language="javascript" filename="Counter.js">
+class Counter extends HTMLElement {
+  constructor() {
+    super();
+    this.count = 0;
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback() {
+    this.render();
+    this.shadowRoot.querySelector('button')
+      .addEventListener('click', () => this.increment());
+  }
+
+  increment() {
+    this.count++;
+    this.render();
+  }
+
+  render() {
+    this.shadowRoot.innerHTML = `
+      <style>${this.styles}</style>
+      <button>Count: ${this.count}</button>
+    `;
+  }
+
+  get styles() {
+    return `
+      button {
+        font-size: 1.25rem;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+      }
+    `;
+  }
+}
+
+customElements.define('my-counter', Counter);
+        </code-block>
+        <code-block language="html" filename="index.html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Counter Demo&lt;/title&gt;
+  &lt;script type="module" src="Counter.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Web Component Counter&lt;/h1&gt;
+  &lt;my-counter&gt;&lt;/my-counter&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+        </code-block>
+      </code-block-group>
+
+      <h3>Configuration Files</h3>
+      <code-block-group>
+        <code-block language="json" filename="package.json">
+{
+  "name": "my-project",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint src",
+    "test": "vitest"
+  }
+}
+        </code-block>
+        <code-block language="javascript" filename="vite.config.js">
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  build: {
+    lib: {
+      entry: 'src/index.js',
+      formats: ['es']
+    }
+  }
+});
+        </code-block>
+        <code-block language="javascript" filename="eslint.config.js">
+export default [
+  {
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module'
+    },
+    rules: {
+      'no-unused-vars': 'error',
+      'no-console': 'warn'
+    }
+  }
+];
+        </code-block>
+      </code-block-group>
+    </section>
+
+    <section class="demo-section">
+      <h2>Collapsible Code</h2>
+      <p class="demo-description">Long code blocks can be collapsed by default with the <code>collapsed</code> attribute.</p>
+
+      <code-block language="javascript" show-lines collapsed filename="long-file.js">
+/**
+ * A comprehensive utility library for common operations.
+ * This file demonstrates the collapsed feature for long code blocks.
+ */
+
+// Array utilities
+export function chunk(array, size) {
+  const chunks = [];
+  for (let i = 0; i < array.length; i += size) {
+    chunks.push(array.slice(i, i + size));
+  }
+  return chunks;
+}
+
+export function unique(array) {
+  return [...new Set(array)];
+}
+
+export function flatten(array, depth = 1) {
+  return depth > 0
+    ? array.reduce((acc, val) =>
+        acc.concat(Array.isArray(val) ? flatten(val, depth - 1) : val), [])
+    : array.slice();
+}
+
+// Object utilities
+export function pick(obj, keys) {
+  return keys.reduce((result, key) => {
+    if (key in obj) result[key] = obj[key];
+    return result;
+  }, {});
+}
+
+export function omit(obj, keys) {
+  const result = { ...obj };
+  keys.forEach(key => delete result[key]);
+  return result;
+}
+
+export function deepClone(obj) {
+  if (obj === null || typeof obj !== 'object') return obj;
+  if (Array.isArray(obj)) return obj.map(deepClone);
+  return Object.fromEntries(
+    Object.entries(obj).map(([k, v]) => [k, deepClone(v)])
+  );
+}
+
+// String utilities
+export function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function truncate(str, length, suffix = '...') {
+  return str.length > length
+    ? str.slice(0, length - suffix.length) + suffix
+    : str;
+}
+
+export function slugify(str) {
+  return str
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+      </code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2>Theme Support</h2>
+      <p class="demo-description">Choose between light and dark themes, or let it follow the system preference.</p>
+
+      <div class="side-by-side">
+        <div>
+          <h3>Light Theme</h3>
+          <code-block language="javascript" theme="light" filename="light.js">
+const theme = 'light';
+document.body.classList.add(theme);
+console.log('Light theme activated');
+          </code-block>
+        </div>
+        <div>
+          <h3>Dark Theme</h3>
+          <code-block language="javascript" theme="dark" filename="dark.js">
+const theme = 'dark';
+document.body.classList.add(theme);
+console.log('Dark theme activated');
+          </code-block>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <h2>Diff Support</h2>
+      <p class="demo-description">Show code changes with the <code>diff</code> language. Lines starting with <code>+</code> are additions, <code>-</code> are removals.</p>
+
+      <code-block language="diff" filename="changes.diff">
+ function greet(name) {
+-  console.log('Hello ' + name);
++  console.log(`Hello, ${name}!`);
+ }
+
+-greet('world');
++greet('World');
+      </code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2>Copy & Download</h2>
+      <p class="demo-description">Every code block includes a copy button. Add the <code>download</code> attribute for a download option.</p>
+
+      <code-block language="html" filename="snippet.html" download>
+&lt;!-- This code block has a download button --&gt;
+&lt;script type="module"&gt;
+  import '@profpowell/code-block';
+&lt;/script&gt;
+
+&lt;code-block language="javascript"&gt;
+console.log('Hello, World!');
+&lt;/code-block&gt;
+      </code-block>
+    </section>
+
+    <section class="demo-section">
+      <h2>Custom Styling</h2>
+      <p class="demo-description">Customize the appearance using CSS custom properties.</p>
+
+      <style>
+        .custom-styled {
+          --cb-border-radius: 16px;
+          --cb-header-bg: #1e3a5f;
+          --cb-code-bg: #0f1c2e;
+          --cb-text-color: #e0f0ff;
+          --cb-label-color: #7eb8ff;
+          --cb-keyword: #ff7eb6;
+          --cb-string: #7ee787;
+          --cb-comment: #6e8898;
+          --cb-function: #79c0ff;
+          --cb-number: #f2cc60;
+        }
+      </style>
+
+      <code-block language="javascript" class="custom-styled" filename="custom.js">
+// Custom styled code block
+function createGradient(colors) {
+  const stops = colors.map((c, i) =>
+    `${c} ${(i / (colors.length - 1)) * 100}%`
+  );
+  return `linear-gradient(90deg, ${stops.join(', ')})`;
+}
+
+const gradient = createGradient(['#ff0080', '#7928ca', '#0070f3']);
+console.log(gradient);
+      </code-block>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>MIT License · <a href="https://github.com/ProfPowell/code-block">View on GitHub</a> · Powered by <a href="https://highlightjs.org/">highlight.js</a></p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      document.querySelectorAll('code-block:not([theme]), code-block-group:not([theme])').forEach(block => {
+        block.setAttribute('theme', isDark ? 'dark' : 'light');
+      });
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    // Load saved theme
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+      document.querySelectorAll('code-block:not([theme]), code-block-group:not([theme])').forEach(block => {
+        block.setAttribute('theme', 'dark');
+      });
+    }
+  </script>
+</body>
+</html>
