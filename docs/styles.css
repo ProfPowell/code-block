@@ -51,7 +51,6 @@ a {
 
 a:hover {
   color: var(--link-hover);
-  text-decoration: underline;
 }
 
 code {
