@@ -26,10 +26,10 @@ function Jt() {
       this.isMatchIgnored = !0;
     }
   }
-  function r(t) {
+  function i(t) {
     return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
   }
-  function i(t, ...n) {
+  function r(t, ...n) {
     const s = /* @__PURE__ */ Object.create(null);
     for (const m in t)
       s[m] = t[m];
@@ -66,7 +66,7 @@ function Jt() {
      *
      * @param {string} text */
     addText(n) {
-      this.buffer += r(n);
+      this.buffer += i(n);
     }
     /**
      * Adds a node open to the output stream (if needed)
@@ -215,7 +215,7 @@ function Jt() {
   function X(...t) {
     return "(" + (V(t).capture ? "" : "?:") + t.map((m) => N(m)).join("|") + ")";
   }
-  function ee(t) {
+  function Y(t) {
     return new RegExp(t.toString() + "|").exec("").length - 1;
   }
   function le(t, n) {
@@ -240,14 +240,14 @@ function Jt() {
       return h;
     }).map((m) => `(${m})`).join(n);
   }
-  const q = /\b\B/, ie = "[a-zA-Z]\\w*", B = "[a-zA-Z_]\\w*", Y = "\\b\\d+(\\.\\d+)?", J = "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)", ne = "\\b(0b[01]+)", j = "!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~", G = (t = {}) => {
+  const q = /\b\B/, re = "[a-zA-Z]\\w*", B = "[a-zA-Z_]\\w*", Q = "\\b\\d+(\\.\\d+)?", ee = "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)", ne = "\\b(0b[01]+)", j = "!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~", G = (t = {}) => {
     const n = /^#![ ]*\//;
     return t.binary && (t.begin = L(
       n,
       /.*\b/,
       t.binary,
       /\b.*/
-    )), i({
+    )), r({
       scope: "meta",
       begin: n,
       end: /$/,
@@ -275,7 +275,7 @@ function Jt() {
   }, Re = {
     begin: /\b(a|an|the|are|I'm|isn't|don't|doesn't|won't|but|just|should|pretty|simply|enough|gonna|going|wtf|so|such|will|you|your|they|like|more)\b/
   }, P = function(t, n, s = {}) {
-    const m = i(
+    const m = r(
       {
         scope: "comment",
         begin: t,
@@ -342,11 +342,11 @@ function Jt() {
     ), m;
   }, de = P("//", "$"), ge = P("/\\*", "\\*/"), fe = P("#", "$"), Ee = {
     scope: "number",
-    begin: Y,
+    begin: Q,
     relevance: 0
   }, we = {
     scope: "number",
-    begin: J,
+    begin: ee,
     relevance: 0
   }, lt = {
     scope: "number",
@@ -367,7 +367,7 @@ function Jt() {
     ]
   }, ut = {
     scope: "title",
-    begin: ie,
+    begin: re,
     relevance: 0
   }, ht = {
     scope: "title",
@@ -388,7 +388,7 @@ function Jt() {
     C_BLOCK_COMMENT_MODE: ge,
     C_LINE_COMMENT_MODE: de,
     C_NUMBER_MODE: we,
-    C_NUMBER_RE: J,
+    C_NUMBER_RE: ee,
     END_SAME_AS_BEGIN: function(t) {
       return Object.assign(
         t,
@@ -405,11 +405,11 @@ function Jt() {
       );
     },
     HASH_COMMENT_MODE: fe,
-    IDENT_RE: ie,
+    IDENT_RE: re,
     MATCH_NOTHING_RE: q,
     METHOD_GUARD: gt,
     NUMBER_MODE: Ee,
-    NUMBER_RE: Y,
+    NUMBER_RE: Q,
     PHRASAL_WORDS_MODE: Re,
     QUOTE_STRING_MODE: oe,
     REGEXP_MODE: dt,
@@ -500,7 +500,7 @@ function Jt() {
     let m = 0;
     const C = t[s], O = {}, h = {};
     for (let d = 1; d <= n.length; d++)
-      h[d + m] = C[d], O[d + m] = !0, m += ee(n[d - 1]);
+      h[d + m] = C[d], O[d + m] = !0, m += Y(n[d - 1]);
     t[s] = h, t[s]._emit = O, t[s]._multi = !0;
   }
   function St(t) {
@@ -540,7 +540,7 @@ function Jt() {
       }
       // @ts-ignore
       addRule(d, f) {
-        f.position = this.position++, this.matchIndexes[this.matchAt] = f, this.regexes.push([f, d]), this.matchAt += ee(d) + 1;
+        f.position = this.position++, this.matchIndexes[this.matchAt] = f, this.regexes.push([f, d]), this.matchAt += Y(d) + 1;
       }
       compile() {
         this.regexes.length === 0 && (this.exec = () => null);
@@ -630,7 +630,7 @@ function Jt() {
     }
     if (t.compilerExtensions || (t.compilerExtensions = []), t.contains && t.contains.includes("self"))
       throw new Error("ERR: contains `self` is not supported at the top-level of a language.  See documentation.");
-    return t.classNameAliases = i(t.classNameAliases || {}), O(
+    return t.classNameAliases = r(t.classNameAliases || {}), O(
       /** @type Mode */
       t
     );
@@ -640,8 +640,8 @@ function Jt() {
   }
   function Ot(t) {
     return t.variants && !t.cachedVariants && (t.cachedVariants = t.variants.map(function(n) {
-      return i(t, { variants: null }, n);
-    })), t.cachedVariants ? t.cachedVariants : Fe(t) ? i(t, { starts: t.starts ? i(t.starts) : null }) : Object.isFrozen(t) ? i(t) : t;
+      return r(t, { variants: null }, n);
+    })), t.cachedVariants ? t.cachedVariants : Fe(t) ? r(t, { starts: t.starts ? r(t.starts) : null }) : Object.isFrozen(t) ? r(t) : t;
   }
   var Rt = "11.11.1";
   class Tt extends Error {
@@ -649,7 +649,7 @@ function Jt() {
       super(n), this.name = "HTMLInjectionError", this.html = s;
     }
   }
-  const Te = r, Ze = i, Ke = Symbol("nomatch"), It = 7, We = function(t) {
+  const Te = i, Ze = r, Ke = Symbol("nomatch"), It = 7, We = function(t) {
     const n = /* @__PURE__ */ Object.create(null), s = /* @__PURE__ */ Object.create(null), m = [];
     let C = !0;
     const O = "Could not find the language '{}', did you forget to load/include a language module?", h = { disableAutodetect: !0, name: "Plain text", contains: [] };
@@ -682,17 +682,17 @@ function Jt() {
       let S = "", $ = "";
       typeof b == "object" ? (S = a, w = b.ignoreIllegals, $ = b.language) : (me("10.7.0", "highlight(lang, code, ...args) has been deprecated."), me("10.7.0", `Please use highlight(code, options) instead.
 https://github.com/highlightjs/highlight.js/issues/2277`), $ = a, S = b), w === void 0 && (w = !0);
-      const re = {
+      const ie = {
         code: S,
         language: $
       };
-      Ae("before:highlight", re);
-      const he = re.result ? re.result : _e(re.language, re.code, w);
-      return he.code = re.code, Ae("after:highlight", he), he;
+      Ae("before:highlight", ie);
+      const he = ie.result ? ie.result : _e(ie.language, ie.code, w);
+      return he.code = ie.code, Ae("after:highlight", he), he;
     }
     function _e(a, b, w, S) {
       const $ = /* @__PURE__ */ Object.create(null);
-      function re(l, g) {
+      function ie(l, g) {
         return l.keywords[g];
       }
       function he() {
@@ -705,7 +705,7 @@ https://github.com/highlightjs/highlight.js/issues/2277`), $ = a, S = b), w === 
         let g = v.keywordPatternRe.exec(A), x = "";
         for (; g; ) {
           x += A.substring(l, g.index);
-          const k = se.case_insensitive ? g[0].toLowerCase() : g[0], Z = re(v, k);
+          const k = se.case_insensitive ? g[0].toLowerCase() : g[0], Z = ie(v, k);
           if (Z) {
             const [ce, Xt] = Z;
             if (U.addText(x), x = "", $[k] = ($[k] || 0) + 1, $[k] <= It && (Ce += Xt), ce.startsWith("_"))
@@ -734,7 +734,7 @@ https://github.com/highlightjs/highlight.js/issues/2277`), $ = a, S = b), w === 
           l = Le(A, v.subLanguage.length ? v.subLanguage : null);
         v.relevance > 0 && (Ce += l.relevance), U.__addSublanguage(l._emitter, l.language);
       }
-      function Q() {
+      function J() {
         v.subLanguage != null ? Me() : he(), A = "";
       }
       function ae(l, g) {
@@ -779,14 +779,14 @@ https://github.com/highlightjs/highlight.js/issues/2277`), $ = a, S = b), w === 
         for (const ce of Z)
           if (ce && (ce(l, k), k.isMatchIgnored))
             return Zt(g);
-        return x.skip ? A += g : (x.excludeBegin && (A += g), Q(), !x.returnBegin && !x.excludeBegin && (A = g)), Qe(x, l), x.returnBegin ? 0 : g.length;
+        return x.skip ? A += g : (x.excludeBegin && (A += g), J(), !x.returnBegin && !x.excludeBegin && (A = g)), Qe(x, l), x.returnBegin ? 0 : g.length;
       }
       function Wt(l) {
         const g = l[0], x = b.substring(l.index), k = Je(v, l, x);
         if (!k)
           return Ke;
         const Z = v;
-        v.endScope && v.endScope._wrap ? (Q(), ae(g, v.endScope._wrap)) : v.endScope && v.endScope._multi ? (Q(), Ye(v.endScope, l)) : Z.skip ? A += g : (Z.returnEnd || Z.excludeEnd || (A += g), Q(), Z.excludeEnd && (A = g));
+        v.endScope && v.endScope._wrap ? (J(), ae(g, v.endScope._wrap)) : v.endScope && v.endScope._multi ? (J(), Ye(v.endScope, l)) : Z.skip ? A += g : (Z.returnEnd || Z.excludeEnd || (A += g), J(), Z.excludeEnd && (A = g));
         do
           v.scope && U.closeNode(), !v.skip && !v.subLanguage && (Ce += v.relevance), v = v.parent;
         while (v !== k.parent);
@@ -802,7 +802,7 @@ https://github.com/highlightjs/highlight.js/issues/2277`), $ = a, S = b), w === 
       function et(l, g) {
         const x = g && g[0];
         if (A += l, x == null)
-          return Q(), 0;
+          return J(), 0;
         if (Ne.type === "begin" && g.type === "end" && Ne.index === g.index && x === "") {
           if (A += b.slice(g.index, g.index + 1), !C) {
             const k = new Error(`0 width match regex (${a})`);
@@ -898,19 +898,19 @@ https://github.com/highlightjs/highlight.js/issues/2277`), $ = a, S = b), w === 
     function Le(a, b) {
       b = b || d.languages || Object.keys(n);
       const w = Ie(a), S = b.filter(ue).filter(Xe).map(
-        (Q) => _e(Q, a, !1)
+        (J) => _e(J, a, !1)
       );
       S.unshift(w);
-      const $ = S.sort((Q, ae) => {
-        if (Q.relevance !== ae.relevance) return ae.relevance - Q.relevance;
-        if (Q.language && ae.language) {
-          if (ue(Q.language).supersetOf === ae.language)
+      const $ = S.sort((J, ae) => {
+        if (J.relevance !== ae.relevance) return ae.relevance - J.relevance;
+        if (J.language && ae.language) {
+          if (ue(J.language).supersetOf === ae.language)
             return 1;
-          if (ue(ae.language).supersetOf === Q.language)
+          if (ue(ae.language).supersetOf === J.language)
             return -1;
         }
         return 0;
-      }), [re, he] = $, Me = re;
+      }), [ie, he] = $, Me = ie;
       return Me.secondBest = he, Me;
     }
     function Lt(a, b, w) {
@@ -1062,7 +1062,7 @@ https://github.com/highlightjs/highlight.js/issues/2277`), $ = a, S = b), w === 
   return ve.newInstance = () => We({}), Ue = ve, ve.HighlightJS = ve, ve.default = ve, Ue;
 }
 var en = /* @__PURE__ */ Jt();
-const I = /* @__PURE__ */ Qt(en), rt = "[A-Za-z$_][0-9A-Za-z$_]*", tn = [
+const I = /* @__PURE__ */ Qt(en), it = "[A-Za-z$_][0-9A-Za-z$_]*", tn = [
   "as",
   // for exports
   "in",
@@ -1114,7 +1114,7 @@ const I = /* @__PURE__ */ Qt(en), rt = "[A-Za-z$_][0-9A-Za-z$_]*", tn = [
   "undefined",
   "NaN",
   "Infinity"
-], it = [
+], rt = [
   // Fundamental objects
   "Object",
   "Function",
@@ -1205,14 +1205,14 @@ const I = /* @__PURE__ */ Qt(en), rt = "[A-Za-z$_][0-9A-Za-z$_]*", tn = [
   // Node.js
 ], on = [].concat(
   at,
-  it,
+  rt,
   ot
 );
 function st(o) {
-  const e = o.regex, r = (P, { after: de }) => {
+  const e = o.regex, i = (P, { after: de }) => {
     const ge = "</" + P[0].slice(1);
     return P.input.indexOf(ge, de) !== -1;
-  }, i = rt, c = {
+  }, r = it, c = {
     begin: "<>",
     end: "</>"
   }, u = /<[A-Za-z0-9\\._:-]+\s*\/>/, p = {
@@ -1235,7 +1235,7 @@ function st(o) {
         de.ignoreMatch();
         return;
       }
-      fe === ">" && (r(P, { after: ge }) || de.ignoreMatch());
+      fe === ">" && (i(P, { after: ge }) || de.ignoreMatch());
       let Ee;
       const we = P.input.substring(ge);
       if (Ee = we.match(/^\s*=/)) {
@@ -1248,7 +1248,7 @@ function st(o) {
       }
     }
   }, E = {
-    $pattern: rt,
+    $pattern: it,
     keyword: tn,
     literal: nn,
     built_in: on,
@@ -1321,7 +1321,7 @@ function st(o) {
       o.BACKSLASH_ESCAPE,
       R
     ]
-  }, ee = {
+  }, Y = {
     className: "comment",
     variants: [
       o.COMMENT(
@@ -1348,7 +1348,7 @@ function st(o) {
                 },
                 {
                   className: "variable",
-                  begin: i + "(?=\\s*(-)|$)",
+                  begin: r + "(?=\\s*(-)|$)",
                   endsParent: !0,
                   relevance: 0
                 },
@@ -1390,7 +1390,7 @@ function st(o) {
       "self"
     ].concat(le)
   });
-  const te = [].concat(ee, R.contains), W = te.concat([
+  const te = [].concat(Y, R.contains), W = te.concat([
     // eat recursive parens in sub expressions
     {
       begin: /(\s*)\(/,
@@ -1408,18 +1408,18 @@ function st(o) {
     excludeEnd: !0,
     keywords: E,
     contains: W
-  }, ie = {
+  }, re = {
     variants: [
       // class Car extends vehicle
       {
         match: [
           /class/,
           /\s+/,
-          i,
+          r,
           /\s+/,
           /extends/,
           /\s+/,
-          e.concat(i, "(", e.concat(/\./, i), ")*")
+          e.concat(r, "(", e.concat(/\./, r), ")*")
         ],
         scope: {
           1: "keyword",
@@ -1433,7 +1433,7 @@ function st(o) {
         match: [
           /class/,
           /\s+/,
-          i
+          r
         ],
         scope: {
           1: "keyword",
@@ -1461,22 +1461,22 @@ function st(o) {
     keywords: {
       _: [
         // se we still get relevance credit for JS library classes
-        ...it,
+        ...rt,
         ...ot
       ]
     }
-  }, Y = {
+  }, Q = {
     label: "use_strict",
     className: "meta",
     relevance: 10,
     begin: /^\s*['"]use (strict|asm)['"]/
-  }, J = {
+  }, ee = {
     variants: [
       {
         match: [
           /function/,
           /\s+/,
-          i,
+          r,
           /(?=\s*\()/
         ]
       },
@@ -1511,16 +1511,16 @@ function st(o) {
         "super",
         "import"
       ].map((P) => `${P}\\s*\\(`)),
-      i,
+      r,
       e.lookahead(/\s*\(/)
     ),
     className: "title.function",
     relevance: 0
   }, F = {
     begin: e.concat(/\./, e.lookahead(
-      e.concat(i, /(?![0-9A-Za-z$_(])/)
+      e.concat(r, /(?![0-9A-Za-z$_(])/)
     )),
-    end: i,
+    end: r,
     excludeBegin: !0,
     keywords: "prototype",
     className: "property",
@@ -1529,7 +1529,7 @@ function st(o) {
     match: [
       /get|set/,
       /\s+/,
-      i,
+      r,
       /(?=\()/
     ],
     className: {
@@ -1547,7 +1547,7 @@ function st(o) {
     match: [
       /const|var|let/,
       /\s+/,
-      i,
+      r,
       /\s*/,
       /=\s*/,
       /(async\s*)?/,
@@ -1576,21 +1576,21 @@ function st(o) {
         binary: "node",
         relevance: 5
       }),
-      Y,
+      Q,
       o.APOS_STRING_MODE,
       o.QUOTE_STRING_MODE,
       M,
       z,
       L,
       V,
-      ee,
+      Y,
       // Skip numbers when they are part of a variable name
       { match: /\$\d+/ },
       N,
       B,
       {
         scope: "attr",
-        match: i + e.lookahead(":"),
+        match: r + e.lookahead(":"),
         relevance: 0
       },
       Re,
@@ -1600,7 +1600,7 @@ function st(o) {
         keywords: "return throw case",
         relevance: 0,
         contains: [
-          ee,
+          Y,
           o.REGEXP_MODE,
           {
             className: "function",
@@ -1669,7 +1669,7 @@ function st(o) {
           }
         ]
       },
-      J,
+      ee,
       {
         // prevent this from getting swallowed up by function
         // since they appear "function like"
@@ -1685,7 +1685,7 @@ function st(o) {
         label: "func.def",
         contains: [
           q,
-          o.inherit(o.TITLE_MODE, { begin: i, className: "title.function" })
+          o.inherit(o.TITLE_MODE, { begin: r, className: "title.function" })
         ]
       },
       // catch ... so it won't trigger the property rule below
@@ -1698,7 +1698,7 @@ function st(o) {
       // .keyword()
       // $keyword = x
       {
-        match: "\\$" + i,
+        match: "\\$" + r,
         relevance: 0
       },
       {
@@ -1708,7 +1708,7 @@ function st(o) {
       },
       G,
       ne,
-      ie,
+      re,
       K,
       {
         match: /\$[(.]/
@@ -2515,7 +2515,7 @@ const an = (o) => ({
   "zoom"
 ].sort().reverse();
 function bn(o) {
-  const e = o.regex, r = an(o), i = { begin: /-(webkit|moz|ms|o)-(?=[a-z])/ }, c = "and or not only", u = /@-?\w[\w]*(-\w+)*/, p = "[a-zA-Z-][a-zA-Z0-9_-]*", E = [
+  const e = o.regex, i = an(o), r = { begin: /-(webkit|moz|ms|o)-(?=[a-z])/ }, c = "and or not only", u = /@-?\w[\w]*(-\w+)*/, p = "[a-zA-Z-][a-zA-Z0-9_-]*", E = [
     o.APOS_STRING_MODE,
     o.QUOTE_STRING_MODE
   ];
@@ -2530,11 +2530,11 @@ function bn(o) {
       keyframePosition: "selector-tag"
     },
     contains: [
-      r.BLOCK_COMMENT,
-      i,
+      i.BLOCK_COMMENT,
+      r,
       // to recognize keyframe 40% etc which are outside the scope of our
       // attribute value mode
-      r.CSS_NUMBER_MODE,
+      i.CSS_NUMBER_MODE,
       {
         className: "selector-id",
         begin: /#[A-Za-z0-9_-]+/,
@@ -2545,7 +2545,7 @@ function bn(o) {
         begin: "\\." + p,
         relevance: 0
       },
-      r.ATTRIBUTE_SELECTOR_MODE,
+      i.ATTRIBUTE_SELECTOR_MODE,
       {
         className: "selector-pseudo",
         variants: [
@@ -2559,7 +2559,7 @@ function bn(o) {
       //   end: /\)/,
       //   contains: [ hljs.CSS_NUMBER_MODE ]
       // },
-      r.CSS_VARIABLE,
+      i.CSS_VARIABLE,
       {
         className: "attribute",
         begin: "\\b(" + gn.join("|") + ")\\b"
@@ -2569,10 +2569,10 @@ function bn(o) {
         begin: /:/,
         end: /[;}{]/,
         contains: [
-          r.BLOCK_COMMENT,
-          r.HEXCOLOR,
-          r.IMPORTANT,
-          r.CSS_NUMBER_MODE,
+          i.BLOCK_COMMENT,
+          i.HEXCOLOR,
+          i.IMPORTANT,
+          i.CSS_NUMBER_MODE,
           ...E,
           // needed to highlight these as strings and to avoid issues with
           // illegal characters that might be inside urls that would tigger the
@@ -2595,7 +2595,7 @@ function bn(o) {
               }
             ]
           },
-          r.FUNCTION_DISPATCH
+          i.FUNCTION_DISPATCH
         ]
       },
       {
@@ -2625,7 +2625,7 @@ function bn(o) {
                 className: "attribute"
               },
               ...E,
-              r.CSS_NUMBER_MODE
+              i.CSS_NUMBER_MODE
             ]
           }
         ]
@@ -2638,7 +2638,7 @@ function bn(o) {
   };
 }
 function xe(o) {
-  const e = o.regex, r = e.concat(/[\p{L}_]/u, e.optional(/[\p{L}0-9_.-]*:/u), /[\p{L}0-9_.-]*/u), i = /[\p{L}0-9._:-]+/u, c = {
+  const e = o.regex, i = e.concat(/[\p{L}_]/u, e.optional(/[\p{L}0-9_.-]*:/u), /[\p{L}0-9_.-]*/u), r = /[\p{L}0-9._:-]+/u, c = {
     className: "symbol",
     begin: /&[a-z]+;|&#[0-9]+;|&#x[a-f0-9]+;/
   }, u = {
@@ -2660,7 +2660,7 @@ function xe(o) {
     contains: [
       {
         className: "attr",
-        begin: i,
+        begin: r,
         relevance: 0
       },
       {
@@ -2810,7 +2810,7 @@ function xe(o) {
         begin: e.concat(
           /</,
           e.lookahead(e.concat(
-            r,
+            i,
             // <tag/>
             // <tag>
             // <tag ...
@@ -2821,7 +2821,7 @@ function xe(o) {
         contains: [
           {
             className: "name",
-            begin: r,
+            begin: i,
             relevance: 0,
             starts: y
           }
@@ -2833,14 +2833,14 @@ function xe(o) {
         begin: e.concat(
           /<\//,
           e.lookahead(e.concat(
-            r,
+            i,
             />/
           ))
         ),
         contains: [
           {
             className: "name",
-            begin: r,
+            begin: i,
             relevance: 0
           },
           {
@@ -2858,27 +2858,27 @@ function pn(o) {
     className: "attr",
     begin: /"(\\.|[^\\"\r\n])*"(?=\s*:)/,
     relevance: 1.01
-  }, r = {
+  }, i = {
     match: /[{}[\],:]/,
     className: "punctuation",
     relevance: 0
-  }, i = [
+  }, r = [
     "true",
     "false",
     "null"
   ], c = {
     scope: "literal",
-    beginKeywords: i.join(" ")
+    beginKeywords: r.join(" ")
   };
   return {
     name: "JSON",
     aliases: ["jsonc"],
     keywords: {
-      literal: i
+      literal: r
     },
     contains: [
       e,
-      r,
+      i,
       o.QUOTE_STRING_MODE,
       c,
       o.C_NUMBER_MODE,
@@ -2889,7 +2889,7 @@ function pn(o) {
   };
 }
 function ct(o) {
-  const e = "true false yes no null", r = "[\\w#;/?:@&=+$,.~*'()[\\]]+", i = {
+  const e = "true false yes no null", i = "[\\w#;/?:@&=+$,.~*'()[\\]]+", r = {
     className: "attr",
     variants: [
       // added brackets support and special char support
@@ -2981,7 +2981,7 @@ function ct(o) {
     illegal: "\\n",
     relevance: 0
   }, V = [
-    i,
+    r,
     {
       className: "meta",
       begin: "^---\\s*$",
@@ -3008,23 +3008,23 @@ function ct(o) {
     {
       // named tags
       className: "type",
-      begin: "!\\w+!" + r
+      begin: "!\\w+!" + i
     },
     // https://yaml.org/spec/1.2/spec.html#id2784064
     {
       // verbatim tags
       className: "type",
-      begin: "!<" + r + ">"
+      begin: "!<" + i + ">"
     },
     {
       // primary tags
       className: "type",
-      begin: "!" + r
+      begin: "!" + i
     },
     {
       // secondary tags
       className: "type",
-      begin: "!!" + r
+      begin: "!!" + i
     },
     {
       // fragment id &ref
@@ -3069,18 +3069,18 @@ function ct(o) {
   };
 }
 function fn(o) {
-  const e = o.regex, r = /(?![A-Za-z0-9])(?![$])/, i = e.concat(
+  const e = o.regex, i = /(?![A-Za-z0-9])(?![$])/, r = e.concat(
     /[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/,
-    r
+    i
   ), c = e.concat(
     /(\\?[A-Z][a-z0-9_\x7f-\xff]+|\\?[A-Z]+(?=[A-Z][a-z0-9_\x7f-\xff])){1,}/,
-    r
+    i
   ), u = e.concat(
     /[A-Z]+/,
-    r
+    i
   ), p = {
     scope: "variable",
-    match: "\\$+" + i
+    match: "\\$+" + r
   }, E = {
     scope: "meta",
     variants: [
@@ -3243,7 +3243,7 @@ function fn(o) {
     "while",
     "xor",
     "yield"
-  ], ee = [
+  ], Y = [
     // Standard PHP library:
     // <https://www.php.net/manual/en/book.spl.php>
     "Error|0",
@@ -3346,14 +3346,14 @@ function fn(o) {
         K.push(oe), oe.toLowerCase() === oe ? K.push(oe.toUpperCase()) : K.push(oe.toLowerCase());
       }), K;
     })(V),
-    built_in: ee
+    built_in: Y
   }, W = (F) => F.map((K) => K.replace(/\|\d+$/, "")), q = { variants: [
     {
       match: [
         /new/,
         e.concat(M, "+"),
         // to prevent built ins from being confused as the class constructor call
-        e.concat("(?!", W(ee).join("\\b|"), "\\b)"),
+        e.concat("(?!", W(Y).join("\\b|"), "\\b)"),
         c
       ],
       scope: {
@@ -3361,14 +3361,14 @@ function fn(o) {
         4: "title.class"
       }
     }
-  ] }, ie = e.concat(i, "\\b(?!\\()"), B = { variants: [
+  ] }, re = e.concat(r, "\\b(?!\\()"), B = { variants: [
     {
       match: [
         e.concat(
           /::/,
           e.lookahead(/(?!class\b)/)
         ),
-        ie
+        re
       ],
       scope: { 2: "variable.constant" }
     },
@@ -3386,7 +3386,7 @@ function fn(o) {
           /::/,
           e.lookahead(/(?!class\b)/)
         ),
-        ie
+        re
       ],
       scope: {
         1: "title.class",
@@ -3414,16 +3414,16 @@ function fn(o) {
         3: "variable.language"
       }
     }
-  ] }, Y = {
+  ] }, Q = {
     scope: "attr",
-    match: e.concat(i, e.lookahead(":"), e.lookahead(/(?!::)/))
-  }, J = {
+    match: e.concat(r, e.lookahead(":"), e.lookahead(/(?!::)/))
+  }, ee = {
     relevance: 0,
     begin: /\(/,
     end: /\)/,
     keywords: te,
     contains: [
-      Y,
+      Q,
       p,
       B,
       o.C_BLOCK_COMMENT_MODE,
@@ -3436,17 +3436,17 @@ function fn(o) {
     match: [
       /\b/,
       // to prevent keywords from being confused as the function title
-      e.concat("(?!fn\\b|function\\b|", W(X).join("\\b|"), "|", W(ee).join("\\b|"), "\\b)"),
-      i,
+      e.concat("(?!fn\\b|function\\b|", W(X).join("\\b|"), "|", W(Y).join("\\b|"), "\\b)"),
+      r,
       e.concat(M, "*"),
       e.lookahead(/(?=\()/)
     ],
     scope: { 3: "title.function.invoke" },
-    contains: [J]
+    contains: [ee]
   };
-  J.contains.push(ne);
+  ee.contains.push(ne);
   const j = [
-    Y,
+    Q,
     B,
     o.C_BLOCK_COMMENT_MODE,
     z,
@@ -3540,7 +3540,7 @@ function fn(o) {
         match: [
           /const/,
           /\s/,
-          i
+          r
         ],
         scope: {
           1: "keyword",
@@ -3632,9 +3632,9 @@ function fn(o) {
   };
 }
 function mn(o) {
-  const e = o.regex, r = "HTTP/([32]|1\\.[01])", i = /[A-Za-z][A-Za-z0-9-]*/, c = {
+  const e = o.regex, i = "HTTP/([32]|1\\.[01])", r = /[A-Za-z][A-Za-z0-9-]*/, c = {
     className: "attribute",
-    begin: e.concat("^", i, "(?=\\:\\s)"),
+    begin: e.concat("^", r, "(?=\\:\\s)"),
     starts: { contains: [
       {
         className: "punctuation",
@@ -3663,12 +3663,12 @@ function mn(o) {
     contains: [
       // response
       {
-        begin: "^(?=" + r + " \\d{3})",
+        begin: "^(?=" + i + " \\d{3})",
         end: /$/,
         contains: [
           {
             className: "meta",
-            begin: r
+            begin: i
           },
           {
             className: "number",
@@ -3683,7 +3683,7 @@ function mn(o) {
       },
       // request
       {
-        begin: "(?=^[A-Z]+ (.*?) " + r + "$)",
+        begin: "(?=^[A-Z]+ (.*?) " + i + "$)",
         end: /$/,
         contains: [
           {
@@ -3695,7 +3695,7 @@ function mn(o) {
           },
           {
             className: "meta",
-            begin: r
+            begin: i
           },
           {
             className: "keyword",
@@ -3830,11 +3830,12 @@ class En extends HTMLElement {
       "copied-text",
       "show-share",
       "show-download",
+      "no-copy",
       "lazy"
     ];
   }
-  attributeChangedCallback(e, r, i) {
-    this.shadowRoot && r !== i && this.render();
+  attributeChangedCallback(e, i, r) {
+    this.shadowRoot && i !== r && this.render();
   }
   get language() {
     return this.getAttribute("language") || "plaintext";
@@ -3854,17 +3855,17 @@ class En extends HTMLElement {
   get highlightLines() {
     const e = this.getAttribute("highlight-lines");
     if (!e) return /* @__PURE__ */ new Set();
-    const r = /* @__PURE__ */ new Set(), i = e.split(",");
-    for (const c of i) {
+    const i = /* @__PURE__ */ new Set(), r = e.split(",");
+    for (const c of r) {
       const u = c.trim();
       if (u.includes("-")) {
         const [p, E] = u.split("-").map(Number);
         for (let _ = p; _ <= E; _++)
-          r.add(_);
+          i.add(_);
       } else
-        r.add(Number(u));
+        i.add(Number(u));
     }
-    return r;
+    return i;
   }
   get collapsed() {
     return this.hasAttribute("collapsed");
@@ -3891,15 +3892,18 @@ class En extends HTMLElement {
   get showDownload() {
     return this.hasAttribute("show-download");
   }
+  get noCopy() {
+    return this.hasAttribute("no-copy");
+  }
   get lazy() {
     return this.hasAttribute("lazy");
   }
   async copyCode() {
-    const e = (this._codeContent || this.textContent).trim(), r = document.createElement("div");
-    r.innerHTML = e;
-    const i = r.textContent, c = this.shadowRoot.querySelector(".copy-button"), u = this.copyText, p = this.copiedText;
+    const e = (this._codeContent || this.textContent).trim(), i = document.createElement("div");
+    i.innerHTML = e;
+    const r = i.textContent, c = this.shadowRoot.querySelector(".copy-button"), u = this.copyText, p = this.copiedText;
     try {
-      await navigator.clipboard.writeText(i), c.textContent = p, c.classList.add("copied"), c.setAttribute("aria-label", "Code copied to clipboard");
+      await navigator.clipboard.writeText(r), c.textContent = p, c.classList.add("copied"), c.setAttribute("aria-label", "Code copied to clipboard");
     } catch (E) {
       console.error("Failed to copy code:", E), c.textContent = "Failed", c.classList.add("failed"), c.setAttribute("aria-label", "Failed to copy code");
     }
@@ -3911,8 +3915,8 @@ class En extends HTMLElement {
    * Download code as a file
    */
   downloadCode() {
-    const e = this.getCode(), r = this.filename || `code.${this._getFileExtension()}`, i = new Blob([e], { type: "text/plain" }), c = URL.createObjectURL(i), u = document.createElement("a");
-    u.href = c, u.download = r, document.body.appendChild(u), u.click(), document.body.removeChild(u), URL.revokeObjectURL(c);
+    const e = this.getCode(), i = this.filename || `code.${this._getFileExtension()}`, r = new Blob([e], { type: "text/plain" }), c = URL.createObjectURL(r), u = document.createElement("a");
+    u.href = c, u.download = i, document.body.appendChild(u), u.click(), document.body.removeChild(u), URL.revokeObjectURL(c);
   }
   /**
    * Get file extension based on language
@@ -3946,45 +3950,45 @@ class En extends HTMLElement {
    */
   toggleShareMenu() {
     this._showShareMenu = !this._showShareMenu;
-    const e = this.shadowRoot.querySelector(".share-menu"), r = this.shadowRoot.querySelector(".share-button");
-    this._showShareMenu ? (e.style.display = "block", r.classList.add("active"), setTimeout(() => {
+    const e = this.shadowRoot.querySelector(".share-menu"), i = this.shadowRoot.querySelector(".share-button");
+    this._showShareMenu ? (e.style.display = "block", i.classList.add("active"), setTimeout(() => {
       document.addEventListener("click", this._handleOutsideClick);
-    }, 0)) : (e.style.display = "none", r.classList.remove("active"), document.removeEventListener("click", this._handleOutsideClick));
+    }, 0)) : (e.style.display = "none", i.classList.remove("active"), document.removeEventListener("click", this._handleOutsideClick));
   }
   _handleOutsideClick(e) {
-    const r = this.shadowRoot.querySelector(".share-menu");
-    r && !r.contains(e.target) && this.toggleShareMenu();
+    const i = this.shadowRoot.querySelector(".share-menu");
+    i && !i.contains(e.target) && this.toggleShareMenu();
   }
   /**
    * Share via Web Share API
    */
   async shareViaWebAPI() {
     if (!navigator.share) return;
-    const e = this.getCode(), r = this.filename || this.label;
+    const e = this.getCode(), i = this.filename || this.label;
     try {
       await navigator.share({
-        title: r,
+        title: i,
         text: e
       }), this.toggleShareMenu();
-    } catch (i) {
-      i.name !== "AbortError" && console.error("Error sharing:", i);
+    } catch (r) {
+      r.name !== "AbortError" && console.error("Error sharing:", r);
     }
   }
   /**
    * Open code in CodePen
    */
   openInCodePen() {
-    const e = this.getCode(), r = this.language;
-    let i = {
+    const e = this.getCode(), i = this.language;
+    let r = {
       title: this.filename || this.label || "Code Block Demo",
       description: "Code shared from code-block component",
       editors: "111"
     };
-    ["html", "markup", "xhtml", "xml", "svg"].includes(r) ? (i.html = e, i.editors = "100") : r === "css" ? (i.css = e, i.editors = "010") : ["javascript", "js"].includes(r) ? (i.js = e, i.editors = "001") : (i.html = `<pre><code>${this.escapeHtml(e)}</code></pre>`, i.editors = "100");
+    ["html", "markup", "xhtml", "xml", "svg"].includes(i) ? (r.html = e, r.editors = "100") : i === "css" ? (r.css = e, r.editors = "010") : ["javascript", "js"].includes(i) ? (r.js = e, r.editors = "001") : (r.html = `<pre><code>${this.escapeHtml(e)}</code></pre>`, r.editors = "100");
     const c = document.createElement("form");
     c.action = "https://codepen.io/pen/define", c.method = "POST", c.target = "_blank";
     const u = document.createElement("input");
-    u.type = "hidden", u.name = "data", u.value = JSON.stringify(i), c.appendChild(u), document.body.appendChild(c), c.submit(), document.body.removeChild(c), this.toggleShareMenu();
+    u.type = "hidden", u.name = "data", u.value = JSON.stringify(r), c.appendChild(u), document.body.appendChild(c), c.submit(), document.body.removeChild(c), this.toggleShareMenu();
   }
   getStyles() {
     const e = this.theme === "dark";
@@ -4435,9 +4439,9 @@ class En extends HTMLElement {
    * Render a placeholder without syntax highlighting (for lazy loading)
    */
   renderPlaceholder() {
-    const e = (this._codeContent || this.textContent).trim(), r = e.split(`
+    const e = (this._codeContent || this.textContent).trim(), i = e.split(`
 `), c = this.escapeHtml(e).split(`
-`).map((_) => `<span class="code-line">${_ || " "}</span>`).join(""), u = this.showLines ? `<div class="line-numbers" aria-hidden="true">${r.map((_, y) => `<span>${y + 1}</span>`).join("")}</div>` : "", p = this.filename ? `<span class="label">${this.escapeHtml(this.language.toUpperCase())}</span><span class="filename">${this.escapeHtml(this.filename)}</span>` : `<span class="label">${this.escapeHtml(this.label)}</span>`;
+`).map((_) => `<span class="code-line">${_ || " "}</span>`).join(""), u = this.showLines ? `<div class="line-numbers" aria-hidden="true">${i.map((_, y) => `<span>${y + 1}</span>`).join("")}</div>` : "", p = this.filename ? `<span class="label">${this.escapeHtml(this.language.toUpperCase())}</span><span class="filename">${this.escapeHtml(this.filename)}</span>` : `<span class="label">${this.escapeHtml(this.label)}</span>`;
     this.shadowRoot.innerHTML = `
       <style>${this.getStyles()}</style>
       <div class="header">
@@ -4459,8 +4463,8 @@ class En extends HTMLElement {
     E && E.addEventListener("click", () => this.copyCode());
   }
   render() {
-    const e = (this._codeContent || this.textContent).trim(), r = e.split(`
-`), i = this.highlightLines, c = this.language === "diff";
+    const e = (this._codeContent || this.textContent).trim(), i = e.split(`
+`), r = this.highlightLines, c = this.language === "diff";
     let u;
     try {
       this.language && this.language !== "plaintext" && this.language !== "text" && this.language !== "txt" ? u = I.highlight(e, { language: this.language, ignoreIllegals: !0 }).value : u = this.escapeHtml(e);
@@ -4468,20 +4472,20 @@ class En extends HTMLElement {
       u = this.escapeHtml(e);
     }
     const p = u.split(`
-`), E = p.map((B, Y) => {
-      const J = Y + 1, ne = i.has(J), j = ["code-line"];
+`), E = p.map((B, Q) => {
+      const ee = Q + 1, ne = r.has(ee), j = ["code-line"];
       if (ne && j.push("highlighted"), c) {
-        const G = r[Y] || "";
+        const G = i[Q] || "";
         G.startsWith("+") && !G.startsWith("+++") ? j.push("diff-add") : G.startsWith("-") && !G.startsWith("---") && j.push("diff-remove");
       }
       return `<span class="${j.join(" ")}">${B || " "}</span>`;
-    }).join(""), _ = this.showLines ? `<div class="line-numbers" aria-hidden="true">${p.map((B, Y) => {
-      const J = Y + 1, ne = i.has(J), j = [];
+    }).join(""), _ = this.showLines ? `<div class="line-numbers" aria-hidden="true">${p.map((B, Q) => {
+      const ee = Q + 1, ne = r.has(ee), j = [];
       if (ne && j.push("highlighted"), c) {
-        const G = r[Y] || "";
+        const G = i[Q] || "";
         G.startsWith("+") && !G.startsWith("+++") ? j.push("diff-add") : G.startsWith("-") && !G.startsWith("---") && j.push("diff-remove");
       }
-      return `<span class="${j.join(" ")}">${J}</span>`;
+      return `<span class="${j.join(" ")}">${ee}</span>`;
     }).join("")}</div>` : "", y = this.filename ? `<span class="label">${this.escapeHtml(this.language.toUpperCase())}</span><span class="filename">${this.escapeHtml(this.filename)}</span>` : `<span class="label">${this.escapeHtml(this.label)}</span>`, H = this.hasAttribute("collapsed") || this.hasAttribute("max-lines"), N = p.length, R = this.maxLines, M = H && N > R, z = this.collapsed, L = z ? `calc(${R} * 1.6em + 2rem)` : "none", V = this.maxHeight ? `--cb-max-height: ${this.maxHeight};` : "", X = z ? `max-height: ${L};` : "";
     this.shadowRoot.innerHTML = `
       <style>${this.getStyles()}</style>
@@ -4527,9 +4531,9 @@ class En extends HTMLElement {
               </svg>
             </button>
           ` : ""}
-          <button class="copy-button"
+          ${this.noCopy ? "" : `<button class="copy-button"
                   aria-label="Copy code to clipboard"
-                  title="Copy code">${this.escapeHtml(this.copyText)}</button>
+                  title="Copy code">${this.escapeHtml(this.copyText)}</button>`}
         </div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="${V}${X}">
@@ -4541,7 +4545,9 @@ class En extends HTMLElement {
           ${z ? `Show all ${N} lines` : "Show less"}
         </button>
       ` : ""}
-    `, M ? this.setAttribute("data-expandable", "") : this.removeAttribute("data-expandable"), this.shadowRoot.querySelector(".copy-button").addEventListener("click", () => this.copyCode());
+    `, M ? this.setAttribute("data-expandable", "") : this.removeAttribute("data-expandable");
+    const Y = this.shadowRoot.querySelector(".copy-button");
+    Y && Y.addEventListener("click", () => this.copyCode());
     const le = this.shadowRoot.querySelector(".expand-button");
     le && le.addEventListener("click", () => this.toggleCollapsed());
     const te = this.shadowRoot.querySelector(".share-button");
@@ -4552,15 +4558,15 @@ class En extends HTMLElement {
     W && W.addEventListener("click", () => this.shareViaWebAPI());
     const q = this.shadowRoot.querySelector(".share-codepen");
     q && q.addEventListener("click", () => this.openInCodePen());
-    const ie = this.shadowRoot.querySelector(".download-button");
-    ie && ie.addEventListener("click", () => this.downloadCode());
+    const re = this.shadowRoot.querySelector(".download-button");
+    re && re.addEventListener("click", () => this.downloadCode());
   }
   toggleCollapsed() {
     this.collapsed ? this.removeAttribute("collapsed") : this.setAttribute("collapsed", "");
   }
   escapeHtml(e) {
-    const r = document.createElement("div");
-    return r.textContent = e, r.innerHTML;
+    const i = document.createElement("div");
+    return i.textContent = e, i.innerHTML;
   }
   /**
    * Update the code content programmatically
@@ -4597,8 +4603,8 @@ class _n extends HTMLElement {
   static get observedAttributes() {
     return ["theme", "show-share", "show-download"];
   }
-  attributeChangedCallback(e, r, i) {
-    this.shadowRoot && r !== i && this.render();
+  attributeChangedCallback(e, i, r) {
+    this.shadowRoot && i !== r && this.render();
   }
   get theme() {
     return this.getAttribute("theme") || "light";
@@ -4616,8 +4622,8 @@ class _n extends HTMLElement {
     return this._activeIndex;
   }
   set activeIndex(e) {
-    const r = this.codeBlocks;
-    e >= 0 && e < r.length && (this._activeIndex = e, this.updateActiveTab());
+    const i = this.codeBlocks;
+    e >= 0 && e < i.length && (this._activeIndex = e, this.updateActiveTab());
   }
   getStyles() {
     const e = this.theme === "dark";
@@ -4820,7 +4826,7 @@ class _n extends HTMLElement {
     e.forEach((u, p) => {
       u.setAttribute("theme", this.theme), p === this._activeIndex ? u.classList.add("active") : u.classList.remove("active");
     });
-    const r = e.map((u, p) => {
+    const i = e.map((u, p) => {
       const E = u.getAttribute("filename"), _ = u.getAttribute("label"), y = u.getAttribute("language") || "plaintext", H = E || _ || y.toUpperCase(), N = p === this._activeIndex;
       return `
         <button
@@ -4877,7 +4883,7 @@ class _n extends HTMLElement {
       <style>${this.getStyles()}</style>
       <div class="header">
         <div class="tabs" role="tablist" aria-label="Code files">
-          ${r}
+          ${i}
         </div>
         ${c}
       </div>
@@ -4916,10 +4922,10 @@ class _n extends HTMLElement {
       }
       p.preventDefault(), this.activeIndex = y, E[y].focus();
     });
-    const r = this.shadowRoot.querySelector(".download-button");
-    r && r.addEventListener("click", () => this.downloadCode());
-    const i = this.shadowRoot.querySelector(".share-button");
-    i && i.addEventListener("click", (p) => {
+    const i = this.shadowRoot.querySelector(".download-button");
+    i && i.addEventListener("click", () => this.downloadCode());
+    const r = this.shadowRoot.querySelector(".share-button");
+    r && r.addEventListener("click", (p) => {
       p.stopPropagation(), this.toggleShareMenu();
     });
     const c = this.shadowRoot.querySelector(".web-share-button");
@@ -4932,22 +4938,22 @@ class _n extends HTMLElement {
     });
   }
   updateActiveTab() {
-    const e = this.shadowRoot.querySelectorAll(".tab"), r = this.codeBlocks;
-    e.forEach((i, c) => {
+    const e = this.shadowRoot.querySelectorAll(".tab"), i = this.codeBlocks;
+    e.forEach((r, c) => {
       const u = c === this._activeIndex;
-      i.setAttribute("aria-selected", u), i.setAttribute("tabindex", u ? "0" : "-1");
-    }), r.forEach((i, c) => {
-      c === this._activeIndex ? i.classList.add("active") : i.classList.remove("active");
+      r.setAttribute("aria-selected", u), r.setAttribute("tabindex", u ? "0" : "-1");
+    }), i.forEach((r, c) => {
+      c === this._activeIndex ? r.classList.add("active") : r.classList.remove("active");
     }), this.dispatchEvent(
       new CustomEvent("tab-change", {
-        detail: { index: this._activeIndex, block: r[this._activeIndex] },
+        detail: { index: this._activeIndex, block: i[this._activeIndex] },
         bubbles: !0
       })
     );
   }
   escapeHtml(e) {
-    const r = document.createElement("div");
-    return r.textContent = e, r.innerHTML;
+    const i = document.createElement("div");
+    return i.textContent = e, i.innerHTML;
   }
   /**
    * Programmatically select a tab by index
@@ -4966,18 +4972,18 @@ class _n extends HTMLElement {
    */
   toggleShareMenu() {
     this._showShareMenu = !this._showShareMenu;
-    const e = this.shadowRoot.querySelector(".share-menu"), r = this.shadowRoot.querySelector(".share-button");
-    e && e.classList.toggle("open", this._showShareMenu), r && r.setAttribute("aria-expanded", this._showShareMenu), this._showShareMenu ? document.addEventListener("click", this._handleOutsideClick) : document.removeEventListener("click", this._handleOutsideClick);
+    const e = this.shadowRoot.querySelector(".share-menu"), i = this.shadowRoot.querySelector(".share-button");
+    e && e.classList.toggle("open", this._showShareMenu), i && i.setAttribute("aria-expanded", this._showShareMenu), this._showShareMenu ? document.addEventListener("click", this._handleOutsideClick) : document.removeEventListener("click", this._handleOutsideClick);
   }
   /**
    * Handle clicks outside share menu
    */
   _handleOutsideClick(e) {
-    const r = this.shadowRoot.querySelector(".share-container");
-    if (r && !e.composedPath().includes(r)) {
+    const i = this.shadowRoot.querySelector(".share-container");
+    if (i && !e.composedPath().includes(i)) {
       this._showShareMenu = !1;
-      const i = this.shadowRoot.querySelector(".share-menu"), c = this.shadowRoot.querySelector(".share-button");
-      i && i.classList.remove("open"), c && c.setAttribute("aria-expanded", "false"), document.removeEventListener("click", this._handleOutsideClick);
+      const r = this.shadowRoot.querySelector(".share-menu"), c = this.shadowRoot.querySelector(".share-button");
+      r && r.classList.remove("open"), c && c.setAttribute("aria-expanded", "false"), document.removeEventListener("click", this._handleOutsideClick);
     }
   }
   /**
@@ -4993,27 +4999,27 @@ class _n extends HTMLElement {
   openInCodePen() {
     const e = this.codeBlocks;
     if (e.length === 0) return;
-    let r = "", i = "", c = "", u = "Code Block Group";
+    let i = "", r = "", c = "", u = "Code Block Group";
     e.forEach((H) => {
       const N = H.language, R = H.getCode(), M = H.filename;
-      ["html", "markup", "xhtml", "xml", "svg"].includes(N) ? (r && (r += `
+      ["html", "markup", "xhtml", "xml", "svg"].includes(N) ? (i && (i += `
 
-`), M && (r += `<!-- ${M} -->
-`), r += R) : N === "css" ? (i && (i += `
+`), M && (i += `<!-- ${M} -->
+`), i += R) : N === "css" ? (r && (r += `
 
-`), M && (i += `/* ${M} */
-`), i += R) : ["javascript", "js"].includes(N) && (c && (c += `
+`), M && (r += `/* ${M} */
+`), r += R) : ["javascript", "js"].includes(N) && (c && (c += `
 
 `), M && (c += `// ${M}
 `), c += R), (!u || u === "Code Block Group") && (u = M || H.label || "Code Block Group");
     });
     let p = "";
-    p += r ? "1" : "0", p += i ? "1" : "0", p += c ? "1" : "0";
+    p += i ? "1" : "0", p += r ? "1" : "0", p += c ? "1" : "0";
     const E = {
       title: u,
       description: "Code shared from code-block-group component",
-      html: r,
-      css: i,
+      html: i,
+      css: r,
       js: c,
       editors: p
     }, _ = document.createElement("form");
@@ -5028,21 +5034,21 @@ class _n extends HTMLElement {
     if (!navigator.share) return;
     const e = this.codeBlocks;
     if (e.length === 0) return;
-    let r = "";
-    e.forEach((i) => {
-      const c = i.filename || i.label || i.language, u = i.getCode();
-      r && (r += `
+    let i = "";
+    e.forEach((r) => {
+      const c = r.filename || r.label || r.language, u = r.getCode();
+      i && (i += `
 
-`), r += `// === ${c} ===
+`), i += `// === ${c} ===
 ${u}`;
     });
     try {
       await navigator.share({
         title: "Code from code-block-group",
-        text: r
+        text: i
       });
-    } catch (i) {
-      i.name !== "AbortError" && console.error("Share failed:", i);
+    } catch (r) {
+      r.name !== "AbortError" && console.error("Share failed:", r);
     }
   }
 }

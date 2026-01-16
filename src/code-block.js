@@ -104,6 +104,7 @@ export class CodeBlock extends HTMLElement {
       'copied-text',
       'show-share',
       'show-download',
+      'no-copy',
       'lazy'
     ]
   }
@@ -187,6 +188,10 @@ export class CodeBlock extends HTMLElement {
 
   get showDownload() {
     return this.hasAttribute('show-download')
+  }
+
+  get noCopy() {
+    return this.hasAttribute('no-copy')
   }
 
   get lazy() {
@@ -1023,9 +1028,13 @@ export class CodeBlock extends HTMLElement {
           `
               : ''
           }
-          <button class="copy-button"
+          ${
+            !this.noCopy
+              ? `<button class="copy-button"
                   aria-label="Copy code to clipboard"
-                  title="Copy code">${this.escapeHtml(this.copyText)}</button>
+                  title="Copy code">${this.escapeHtml(this.copyText)}</button>`
+              : ''
+          }
         </div>
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="${maxHeightStyle}${codeStyle}">
@@ -1052,7 +1061,9 @@ export class CodeBlock extends HTMLElement {
 
     // Add copy button event listener
     const copyBtn = this.shadowRoot.querySelector('.copy-button')
-    copyBtn.addEventListener('click', () => this.copyCode())
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => this.copyCode())
+    }
 
     // Add expand button event listener
     const expandBtn = this.shadowRoot.querySelector('.expand-button')
