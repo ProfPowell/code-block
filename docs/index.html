@@ -26,6 +26,15 @@
     <section class="hero">
       <h1>&lt;code-block&gt;</h1>
       <p class="tagline">A lightweight Web Component for displaying code with syntax highlighting, copy functionality, line numbers, and theme support.</p>
+
+      <div class="hero-demo">
+        <code-block language="javascript" filename="greeting.js" show-lines highlight-lines="2">
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+        </code-block>
+      </div>
+
       <div class="hero-actions">
         <a href="demos.html" class="btn primary">View Demos</a>
         <a href="api.html" class="btn secondary">API Documentation</a>
@@ -35,30 +44,30 @@
     <section class="features">
       <h2>Features</h2>
       <div class="feature-grid">
-        <div class="feature-card">
+        <a href="demos.html#supported-languages" class="feature-card">
           <h3>Syntax Highlighting</h3>
-          <p>13+ languages supported via highlight.js including JavaScript, CSS, HTML, JSON, YAML, PHP, and more.</p>
-        </div>
-        <div class="feature-card">
+          <p>13+ languages supported via highlight.js including JavaScript, Python, CSS, HTML, JSON, YAML, and more.</p>
+        </a>
+        <a href="demos.html#multi-file-tabs" class="feature-card">
           <h3>Multi-File Tabs</h3>
           <p>Group related files in a tabbed interface with <code>&lt;code-block-group&gt;</code>.</p>
-        </div>
-        <div class="feature-card">
+        </a>
+        <a href="demos.html#line-highlighting" class="feature-card">
           <h3>Line Highlighting</h3>
           <p>Draw attention to specific lines with the <code>highlight-lines</code> attribute.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Share & Download</h3>
-          <p>One-click download or open in CodePen with built-in share functionality.</p>
-        </div>
-        <div class="feature-card">
+        </a>
+        <a href="demos.html#download-button" class="feature-card">
+          <h3>Download Code</h3>
+          <p>One-click download to save code snippets as files.</p>
+        </a>
+        <a href="demos.html#theme-support" class="feature-card">
           <h3>Light & Dark Themes</h3>
           <p>GitHub-inspired color schemes with full CSS custom property support.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Lazy Loading</h3>
-          <p>Defer syntax highlighting until visible for optimal page performance.</p>
-        </div>
+        </a>
+        <a href="api.html#css-custom-properties" class="feature-card">
+          <h3>Fully Customizable</h3>
+          <p>15+ CSS custom properties for complete visual customization.</p>
+        </a>
       </div>
     </section>
 
@@ -73,42 +82,18 @@
       <code-block language="html">&lt;script type="module" src="https://unpkg.com/@profpowell/code-block"&gt;&lt;/script&gt;</code-block>
 
       <h3>Basic Usage</h3>
-      <p>Import and use the component:</p>
-      <code-block language="javascript">import '@profpowell/code-block'</code-block>
-
       <code-block language="html">&lt;code-block language="javascript"&gt;
 const greeting = "Hello, World!";
 console.log(greeting);
 &lt;/code-block&gt;</code-block>
 
-      <h3>Result</h3>
-      <code-block language="javascript">
-const greeting = "Hello, World!";
-console.log(greeting);
-      </code-block>
-
-      <h3>With Line Numbers and Highlighting</h3>
-      <code-block language="javascript" show-lines highlight-lines="2-4" filename="example.js">
-async function fetchData(url) {
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-}
-      </code-block>
-
-      <h3>Multi-File Tabs</h3>
-      <code-block-group>
-        <code-block language="html" filename="index.html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-  &lt;head&gt;&lt;link rel="stylesheet" href="styles.css"&gt;&lt;/head&gt;
-  &lt;body&gt;&lt;h1&gt;Hello&lt;/h1&gt;&lt;/body&gt;
-&lt;/html&gt;</code-block>
-        <code-block language="css" filename="styles.css">body {
-  font-family: system-ui, sans-serif;
-  margin: 0;
-  padding: 2rem;
-}</code-block>
-      </code-block-group>
+      <div class="quick-start-links">
+        <p>Ready to explore more?</p>
+        <div class="hero-actions">
+          <a href="demos.html" class="btn primary">See All Demos</a>
+          <a href="api.html" class="btn secondary">Full API Reference</a>
+        </div>
+      </div>
     </section>
 
     <section class="related">

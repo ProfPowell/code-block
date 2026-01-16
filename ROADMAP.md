@@ -1,6 +1,6 @@
 # Code Block Component Roadmap
 
-This document outlines planned features and improvements for the `<code-block>` web component.
+This document outlines possible features and improvements for the `<code-block>` web component.
 
 ---
 

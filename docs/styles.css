@@ -159,6 +159,12 @@ main {
   margin-right: auto;
 }
 
+.hero-demo {
+  max-width: 500px;
+  margin: 2rem auto;
+  text-align: left;
+}
+
 .hero-actions {
   display: flex;
   gap: 1rem;
