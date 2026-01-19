@@ -116,7 +116,8 @@ export class CodeBlock extends HTMLElement {
       'show-share',
       'show-download',
       'no-copy',
-      'lazy'
+      'lazy',
+      'focus-mode'
     ]
   }
 
@@ -207,6 +208,10 @@ export class CodeBlock extends HTMLElement {
 
   get lazy() {
     return this.hasAttribute('lazy')
+  }
+
+  get focusMode() {
+    return this.hasAttribute('focus-mode')
   }
 
   async copyCode() {
@@ -627,6 +632,22 @@ export class CodeBlock extends HTMLElement {
         border-left: 3px solid var(--cb-highlight-border, ${isDark ? '#58a6ff' : '#f9a825'});
         margin-left: calc(-0.5rem - 3px);
         padding-left: calc(0.5rem + 3px);
+      }
+
+      /* Focus mode - dims non-highlighted lines */
+      :host([focus-mode]) .code-line:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
+        filter: blur(var(--cb-focus-blur, 0.5px));
+        transition: opacity 0.2s ease, filter 0.2s ease;
+      }
+
+      :host([focus-mode]) .code-line.highlighted {
+        opacity: 1;
+        filter: none;
+      }
+
+      :host([focus-mode]) .line-numbers span:not(.highlighted) {
+        opacity: var(--cb-focus-dim-opacity, 0.4);
       }
 
       /* highlight.js theme - GitHub style with CSS custom properties */

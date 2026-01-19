@@ -10,6 +10,7 @@ A feature-rich code block web component with syntax highlighting, copy-to-clipbo
 |---------|-------------|
 | [**Multi-File Tabs**](demo.html#multi-file-tabs) | Tabbed interface for related code files with `<code-block-group>` |
 | [**Line Highlighting**](demo.html#line-highlighting) | Draw attention to specific lines with `highlight-lines="3,5-7"` |
+| [**Focus Mode**](demo.html#focus-mode) | Dim non-highlighted lines with `focus-mode` for emphasis |
 | [**Share & Download**](demo.html#share-download) | One-click download or open in CodePen |
 | [**Collapsible Blocks**](demo.html#collapsible) | Expandable code with "Show more" for long snippets |
 | [**Lazy Loading**](demo.html#lazy-highlighting) | Defer syntax highlighting until visible for performance |
@@ -156,6 +157,7 @@ Additional languages can be added by importing them from highlight.js.
 | `show-lines` | boolean | `false` | Display line numbers |
 | `filename` | string | — | File path shown in header |
 | `highlight-lines` | string | — | Lines to highlight (e.g., `"3,5-7"`) |
+| `focus-mode` | boolean | `false` | Dim non-highlighted lines for emphasis |
 | `collapsed` | boolean | `false` | Start in collapsed state |
 | `max-lines` | number | `10` | Lines visible when collapsed |
 | `max-height` | string | — | Max height with scrolling (e.g., `"300px"`) |
@@ -204,6 +206,7 @@ Open `demo.html` in a browser to see all features in action:
 
 - [Multi-file tabbed interface](demo.html#multi-file-tabs)
 - [Line highlighting](demo.html#line-highlighting)
+- [Focus mode](demo.html#focus-mode)
 - [Share & download buttons](demo.html#share-download)
 - [Collapsible code blocks](demo.html#collapsible)
 - [Lazy loading for performance](demo.html#lazy-highlighting)

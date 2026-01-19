@@ -84,11 +84,11 @@ for (let i = 0; i &lt; 10; i++) {
       <h3>Result</h3>
       <code-block language="javascript" show-lines filename="fibonacci.js">
 function fibonacci(n) {
-  if (n <= 1) return n;
+  if (n &lt;= 1) return n;
   return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i &lt; 10; i++) {
   console.log(`F(${i}) = ${fibonacci(i)}`);
 }
       </code-block>
@@ -194,6 +194,86 @@ class Calculator {
       </code-block>
     </section>
 
+    <!-- FOCUS MODE -->
+    <section class="demo-section" id="focus-mode">
+      <h2>Focus Mode</h2>
+      <p class="demo-description">Combine <code>focus-mode</code> with <code>highlight-lines</code> to dim non-highlighted lines, drawing attention to specific code.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;code-block language="javascript" show-lines highlight-lines="3-5" focus-mode&gt;
+async function fetchUser(id) {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed:', error);
+    return null;
+  }
+}
+&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block language="javascript" show-lines highlight-lines="3-5" focus-mode>
+async function fetchUser(id) {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed:', error);
+    return null;
+  }
+}
+      </code-block>
+
+      <h3>Comparison: Without vs With Focus Mode</h3>
+      <div class="side-by-side">
+        <div>
+          <p><strong>Without Focus Mode</strong></p>
+          <code-block language="javascript" show-lines highlight-lines="2-4">
+class Calculator {
+  add(a, b) {
+    return a + b;
+  }
+
+  subtract(a, b) {
+    return a - b;
+  }
+}
+          </code-block>
+        </div>
+        <div>
+          <p><strong>With Focus Mode</strong></p>
+          <code-block language="javascript" show-lines highlight-lines="2-4" focus-mode>
+class Calculator {
+  add(a, b) {
+    return a + b;
+  }
+
+  subtract(a, b) {
+    return a - b;
+  }
+}
+          </code-block>
+        </div>
+      </div>
+
+      <h3>Customizing Focus Intensity</h3>
+      <p class="demo-description">Adjust the dimming with CSS custom properties:</p>
+      <code-block language="css">/* Subtle dim */
+.subtle-focus {
+  --cb-focus-dim-opacity: 0.6;
+  --cb-focus-blur: 0;
+}
+
+/* Heavy dim */
+.heavy-focus {
+  --cb-focus-dim-opacity: 0.2;
+  --cb-focus-blur: 1px;
+}</code-block>
+    </section>
+
     <!-- MULTI-FILE TABS -->
     <section class="demo-section" id="multi-file-tabs">
       <h2>Multi-File Tabs</h2>
@@ -258,7 +338,7 @@ export function unique(array) {
 // This content is collapsed by default
 export function chunk(array, size) {
   const chunks = [];
-  for (let i = 0; i < array.length; i += size) {
+  for (let i = 0; i &lt; array.length; i += size) {
     chunks.push(array.slice(i, i + size));
   }
   return chunks;

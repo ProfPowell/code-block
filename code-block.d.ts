@@ -13,7 +13,7 @@ export declare class CodeBlock extends HTMLElement {
   /**
    * List of attributes to observe for changes
    */
-  static readonly observedAttributes: readonly ['language', 'label', 'theme', 'show-lines', 'filename', 'highlight-lines', 'collapsed', 'max-lines', 'max-height', 'wrap', 'copy-text', 'copied-text', 'show-share', 'show-download', 'lazy'];
+  static readonly observedAttributes: readonly ['language', 'label', 'theme', 'show-lines', 'filename', 'highlight-lines', 'collapsed', 'max-lines', 'max-height', 'wrap', 'copy-text', 'copied-text', 'show-share', 'show-download', 'lazy', 'focus-mode'];
 
   /**
    * Called when an observed attribute changes
@@ -127,6 +127,14 @@ export declare class CodeBlock extends HTMLElement {
   readonly lazy: boolean;
 
   /**
+   * Whether to dim/blur non-highlighted lines for focus
+   * Set via the `focus-mode` attribute
+   * Works in conjunction with highlight-lines
+   * @default false
+   */
+  readonly focusMode: boolean;
+
+  /**
    * Copies the code content to clipboard.
    * Shows visual feedback on success or failure.
    */
@@ -215,6 +223,10 @@ export declare class CodeBlock extends HTMLElement {
  * --cb-highlight-bg: Highlighted line background
  * --cb-highlight-border: Highlighted line left border
  * --cb-highlight-gutter: Highlighted line number background
+ *
+ * Focus Mode:
+ * --cb-focus-dim-opacity: Opacity of non-highlighted lines (default: 0.4)
+ * --cb-focus-blur: Blur amount for non-highlighted lines (default: 0.5px)
  *
  * Button:
  * --cb-button-bg: Copy button background
