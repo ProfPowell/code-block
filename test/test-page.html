@@ -9,34 +9,161 @@
 <body>
   <h1>Test Page</h1>
 
-  <code-block language="javascript" filename="test.js">
+  <!-- Basic usage -->
+  <code-block language="javascript" filename="test.js" id="basic-block">
 const greeting = "Hello, World!";
 console.log(greeting);
   </code-block>
 
-  <code-block language="html" show-lines>
+  <!-- Line numbers -->
+  <code-block language="html" show-lines id="line-numbers-block">
 &lt;div class="container"&gt;
   &lt;p&gt;Test content&lt;/p&gt;
 &lt;/div&gt;
   </code-block>
 
-  <code-block-group>
+  <!-- Line highlighting -->
+  <code-block language="javascript" show-lines highlight-lines="2,4" id="highlight-block">
+function example() {
+  const highlighted = true;
+  const normal = false;
+  return highlighted;
+}
+  </code-block>
+
+  <!-- Focus mode -->
+  <code-block language="javascript" show-lines highlight-lines="2-3" focus-mode id="focus-mode-block">
+function focusExample() {
+  const focused = true;
+  return focused;
+}
+// This line is dimmed
+  </code-block>
+
+  <!-- Theme dark -->
+  <code-block language="javascript" theme="dark" id="dark-theme-block">
+const darkMode = true;
+  </code-block>
+
+  <!-- Theme light -->
+  <code-block language="javascript" theme="light" id="light-theme-block">
+const lightMode = true;
+  </code-block>
+
+  <!-- Collapsed -->
+  <code-block language="javascript" collapsed max-lines="3" id="collapsed-block">
+// Line 1
+// Line 2
+// Line 3
+// Line 4
+// Line 5
+// Line 6
+// Line 7
+// Line 8
+// Line 9
+// Line 10
+  </code-block>
+
+  <!-- Max height -->
+  <code-block language="javascript" max-height="100px" id="max-height-block">
+// Line 1
+// Line 2
+// Line 3
+// Line 4
+// Line 5
+// Line 6
+// Line 7
+// Line 8
+  </code-block>
+
+  <!-- Wrap -->
+  <code-block language="javascript" wrap id="wrap-block">
+const veryLongLine = "This is a very long line that should wrap instead of scrolling horizontally when the wrap attribute is set";
+  </code-block>
+
+  <!-- Custom copy text -->
+  <code-block language="javascript" copy-text="Clone" copied-text="Cloned!" id="custom-copy-text-block">
+const custom = true;
+  </code-block>
+
+  <!-- Label -->
+  <code-block language="javascript" label="Custom Label" id="label-block">
+const labeled = true;
+  </code-block>
+
+  <!-- No copy -->
+  <code-block language="javascript" no-copy id="no-copy-block">
+// This block has no copy button
+const secret = 'hidden';
+  </code-block>
+
+  <!-- Show download -->
+  <code-block language="javascript" show-download filename="download-test.js" id="download-block">
+// This block has a download button
+export const data = { test: true };
+  </code-block>
+
+  <!-- Show share -->
+  <code-block language="javascript" show-share id="share-block">
+// This block has a share button
+const shareable = true;
+  </code-block>
+
+  <!-- Diff support -->
+  <code-block language="diff" id="diff-block">
+ function greet(name) {
+-  console.log('Hello ' + name);
++  console.log(`Hello, ${name}!`);
+ }
+  </code-block>
+
+  <!-- Multiple languages -->
+  <code-block language="python" id="python-block">
+def hello():
+    print("Hello from Python")
+  </code-block>
+
+  <code-block language="typescript" id="typescript-block">
+interface User {
+  name: string;
+  id: number;
+}
+  </code-block>
+
+  <code-block language="bash" id="bash-block">
+#!/bin/bash
+echo "Hello from Bash"
+  </code-block>
+
+  <code-block language="css" id="css-block">
+.container {
+  display: flex;
+  gap: 1rem;
+}
+  </code-block>
+
+  <!-- Code block group -->
+  <code-block-group id="group-block">
     <code-block language="javascript" filename="app.js">
 console.log('App loaded');
     </code-block>
     <code-block language="css" filename="styles.css">
 body { margin: 0; }
     </code-block>
+    <code-block language="html" filename="index.html">
+&lt;h1&gt;Hello&lt;/h1&gt;
+    </code-block>
   </code-block-group>
 
-  <code-block language="javascript" no-copy id="no-copy-block">
-// This block has no copy button
-const secret = 'hidden';
-  </code-block>
+  <!-- Group with theme -->
+  <code-block-group theme="dark" id="group-dark-block">
+    <code-block language="javascript" filename="dark.js">
+const dark = true;
+    </code-block>
+    <code-block language="css" filename="dark.css">
+body { background: #000; }
+    </code-block>
+  </code-block-group>
 
-  <code-block language="javascript" show-download filename="download-test.js" id="download-block">
-// This block has a download button
-export const data = { test: true };
-  </code-block>
 </body>
 </html>
