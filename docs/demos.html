@@ -44,6 +44,43 @@ console.log(greeting);
       </code-block>
     </section>
 
+    <!-- EXTERNAL FILE LOADING -->
+    <section class="demo-section" id="external-loading">
+      <h2>External File Loading</h2>
+      <p class="demo-description">Load code from an external URL using the <code>src</code> attribute. The language and filename are auto-detected from the URL.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;!-- Load code from a URL - language auto-detected from extension --&gt;
+&lt;code-block src="examples/greeting.js"&gt;&lt;/code-block&gt;
+
+&lt;!-- Override auto-detected language --&gt;
+&lt;code-block src="examples/greeting.js" language="typescript"&gt;&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block src="examples/greeting.js" show-lines></code-block>
+
+      <h3>Features</h3>
+      <ul style="color: var(--text-secondary, #57606a); margin: 1rem 0; padding-left: 1.5rem;">
+        <li><strong>Auto-detection:</strong> Language and filename are automatically detected from the URL</li>
+        <li><strong>Loading state:</strong> Shows a spinner while fetching</li>
+        <li><strong>Error handling:</strong> Displays error message with retry button if fetch fails</li>
+        <li><strong>Events:</strong> Dispatches <code>code-loaded</code> and <code>code-load-error</code> events</li>
+      </ul>
+
+      <h3>Listening for Events</h3>
+      <code-block language="javascript">const codeBlock = document.querySelector('code-block[src]');
+
+codeBlock.addEventListener('code-loaded', (e) =&gt; {
+  console.log('Loaded from:', e.detail.url);
+  console.log('Code:', e.detail.code);
+});
+
+codeBlock.addEventListener('code-load-error', (e) =&gt; {
+  console.error('Failed to load:', e.detail.url);
+  console.error('Error:', e.detail.error);
+});</code-block>
+    </section>
+
     <!-- FILENAME -->
     <section class="demo-section">
       <h2>Filename Display</h2>

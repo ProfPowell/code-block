@@ -55,11 +55,19 @@ export class CodeBlock extends HTMLElement {
     this._handleOutsideClick = this._handleOutsideClick.bind(this)
     this._observer = null
     this._highlighted = false
+    this._isLoading = false
+    this._loadError = null
   }
 
   connectedCallback() {
     // Capture the original text content before rendering
     this._codeContent = this.textContent
+
+    // If src attribute is set, load from external URL
+    if (this.src) {
+      this._loadFromSrc()
+      return
+    }
 
     // Use lazy loading if attribute is set
     if (this.hasAttribute('lazy')) {
@@ -99,6 +107,163 @@ export class CodeBlock extends HTMLElement {
     this._observer.observe(this)
   }
 
+  /**
+   * Load code content from external URL specified by src attribute
+   */
+  async _loadFromSrc() {
+    const url = this.src
+    if (!url) return
+
+    this._isLoading = true
+    this._loadError = null
+    this._renderLoadingState()
+
+    try {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+      const code = await response.text()
+      this._codeContent = code
+
+      // Auto-detect language from file extension if not explicitly set
+      if (!this.hasAttribute('language')) {
+        const detectedLang = this._detectLanguageFromUrl(url)
+        if (detectedLang) {
+          this.setAttribute('language', detectedLang)
+        }
+      }
+
+      // Auto-set filename from URL if not explicitly set
+      if (!this.hasAttribute('filename')) {
+        const filename = url.split('/').pop().split('?')[0]
+        if (filename) {
+          this.setAttribute('filename', filename)
+        }
+      }
+
+      this._isLoading = false
+      this.render()
+
+      // Dispatch loaded event
+      this.dispatchEvent(new CustomEvent('code-loaded', {
+        detail: { url, code },
+        bubbles: true
+      }))
+    } catch (error) {
+      this._isLoading = false
+      this._loadError = error.message
+      this._renderErrorState()
+
+      // Dispatch error event
+      this.dispatchEvent(new CustomEvent('code-load-error', {
+        detail: { url, error: error.message },
+        bubbles: true
+      }))
+    }
+  }
+
+  /**
+   * Detect language from URL file extension
+   */
+  _detectLanguageFromUrl(url) {
+    const extensionMap = {
+      'js': 'javascript',
+      'mjs': 'javascript',
+      'cjs': 'javascript',
+      'ts': 'typescript',
+      'tsx': 'typescript',
+      'jsx': 'javascript',
+      'py': 'python',
+      'css': 'css',
+      'html': 'html',
+      'htm': 'html',
+      'json': 'json',
+      'yaml': 'yaml',
+      'yml': 'yaml',
+      'xml': 'xml',
+      'svg': 'xml',
+      'sh': 'bash',
+      'bash': 'bash',
+      'zsh': 'bash',
+      'php': 'php',
+      'diff': 'diff',
+      'patch': 'diff',
+      'md': 'markdown',
+      'markdown': 'markdown',
+      'txt': 'plaintext'
+    }
+
+    // Extract filename from URL (remove query string and hash)
+    const filename = url.split('/').pop().split('?')[0].split('#')[0]
+    const ext = filename.split('.').pop().toLowerCase()
+    return extensionMap[ext] || null
+  }
+
+  /**
+   * Render loading state while fetching external content
+   */
+  _renderLoadingState() {
+    const isDark = this.theme === 'dark'
+    this.shadowRoot.innerHTML = `
+      <style>${this.getStyles()}</style>
+      <div class="header">
+        <div class="label-container" id="code-label">
+          <span class="label">Loading...</span>
+          ${this.src ? `<span class="filename">${this.escapeHtml(this.src.split('/').pop().split('?')[0])}</span>` : ''}
+        </div>
+      </div>
+      <div class="code-container" style="padding: 2rem; text-align: center;">
+        <div class="loading-spinner" style="
+          display: inline-block;
+          width: 24px;
+          height: 24px;
+          border: 2px solid ${isDark ? '#30363d' : '#e1e4e8'};
+          border-top-color: ${isDark ? '#58a6ff' : '#0969da'};
+          border-radius: 50%;
+          animation: spin 0.8s linear infinite;
+        "></div>
+        <style>
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        </style>
+      </div>
+    `
+  }
+
+  /**
+   * Render error state when external content fails to load
+   */
+  _renderErrorState() {
+    const isDark = this.theme === 'dark'
+    this.shadowRoot.innerHTML = `
+      <style>${this.getStyles()}</style>
+      <div class="header">
+        <div class="label-container" id="code-label">
+          <span class="label" style="color: ${isDark ? '#f85149' : '#cf222e'};">Error</span>
+          ${this.src ? `<span class="filename">${this.escapeHtml(this.src.split('/').pop().split('?')[0])}</span>` : ''}
+        </div>
+        <div class="header-actions">
+          <button class="copy-button" onclick="this.getRootNode().host._loadFromSrc()">Retry</button>
+        </div>
+      </div>
+      <div class="code-container" style="padding: 1.5rem; text-align: center;">
+        <div style="color: ${isDark ? '#f85149' : '#cf222e'}; margin-bottom: 0.5rem;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+        </div>
+        <div style="color: ${isDark ? '#8b949e' : '#57606a'}; font-size: 0.875rem;">
+          Failed to load: ${this.escapeHtml(this._loadError || 'Unknown error')}
+        </div>
+        <div style="color: ${isDark ? '#484f58' : '#6e7781'}; font-size: 0.75rem; margin-top: 0.25rem;">
+          ${this.escapeHtml(this.src)}
+        </div>
+      </div>
+    `
+  }
+
   static get observedAttributes() {
     return [
       'language',
@@ -117,12 +282,18 @@ export class CodeBlock extends HTMLElement {
       'show-download',
       'no-copy',
       'lazy',
-      'focus-mode'
+      'focus-mode',
+      'src'
     ]
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (this.shadowRoot && oldValue !== newValue) {
+      // If src attribute changes, reload from new URL
+      if (name === 'src' && newValue) {
+        this._loadFromSrc()
+        return
+      }
       this.render()
     }
   }
@@ -212,6 +383,10 @@ export class CodeBlock extends HTMLElement {
 
   get focusMode() {
     return this.hasAttribute('focus-mode')
+  }
+
+  get src() {
+    return this.getAttribute('src') || ''
   }
 
   async copyCode() {

@@ -88,7 +88,17 @@
             },
             {
               "kind": "field",
+              "name": "noCopy",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "lazy",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "focusMode",
               "readonly": true
             },
             {
@@ -249,7 +259,13 @@
               "name": "show-download"
             },
             {
+              "name": "no-copy"
+            },
+            {
               "name": "lazy"
+            },
+            {
+              "name": "focus-mode"
             }
           ],
           "superclass": {

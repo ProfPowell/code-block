@@ -636,3 +636,130 @@ test.describe('code-block - Static Methods', () => {
     expect(languages).toContain('bash')
   })
 })
+
+test.describe('code-block - External File Loading (src attribute)', () => {
+  test('src attribute is recognized', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const src = await page.evaluate(() => {
+      const el = document.querySelector('#external-src-block')
+      return el?.src
+    })
+    expect(src).toBe('fixtures/sample.js')
+  })
+
+  test('external file content is loaded', async ({ page }) => {
+    await page.goto(TEST_URL)
+    // Wait longer for fetch to complete
+    await page.waitForTimeout(3000)
+
+    const result = await page.evaluate(() => {
+      const el = document.querySelector('#external-src-block')
+      const code = el?.getCode?.()
+      return {
+        hasContent: code?.length > 0,
+        containsFunction: code?.includes('function greet')
+      }
+    })
+    expect(result.hasContent).toBe(true)
+    expect(result.containsFunction).toBe(true)
+  })
+
+  test('language is auto-detected from file extension', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await page.waitForTimeout(3000)
+
+    const language = await page.evaluate(() => {
+      const el = document.querySelector('#external-src-block')
+      return el?.language
+    })
+    expect(language).toBe('javascript')
+  })
+
+  test('filename is auto-set from URL', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await page.waitForTimeout(3000)
+
+    const filename = await page.evaluate(() => {
+      const el = document.querySelector('#external-src-block')
+      return el?.filename
+    })
+    expect(filename).toBe('sample.js')
+  })
+
+  test('explicit language attribute overrides auto-detection', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await page.waitForTimeout(3000)
+
+    const language = await page.evaluate(() => {
+      const el = document.querySelector('#external-src-lang-block')
+      return el?.language
+    })
+    expect(language).toBe('typescript')
+  })
+
+  test('code-loaded event is dispatched on success', async ({ page }) => {
+    await page.goto(TEST_URL)
+
+    // Create a new element and listen for the event
+    const eventFired = await page.evaluate(async () => {
+      return new Promise((resolve) => {
+        const el = document.createElement('code-block')
+        el.setAttribute('src', 'fixtures/sample.js')
+
+        el.addEventListener('code-loaded', (e) => {
+          resolve({
+            fired: true,
+            hasUrl: !!e.detail.url,
+            hasCode: !!e.detail.code
+          })
+        })
+
+        el.addEventListener('code-load-error', () => {
+          resolve({ fired: false, error: true })
+        })
+
+        document.body.appendChild(el)
+
+        // Timeout fallback
+        setTimeout(() => resolve({ fired: false, timeout: true }), 5000)
+      })
+    })
+
+    expect(eventFired.fired).toBe(true)
+    expect(eventFired.hasUrl).toBe(true)
+    expect(eventFired.hasCode).toBe(true)
+  })
+
+  test('error state is shown for invalid URL', async ({ page }) => {
+    await page.goto(TEST_URL)
+
+    const result = await page.evaluate(async () => {
+      return new Promise((resolve) => {
+        const el = document.createElement('code-block')
+        el.setAttribute('src', 'nonexistent-file.js')
+
+        el.addEventListener('code-load-error', (e) => {
+          const shadow = el.shadowRoot
+          const hasErrorLabel = shadow?.querySelector('.label')?.textContent?.includes('Error')
+          resolve({
+            errorFired: true,
+            hasErrorUrl: !!e.detail.url,
+            hasErrorMessage: !!e.detail.error,
+            hasErrorUI: hasErrorLabel
+          })
+        })
+
+        document.body.appendChild(el)
+
+        // Timeout fallback
+        setTimeout(() => resolve({ errorFired: false, timeout: true }), 5000)
+      })
+    })
+
+    expect(result.errorFired).toBe(true)
+    expect(result.hasErrorUrl).toBe(true)
+    expect(result.hasErrorMessage).toBe(true)
+  })
+})

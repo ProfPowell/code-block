@@ -101,6 +101,18 @@
             <td><code>false</code></td>
             <td>Defers syntax highlighting until the element is visible in the viewport.</td>
           </tr>
+          <tr>
+            <td><code>focus-mode</code></td>
+            <td>boolean</td>
+            <td><code>false</code></td>
+            <td>Dims non-highlighted lines to draw attention to specific code. Use with <code>highlight-lines</code>.</td>
+          </tr>
+          <tr>
+            <td><code>src</code></td>
+            <td>string</td>
+            <td>—</td>
+            <td>URL to load code content from. Language and filename are auto-detected from the URL if not specified. Dispatches <code>code-loaded</code> or <code>code-load-error</code> events.</td>
+          </tr>
         </tbody>
       </table>
 
@@ -232,6 +244,16 @@
             <td><code>code-collapsed</code></td>
             <td>—</td>
             <td>Fired when a code block is collapsed.</td>
+          </tr>
+          <tr>
+            <td><code>code-loaded</code></td>
+            <td><code>{ url: string, code: string }</code></td>
+            <td>Fired when external code (via <code>src</code>) is successfully loaded.</td>
+          </tr>
+          <tr>
+            <td><code>code-load-error</code></td>
+            <td><code>{ url: string, error: string }</code></td>
+            <td>Fired when external code (via <code>src</code>) fails to load.</td>
           </tr>
         </tbody>
       </table>

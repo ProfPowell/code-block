@@ -13,7 +13,7 @@ export declare class CodeBlock extends HTMLElement {
   /**
    * List of attributes to observe for changes
    */
-  static readonly observedAttributes: readonly ['language', 'label', 'theme', 'show-lines', 'filename', 'highlight-lines', 'collapsed', 'max-lines', 'max-height', 'wrap', 'copy-text', 'copied-text', 'show-share', 'show-download', 'lazy', 'focus-mode'];
+  static readonly observedAttributes: readonly ['language', 'label', 'theme', 'show-lines', 'filename', 'highlight-lines', 'collapsed', 'max-lines', 'max-height', 'wrap', 'copy-text', 'copied-text', 'show-share', 'show-download', 'lazy', 'focus-mode', 'src'];
 
   /**
    * Called when an observed attribute changes
@@ -133,6 +133,14 @@ export declare class CodeBlock extends HTMLElement {
    * @default false
    */
   readonly focusMode: boolean;
+
+  /**
+   * URL to load code content from
+   * Set via the `src` attribute
+   * When set, fetches code from the URL instead of using textContent
+   * Language is auto-detected from file extension if not specified
+   */
+  readonly src: string;
 
   /**
    * Copies the code content to clipboard.
@@ -380,6 +388,22 @@ export interface TabChangeEventDetail {
   block: CodeBlock;
 }
 
+/**
+ * Event detail for code-loaded event (fired when src content loads successfully)
+ */
+export interface CodeLoadedEventDetail {
+  url: string;
+  code: string;
+}
+
+/**
+ * Event detail for code-load-error event (fired when src content fails to load)
+ */
+export interface CodeLoadErrorEventDetail {
+  url: string;
+  error: string;
+}
+
 declare global {
   interface HTMLElementTagNameMap {
     'code-block': CodeBlock;
@@ -388,6 +412,8 @@ declare global {
 
   interface HTMLElementEventMap {
     'tab-change': CustomEvent<TabChangeEventDetail>;
+    'code-loaded': CustomEvent<CodeLoadedEventDetail>;
+    'code-load-error': CustomEvent<CodeLoadErrorEventDetail>;
   }
 
   namespace JSX {
@@ -409,6 +435,8 @@ declare global {
           'show-share'?: boolean;
           'show-download'?: boolean;
           lazy?: boolean;
+          'focus-mode'?: boolean;
+          src?: string;
         },
         HTMLElement
       >;
