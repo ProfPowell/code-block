@@ -46,6 +46,82 @@ hljs.registerLanguage('py', python)
 hljs.registerLanguage('typescript', typescript)
 hljs.registerLanguage('ts', typescript)
 
+// --- Page-level dark mode observer (shared singleton) ---
+const _registeredInstances = new Set()
+let _pageObserver = null
+let _currentPageDark = null
+
+function _detectPageDarkMode() {
+  const html = document.documentElement
+  const body = document.body
+  if (!html || !body) return null
+
+  if (html.classList.contains('dark') || body.classList.contains('dark')) return true
+
+  if (html.getAttribute('data-theme') === 'dark' || body.getAttribute('data-theme') === 'dark') return true
+  if (html.getAttribute('data-theme') === 'light' || body.getAttribute('data-theme') === 'light') return false
+
+  if (html.getAttribute('data-bs-theme') === 'dark' || body.getAttribute('data-bs-theme') === 'dark') return true
+  if (html.getAttribute('data-bs-theme') === 'light' || body.getAttribute('data-bs-theme') === 'light') return false
+
+  const colorScheme = getComputedStyle(html).colorScheme
+  if (colorScheme === 'dark') return true
+  if (colorScheme === 'light') return false
+
+  return null
+}
+
+function _notifyInstances() {
+  const newState = _detectPageDarkMode()
+  if (newState === _currentPageDark) return
+  _currentPageDark = newState
+
+  for (const instance of _registeredInstances) {
+    instance._onPageModeChange(newState)
+  }
+}
+
+function _startObserving() {
+  if (_pageObserver) return
+
+  _pageObserver = new MutationObserver(_notifyInstances)
+
+  const observeOptions = {
+    attributes: true,
+    attributeFilter: ['class', 'data-theme', 'data-bs-theme', 'style'],
+  }
+
+  _pageObserver.observe(document.documentElement, observeOptions)
+  if (document.body) {
+    _pageObserver.observe(document.body, observeOptions)
+  }
+}
+
+function _stopObserving() {
+  if (_pageObserver) {
+    _pageObserver.disconnect()
+    _pageObserver = null
+  }
+}
+
+function _registerInstance(instance) {
+  _registeredInstances.add(instance)
+  if (_registeredInstances.size === 1) {
+    _startObserving()
+  }
+  const state = _detectPageDarkMode()
+  _currentPageDark = state
+  instance._onPageModeChange(state)
+}
+
+function _unregisterInstance(instance) {
+  _registeredInstances.delete(instance)
+  if (_registeredInstances.size === 0) {
+    _stopObserving()
+    _currentPageDark = null
+  }
+}
+
 export class CodeBlock extends HTMLElement {
   constructor() {
     super()
@@ -66,19 +142,19 @@ export class CodeBlock extends HTMLElement {
     // If src attribute is set, load from external URL
     if (this.src) {
       this._loadFromSrc()
-      return
-    }
-
-    // Use lazy loading if attribute is set
-    if (this.hasAttribute('lazy')) {
+    } else if (this.hasAttribute('lazy')) {
+      // Use lazy loading if attribute is set
       this.renderPlaceholder()
       this._setupLazyObserver()
     } else {
       this.render()
     }
+
+    _registerInstance(this)
   }
 
   disconnectedCallback() {
+    _unregisterInstance(this)
     if (this._observer) {
       this._observer.disconnect()
       this._observer = null
@@ -269,6 +345,7 @@ export class CodeBlock extends HTMLElement {
       'language',
       'label',
       'theme',
+      'data-page-theme',
       'show-lines',
       'filename',
       'highlight-lines',
@@ -294,7 +371,28 @@ export class CodeBlock extends HTMLElement {
         this._loadFromSrc()
         return
       }
+      if (name === 'theme') {
+        if (this.hasAttribute('theme')) {
+          this.removeAttribute('data-page-theme')
+        } else {
+          this._onPageModeChange(_detectPageDarkMode())
+        }
+      }
       this.render()
+    }
+  }
+
+  _onPageModeChange(isDark) {
+    if (this.hasAttribute('theme')) {
+      this.removeAttribute('data-page-theme')
+      return
+    }
+    if (isDark === true) {
+      this.setAttribute('data-page-theme', 'dark')
+    } else if (isDark === false) {
+      this.setAttribute('data-page-theme', 'light')
+    } else {
+      this.removeAttribute('data-page-theme')
     }
   }
 
@@ -307,7 +405,7 @@ export class CodeBlock extends HTMLElement {
   }
 
   get theme() {
-    return this.getAttribute('theme') || 'light'
+    return this.getAttribute('theme') || this.getAttribute('data-page-theme') || 'light'
   }
 
   get showLines() {
@@ -1374,24 +1472,48 @@ class CodeBlockGroup extends HTMLElement {
       this.render()
       this.setupEventListeners()
     })
+
+    _registerInstance(this)
   }
 
   disconnectedCallback() {
+    _unregisterInstance(this)
     document.removeEventListener('click', this._handleOutsideClick)
   }
 
   static get observedAttributes() {
-    return ['theme', 'show-share', 'show-download']
+    return ['theme', 'data-page-theme', 'show-share', 'show-download']
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (this.shadowRoot && oldValue !== newValue) {
+      if (name === 'theme') {
+        if (this.hasAttribute('theme')) {
+          this.removeAttribute('data-page-theme')
+        } else {
+          this._onPageModeChange(_detectPageDarkMode())
+        }
+      }
       this.render()
     }
   }
 
+  _onPageModeChange(isDark) {
+    if (this.hasAttribute('theme')) {
+      this.removeAttribute('data-page-theme')
+      return
+    }
+    if (isDark === true) {
+      this.setAttribute('data-page-theme', 'dark')
+    } else if (isDark === false) {
+      this.setAttribute('data-page-theme', 'light')
+    } else {
+      this.removeAttribute('data-page-theme')
+    }
+  }
+
   get theme() {
-    return this.getAttribute('theme') || 'light'
+    return this.getAttribute('theme') || this.getAttribute('data-page-theme') || 'light'
   }
 
   get showShare() {

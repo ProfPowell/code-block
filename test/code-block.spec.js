@@ -732,6 +732,133 @@ test.describe('code-block - External File Loading (src attribute)', () => {
     expect(eventFired.hasCode).toBe(true)
   })
 
+  test('detects body.dark class and sets data-page-theme="dark"', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const el = page.locator('#no-theme-block')
+
+    // Initially no page-level signal
+    let pageTheme = await el.evaluate((node) => node.getAttribute('data-page-theme'))
+    expect(pageTheme).toBeNull()
+
+    // Add dark class to body
+    await page.evaluate(() => document.body.classList.add('dark'))
+    await page.waitForFunction(() => {
+      const el = document.querySelector('#no-theme-block')
+      return el.getAttribute('data-page-theme') === 'dark'
+    })
+
+    pageTheme = await el.evaluate((node) => node.getAttribute('data-page-theme'))
+    expect(pageTheme).toBe('dark')
+
+    // Verify theme getter returns dark
+    const theme = await el.evaluate((node) => node.theme)
+    expect(theme).toBe('dark')
+  })
+
+  test('detects html[data-theme="dark"] and sets data-page-theme="dark"', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const el = page.locator('#no-theme-block')
+
+    await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'))
+    await page.waitForFunction(() => {
+      const el = document.querySelector('#no-theme-block')
+      return el.getAttribute('data-page-theme') === 'dark'
+    })
+
+    const pageTheme = await el.evaluate((node) => node.getAttribute('data-page-theme'))
+    expect(pageTheme).toBe('dark')
+  })
+
+  test('explicit theme attribute overrides page-level detection', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const el = page.locator('#dark-theme-block')
+
+    // Add dark class to body — should not affect element with explicit theme
+    await page.evaluate(() => document.body.classList.add('dark'))
+    await page.waitForTimeout(50)
+
+    const pageTheme = await el.evaluate((node) => node.getAttribute('data-page-theme'))
+    expect(pageTheme).toBeNull()
+
+    const theme = await el.evaluate((node) => node.theme)
+    expect(theme).toBe('dark')
+  })
+
+  test('removes data-page-theme when page dark class is removed', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const el = page.locator('#no-theme-block')
+
+    // Add then remove dark class
+    await page.evaluate(() => document.body.classList.add('dark'))
+    await page.waitForFunction(() => {
+      const el = document.querySelector('#no-theme-block')
+      return el.getAttribute('data-page-theme') === 'dark'
+    })
+
+    await page.evaluate(() => document.body.classList.remove('dark'))
+    await page.waitForFunction(() => {
+      const el = document.querySelector('#no-theme-block')
+      return el.getAttribute('data-page-theme') === null
+    })
+
+    const pageTheme = await el.evaluate((node) => node.getAttribute('data-page-theme'))
+    expect(pageTheme).toBeNull()
+  })
+
+  test('code-block-group detects page dark mode', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const el = page.locator('#no-theme-group')
+
+    await page.evaluate(() => document.body.classList.add('dark'))
+    await page.waitForFunction(() => {
+      const el = document.querySelector('#no-theme-group')
+      return el.getAttribute('data-page-theme') === 'dark'
+    })
+
+    const theme = await el.evaluate((node) => node.theme)
+    expect(theme).toBe('dark')
+  })
+
+  test('re-renders with dark colors when page goes dark', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const el = page.locator('#no-theme-block')
+
+    // Get initial background (light)
+    const lightBg = await el.evaluate((node) => {
+      const style = node.shadowRoot.querySelector('style')
+      return style?.textContent?.includes('#0d1117')
+    })
+    expect(lightBg).toBe(false)
+
+    // Trigger dark mode
+    await page.evaluate(() => document.body.classList.add('dark'))
+    await page.waitForFunction(() => {
+      const el = document.querySelector('#no-theme-block')
+      return el.getAttribute('data-page-theme') === 'dark'
+    })
+    // Wait for re-render
+    await page.waitForTimeout(100)
+
+    // Verify dark colors are in the rendered styles
+    const darkBg = await el.evaluate((node) => {
+      const style = node.shadowRoot.querySelector('style')
+      return style?.textContent?.includes('#0d1117')
+    })
+    expect(darkBg).toBe(true)
+  })
+
   test('error state is shown for invalid URL', async ({ page }) => {
     await page.goto(TEST_URL)
 
