@@ -17,6 +17,40 @@
               "description": "Set up IntersectionObserver for lazy highlighting"
             },
             {
+              "kind": "method",
+              "name": "_loadFromSrc",
+              "description": "Load code content from external URL specified by src attribute"
+            },
+            {
+              "kind": "method",
+              "name": "_detectLanguageFromUrl",
+              "parameters": [
+                {
+                  "name": "url"
+                }
+              ],
+              "description": "Detect language from URL file extension"
+            },
+            {
+              "kind": "method",
+              "name": "_renderLoadingState",
+              "description": "Render loading state while fetching external content"
+            },
+            {
+              "kind": "method",
+              "name": "_renderErrorState",
+              "description": "Render error state when external content fails to load"
+            },
+            {
+              "kind": "method",
+              "name": "_onPageModeChange",
+              "parameters": [
+                {
+                  "name": "isDark"
+                }
+              ]
+            },
+            {
               "kind": "field",
               "name": "language",
               "readonly": true
@@ -99,6 +133,11 @@
             {
               "kind": "field",
               "name": "focusMode",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "src",
               "readonly": true
             },
             {
@@ -213,6 +252,36 @@
                 "text": "boolean"
               },
               "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_isLoading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_loadError",
+              "type": {
+                "text": "null"
+              },
+              "default": "null"
+            }
+          ],
+          "events": [
+            {
+              "name": "code-loaded",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "code-load-error",
+              "type": {
+                "text": "CustomEvent"
+              }
             }
           ],
           "attributes": [
@@ -224,6 +293,9 @@
             },
             {
               "name": "theme"
+            },
+            {
+              "name": "data-page-theme"
             },
             {
               "name": "show-lines"
@@ -266,6 +338,9 @@
             },
             {
               "name": "focus-mode"
+            },
+            {
+              "name": "src"
             }
           ],
           "superclass": {
@@ -279,6 +354,15 @@
           "description": "Code Block Group - Tabbed interface for multiple code blocks",
           "name": "CodeBlockGroup",
           "members": [
+            {
+              "kind": "method",
+              "name": "_onPageModeChange",
+              "parameters": [
+                {
+                  "name": "isDark"
+                }
+              ]
+            },
             {
               "kind": "field",
               "name": "theme",
@@ -397,6 +481,9 @@
           "attributes": [
             {
               "name": "theme"
+            },
+            {
+              "name": "data-page-theme"
             },
             {
               "name": "show-share"

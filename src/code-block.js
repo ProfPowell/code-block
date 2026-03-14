@@ -64,6 +64,10 @@ function _detectPageDarkMode() {
   if (html.getAttribute('data-bs-theme') === 'dark' || body.getAttribute('data-bs-theme') === 'dark') return true
   if (html.getAttribute('data-bs-theme') === 'light' || body.getAttribute('data-bs-theme') === 'light') return false
 
+  // Check Vanilla Breeze data-mode attribute
+  if (html.getAttribute('data-mode') === 'dark') return true
+  if (html.getAttribute('data-mode') === 'light') return false
+
   const colorScheme = getComputedStyle(html).colorScheme
   if (colorScheme === 'dark') return true
   if (colorScheme === 'light') return false
@@ -88,7 +92,7 @@ function _startObserving() {
 
   const observeOptions = {
     attributes: true,
-    attributeFilter: ['class', 'data-theme', 'data-bs-theme', 'style'],
+    attributeFilter: ['class', 'data-theme', 'data-bs-theme', 'data-mode', 'style'],
   }
 
   _pageObserver.observe(document.documentElement, observeOptions)
@@ -669,12 +673,24 @@ export class CodeBlock extends HTMLElement {
 
     return `
       :host {
+        /* Internal defaults — external --cb-* overrides always win */
+        --_cb-bg: ${isDark ? 'var(--color-surface-raised, #0d1117)' : 'var(--color-surface-raised, #f6f8fa)'};
+        --_cb-code-bg: ${isDark ? 'var(--color-surface, #0d1117)' : 'var(--color-surface, #fff)'};
+        --_cb-header-bg: ${isDark ? 'var(--color-surface-raised, #161b22)' : 'var(--color-surface-raised, #e1e4e8)'};
+        --_cb-text-color: ${isDark ? 'var(--color-text, #c9d1d9)' : 'var(--color-text, #24292e)'};
+        --_cb-border-color: ${isDark ? 'var(--color-border, #30363d)' : 'var(--color-border, #e1e4e8)'};
+        --_cb-comment: ${isDark ? 'var(--color-text-muted, #8b949e)' : 'var(--color-text-muted, #6a737d)'};
+        --_cb-button-bg: ${isDark ? '#21262d' : '#fff'};
+        --_cb-button-color: ${isDark ? 'var(--color-text, #c9d1d9)' : 'var(--color-text, #24292e)'};
+        --_cb-scrollbar-track: ${isDark ? '#161b22' : '#f6f8fa'};
+        --_cb-scrollbar-thumb: ${isDark ? '#30363d' : '#d1d5da'};
+
         display: block;
         margin: var(--cb-margin, 1rem 0);
         border-radius: var(--cb-border-radius, 8px);
         overflow: hidden;
-        border: 1px solid var(--cb-border-color, ${isDark ? '#30363d' : '#e1e4e8'});
-        background: var(--cb-bg, ${isDark ? '#0d1117' : '#f6f8fa'});
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
         font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
         font-size: var(--cb-font-size, 0.875rem);
       }
@@ -684,8 +700,8 @@ export class CodeBlock extends HTMLElement {
         justify-content: space-between;
         align-items: center;
         padding: 0.5rem 1rem;
-        background: var(--cb-header-bg, ${isDark ? '#161b22' : '#e1e4e8'});
-        border-bottom: 1px solid var(--cb-border-color, ${isDark ? '#30363d' : '#d1d5da'});
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
         gap: 1rem;
       }
 
@@ -717,13 +733,13 @@ export class CodeBlock extends HTMLElement {
       }
 
       .copy-button {
-        background: var(--cb-button-bg, ${isDark ? '#21262d' : '#fff'});
+        background: var(--cb-button-bg, var(--_cb-button-bg));
         border: 1px solid var(--cb-button-border, ${isDark ? '#30363d' : '#d1d5da'});
         border-radius: 4px;
         padding: 4px 12px;
         font-size: 0.75rem;
         font-weight: 500;
-        color: var(--cb-button-color, ${isDark ? '#c9d1d9' : '#24292e'});
+        color: var(--cb-button-color, var(--_cb-button-color));
         cursor: pointer;
         transition: all 0.2s ease;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -776,7 +792,7 @@ export class CodeBlock extends HTMLElement {
       }
 
       .action-button:hover {
-        color: var(--cb-button-color, ${isDark ? '#c9d1d9' : '#24292e'});
+        color: var(--cb-button-color, var(--_cb-button-color));
         background: ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'};
       }
 
@@ -804,8 +820,8 @@ export class CodeBlock extends HTMLElement {
         position: absolute;
         top: calc(100% + 4px);
         right: 0;
-        background: var(--cb-header-bg, ${isDark ? '#161b22' : '#f6f8fa'});
-        border: 1px solid var(--cb-border-color, ${isDark ? '#30363d' : '#e1e4e8'});
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         min-width: 160px;
@@ -821,13 +837,13 @@ export class CodeBlock extends HTMLElement {
         padding: 0.5rem 0.75rem;
         background: none;
         border: none;
-        color: var(--cb-text-color, ${isDark ? '#c9d1d9' : '#24292e'});
+        color: var(--cb-text-color, var(--_cb-text-color));
         font-size: 0.8125rem;
         font-weight: 500;
         text-align: left;
         cursor: pointer;
         transition: background 0.15s ease;
-        border-bottom: 1px solid var(--cb-border-color, ${isDark ? '#30363d' : '#e1e4e8'});
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       }
 
@@ -852,7 +868,7 @@ export class CodeBlock extends HTMLElement {
       .code-container {
         display: flex;
         overflow-x: auto;
-        background: var(--cb-code-bg, ${isDark ? '#0d1117' : '#fff'});
+        background: var(--cb-code-bg, var(--_cb-code-bg));
       }
 
       .line-numbers {
@@ -860,7 +876,7 @@ export class CodeBlock extends HTMLElement {
         text-align: right;
         user-select: none;
         background: var(--cb-line-numbers-bg, ${isDark ? '#161b22' : '#f6f8fa'});
-        border-right: 1px solid var(--cb-border-color, ${isDark ? '#30363d' : '#e1e4e8'});
+        border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
         color: var(--cb-line-numbers-color, ${isDark ? '#484f58' : '#959da5'});
         line-height: 1.6;
         flex-shrink: 0;
@@ -887,7 +903,7 @@ export class CodeBlock extends HTMLElement {
       code {
         display: block;
         font-family: inherit;
-        color: var(--cb-text-color, ${isDark ? '#c9d1d9' : '#24292e'});
+        color: var(--cb-text-color, var(--_cb-text-color));
         background: transparent;
         padding: 1rem;
       }
@@ -926,7 +942,7 @@ export class CodeBlock extends HTMLElement {
       /* highlight.js theme - GitHub style with CSS custom properties */
       .hljs-comment,
       .hljs-quote {
-        color: var(--cb-comment, ${isDark ? '#8b949e' : '#6a737d'});
+        color: var(--cb-comment, var(--_cb-comment));
         font-style: italic;
       }
 
@@ -1048,7 +1064,7 @@ export class CodeBlock extends HTMLElement {
         left: 0;
         right: 0;
         height: 60px;
-        background: linear-gradient(transparent, var(--cb-code-bg, ${isDark ? '#0d1117' : '#fff'}));
+        background: linear-gradient(transparent, var(--cb-code-bg, var(--_cb-code-bg)));
         pointer-events: none;
       }
 
@@ -1067,7 +1083,7 @@ export class CodeBlock extends HTMLElement {
         padding: 0.5rem 1rem;
         background: var(--cb-expand-bg, ${isDark ? '#161b22' : '#f6f8fa'});
         border: none;
-        border-top: 1px solid var(--cb-border-color, ${isDark ? '#30363d' : '#e1e4e8'});
+        border-top: 1px solid var(--cb-border-color, var(--_cb-border-color));
         color: var(--cb-expand-color, ${isDark ? '#58a6ff' : '#0366d6'});
         font-size: 0.8rem;
         font-weight: 500;
@@ -1101,11 +1117,11 @@ export class CodeBlock extends HTMLElement {
       }
 
       :host([max-height]) .code-container::-webkit-scrollbar-track {
-        background: var(--cb-scrollbar-track, ${isDark ? '#161b22' : '#f6f8fa'});
+        background: var(--cb-scrollbar-track, var(--_cb-scrollbar-track));
       }
 
       :host([max-height]) .code-container::-webkit-scrollbar-thumb {
-        background: var(--cb-scrollbar-thumb, ${isDark ? '#30363d' : '#d1d5da'});
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
         border-radius: 4px;
       }
 
@@ -1545,20 +1561,32 @@ class CodeBlockGroup extends HTMLElement {
 
     return `
       :host {
+        /* Internal defaults — external --cb-* overrides always win */
+        --_cb-bg: ${isDark ? 'var(--color-surface-raised, #0d1117)' : 'var(--color-surface-raised, #f6f8fa)'};
+        --_cb-code-bg: ${isDark ? 'var(--color-surface, #0d1117)' : 'var(--color-surface, #fff)'};
+        --_cb-header-bg: ${isDark ? 'var(--color-surface-raised, #161b22)' : 'var(--color-surface-raised, #e1e4e8)'};
+        --_cb-text-color: ${isDark ? 'var(--color-text, #c9d1d9)' : 'var(--color-text, #24292e)'};
+        --_cb-border-color: ${isDark ? 'var(--color-border, #30363d)' : 'var(--color-border, #e1e4e8)'};
+        --_cb-comment: ${isDark ? 'var(--color-text-muted, #8b949e)' : 'var(--color-text-muted, #6a737d)'};
+        --_cb-button-bg: ${isDark ? '#21262d' : '#fff'};
+        --_cb-button-color: ${isDark ? 'var(--color-text, #c9d1d9)' : 'var(--color-text, #24292e)'};
+        --_cb-scrollbar-track: ${isDark ? '#161b22' : '#f6f8fa'};
+        --_cb-scrollbar-thumb: ${isDark ? '#30363d' : '#d1d5da'};
+
         display: block;
         margin: var(--cb-margin, 1rem 0);
         border-radius: var(--cb-border-radius, 8px);
         overflow: hidden;
-        border: 1px solid var(--cb-border-color, ${isDark ? '#30363d' : '#e1e4e8'});
-        background: var(--cb-bg, ${isDark ? '#0d1117' : '#f6f8fa'});
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
+        background: var(--cb-bg, var(--_cb-bg));
         font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
         font-size: var(--cb-font-size, 0.875rem);
       }
 
       .tabs {
         display: flex;
-        background: var(--cb-header-bg, ${isDark ? '#161b22' : '#f6f8fa'});
-        border-bottom: 1px solid var(--cb-border-color, ${isDark ? '#30363d' : '#e1e4e8'});
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
         overflow-x: auto;
         scrollbar-width: thin;
       }
@@ -1568,7 +1596,7 @@ class CodeBlockGroup extends HTMLElement {
       }
 
       .tabs::-webkit-scrollbar-thumb {
-        background: var(--cb-scrollbar-thumb, ${isDark ? '#30363d' : '#d1d5da'});
+        background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
         border-radius: 2px;
       }
 
@@ -1590,7 +1618,7 @@ class CodeBlockGroup extends HTMLElement {
       }
 
       .tab:hover {
-        color: var(--cb-text-color, ${isDark ? '#c9d1d9' : '#24292e'});
+        color: var(--cb-text-color, var(--_cb-text-color));
         background: ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'};
       }
 
@@ -1600,9 +1628,9 @@ class CodeBlockGroup extends HTMLElement {
       }
 
       .tab[aria-selected="true"] {
-        color: var(--cb-text-color, ${isDark ? '#c9d1d9' : '#24292e'});
+        color: var(--cb-text-color, var(--_cb-text-color));
         border-bottom-color: var(--cb-focus-color, ${isDark ? '#58a6ff' : '#0969da'});
-        background: var(--cb-code-bg, ${isDark ? '#0d1117' : '#fff'});
+        background: var(--cb-code-bg, var(--_cb-code-bg));
       }
 
       .language-badge {
@@ -1635,8 +1663,8 @@ class CodeBlockGroup extends HTMLElement {
       .header {
         display: flex;
         align-items: stretch;
-        background: var(--cb-header-bg, ${isDark ? '#161b22' : '#f6f8fa'});
-        border-bottom: 1px solid var(--cb-border-color, ${isDark ? '#30363d' : '#e1e4e8'});
+        background: var(--cb-header-bg, var(--_cb-header-bg));
+        border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
       }
 
       .tabs {
@@ -1668,7 +1696,7 @@ class CodeBlockGroup extends HTMLElement {
 
       .action-button:hover {
         background: ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'};
-        color: var(--cb-text-color, ${isDark ? '#c9d1d9' : '#24292e'});
+        color: var(--cb-text-color, var(--_cb-text-color));
       }
 
       .action-button:focus-visible {
@@ -1693,7 +1721,7 @@ class CodeBlockGroup extends HTMLElement {
         min-width: 140px;
         padding: 0.25rem 0;
         background: var(--cb-bg, ${isDark ? '#21262d' : '#fff'});
-        border: 1px solid var(--cb-border-color, ${isDark ? '#30363d' : '#e1e4e8'});
+        border: 1px solid var(--cb-border-color, var(--_cb-border-color));
         border-radius: 6px;
         box-shadow: 0 8px 24px ${isDark ? 'rgba(0,0,0,0.4)' : 'rgba(0,0,0,0.12)'};
         z-index: 100;
@@ -1717,7 +1745,7 @@ class CodeBlockGroup extends HTMLElement {
         padding: 0.5rem 0.75rem;
         background: transparent;
         border: none;
-        color: var(--cb-text-color, ${isDark ? '#c9d1d9' : '#24292e'});
+        color: var(--cb-text-color, var(--_cb-text-color));
         font-family: inherit;
         font-size: 0.8125rem;
         text-align: left;
