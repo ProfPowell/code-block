@@ -46,6 +46,14 @@ hljs.registerLanguage('py', python)
 hljs.registerLanguage('typescript', typescript)
 hljs.registerLanguage('ts', typescript)
 
+// --- Anti-FOUC: hide elements until custom element is defined ---
+if (typeof document !== 'undefined') {
+  const _antiFlash = document.createElement('style')
+  _antiFlash.textContent =
+    'code-block:not(:defined),code-block-group:not(:defined){display:block;opacity:0}'
+  document.head.appendChild(_antiFlash)
+}
+
 // --- Page-level dark mode observer (shared singleton) ---
 const _registeredInstances = new Set()
 let _pageObserver = null
