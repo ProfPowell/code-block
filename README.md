@@ -289,6 +289,81 @@ const languages = CodeBlock.getSupportedLanguages();
 console.log(`Supports ${languages.length} languages`);
 ```
 
+## Server-Side Rendering (SSR)
+
+For static sites and documentation, code blocks can be pre-rendered at build time using the SSR module. This eliminates client-side syntax highlighting and displays code instantly using Declarative Shadow DOM.
+
+### Installation
+
+The SSR module is included in the package — no extra install needed:
+
+```javascript
+import { prerenderCodeBlock, prerenderCodeBlocksInHtml } from '@profpowell/code-block/ssr'
+```
+
+### Single Block
+
+```javascript
+const html = prerenderCodeBlock({
+  code: 'const x = 42;',
+  language: 'javascript',
+  theme: 'dark',
+  showLines: true,
+  filename: 'app.js',
+})
+// Returns complete <code-block data-ssr> with Declarative Shadow DOM
+```
+
+### Process an HTML Page
+
+```javascript
+const page = prerenderCodeBlocksInHtml(rawHtml)
+// Finds all <code-block> elements and pre-renders them
+// Skips blocks with src attribute or data-ssr (already processed)
+```
+
+### SSG Integration (Cook, Eleventy, etc.)
+
+The SSR module runs in Node.js and can be used as a build step in any static site generator:
+
+```javascript
+// Example Cook plugin
+import { prerenderCodeBlocksInHtml } from '@profpowell/code-block/ssr'
+
+// Process HTML after all other transforms
+file.src = prerenderCodeBlocksInHtml(file.src)
+```
+
+### How It Works
+
+1. **Build time**: `prerenderCodeBlock()` runs highlight.js in Node.js and generates the full shadow DOM HTML
+2. **Output**: A `<code-block data-ssr>` element with `<template shadowrootmode="open">` containing pre-rendered styles and highlighted code, plus a `<textarea>` preserving raw code for copy-to-clipboard
+3. **Browser**: The Declarative Shadow DOM template is parsed into a real shadow root — code is visible immediately, before any JavaScript loads
+4. **Hydration**: When the component JS loads, it detects `data-ssr`, skips re-rendering, and attaches interactive event listeners (copy, download, share, expand/collapse)
+
+### Options
+
+`prerenderCodeBlock()` accepts all the same options as the component's HTML attributes:
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `code` | string | required | Source code to highlight |
+| `language` | string | `'plaintext'` | Language for highlighting |
+| `theme` | string | `'light'` | `'light'` or `'dark'` |
+| `filename` | string | — | Filename in header |
+| `label` | string | — | Custom label |
+| `showLines` | boolean | `false` | Show line numbers |
+| `highlightLines` | string | — | Lines to highlight, e.g. `"2,4-6"` |
+| `focusMode` | boolean | `false` | Dim non-highlighted lines |
+| `collapsed` | boolean | `false` | Start collapsed |
+| `maxLines` | number | `10` | Visible lines when collapsed |
+| `maxHeight` | string | — | Max height with scroll |
+| `wrap` | boolean | `false` | Word wrap |
+| `noCopy` | boolean | `false` | Hide copy button |
+| `copyText` | string | `'Copy'` | Copy button text |
+| `showShare` | boolean | `false` | Show share button |
+| `showDownload` | boolean | `false` | Show download button |
+
 ## Demo
 
 Open `demo.html` in a browser to see all features in action:

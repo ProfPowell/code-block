@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { prerenderCodeBlock } from '../ssr/index.js'
 
 const TEST_URL = '/test/test-page.html'
 const LOAD_TIMEOUT = 2000
@@ -960,5 +961,94 @@ test.describe('code-block - Textarea Content Source', () => {
     })
     expect(code).toContain("import 'vanilla-breeze/css'")
     expect(code).toContain('console.log')
+  })
+})
+
+// --- SSR / Declarative Shadow DOM Hydration Tests ---
+// Note: innerHTML doesn't parse DSD templates, so these tests verify
+// the component handles SSR-generated content (with textarea) when
+// dynamically inserted. Full DSD parse happens only in initial page load.
+test.describe('code-block - SSR Hydration', () => {
+  test('SSR output renders correctly when injected into page', async ({ page }) => {
+    const ssrBlock = prerenderCodeBlock({
+      code: 'const x = 42;',
+      language: 'javascript',
+    })
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const result = await page.evaluate((html) => {
+      const container = document.createElement('div')
+      container.innerHTML = html
+      document.body.appendChild(container)
+      const el = container.querySelector('code-block')
+      return new Promise(resolve => {
+        requestAnimationFrame(() => {
+          const shadow = el?.shadowRoot
+          resolve({
+            hasShadow: !!shadow,
+            codeText: shadow?.querySelector('code')?.textContent,
+            hasCopyButton: !!shadow?.querySelector('.copy-button'),
+          })
+        })
+      })
+    }, ssrBlock)
+    expect(result.hasShadow).toBe(true)
+    expect(result.codeText).toContain('const')
+    expect(result.codeText).toContain('42')
+    expect(result.hasCopyButton).toBe(true)
+  })
+
+  test('SSR block with textarea provides correct getCode', async ({ page }) => {
+    const ssrBlock = prerenderCodeBlock({
+      code: 'function hello() { return "world"; }',
+      language: 'javascript',
+    })
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const code = await page.evaluate((html) => {
+      const container = document.createElement('div')
+      container.innerHTML = html
+      document.body.appendChild(container)
+      const el = container.querySelector('code-block')
+      return new Promise(resolve => {
+        requestAnimationFrame(() => {
+          resolve(el?.getCode?.())
+        })
+      })
+    }, ssrBlock)
+    expect(code).toContain('function hello()')
+    expect(code).toContain('return "world"')
+  })
+
+  test('SSR block with line numbers renders correctly', async ({ page }) => {
+    const ssrBlock = prerenderCodeBlock({
+      code: 'let y = 100;\nlet z = 200;',
+      language: 'javascript',
+      showLines: true,
+    })
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const result = await page.evaluate((html) => {
+      const container = document.createElement('div')
+      container.innerHTML = html
+      document.body.appendChild(container)
+      const el = container.querySelector('code-block')
+      return new Promise(resolve => {
+        requestAnimationFrame(() => {
+          const shadow = el?.shadowRoot
+          resolve({
+            hasLineNumbers: !!shadow?.querySelector('.line-numbers'),
+            lineCount: shadow?.querySelectorAll('.line-numbers span')?.length,
+            hasHighlightedCode: shadow?.querySelector('code')?.innerHTML?.includes('hljs-'),
+          })
+        })
+      })
+    }, ssrBlock)
+    expect(result.hasLineNumbers).toBe(true)
+    expect(result.lineCount).toBe(2)
+    expect(result.hasHighlightedCode).toBe(true)
   })
 })

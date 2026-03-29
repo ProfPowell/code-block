@@ -1,6 +1,6 @@
 {
   "name": "@profpowell/code-block",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "description": "A code block web component with syntax highlighting (via highlight.js), copy functionality, line numbers, and theme support",
   "type": "module",
   "main": "dist/code-block.js",
@@ -11,6 +11,10 @@
       "types": "./code-block.d.ts",
       "import": "./dist/code-block.js",
       "default": "./dist/code-block.js"
+    },
+    "./ssr": {
+      "import": "./ssr/index.js",
+      "default": "./ssr/index.js"
     }
   },
   "publishConfig" : { 
@@ -18,6 +22,7 @@
   },
   "files": [
     "dist",
+    "ssr",
     "code-block.d.ts",
     "custom-elements.json",
     "README.md",

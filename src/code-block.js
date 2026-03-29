@@ -137,7 +137,10 @@ function _unregisterInstance(instance) {
 export class CodeBlock extends HTMLElement {
   constructor() {
     super()
-    this.attachShadow({ mode: 'open' })
+    // DSD may have already created a shadow root via <template shadowrootmode>
+    if (!this.shadowRoot) {
+      this.attachShadow({ mode: 'open' })
+    }
     this._codeContent = null
     this._showShareMenu = false
     this._handleOutsideClick = this._handleOutsideClick.bind(this)
@@ -148,6 +151,18 @@ export class CodeBlock extends HTMLElement {
   }
 
   connectedCallback() {
+    // SSR hydration: DSD already rendered the shadow DOM
+    if (this.shadowRoot?.children.length && this.hasAttribute('data-ssr')) {
+      const textarea = this.querySelector('textarea')
+      if (textarea) {
+        this._codeContent = textarea.value || textarea.textContent
+        textarea.remove()
+      }
+      this._hydrateInteractivity()
+      _registerInstance(this)
+      return
+    }
+
     // Check for <textarea> content source (SSG/JSDOM-safe)
     const textarea = this.querySelector('textarea')
     if (textarea) {
@@ -1227,6 +1242,31 @@ export class CodeBlock extends HTMLElement {
     }
   }
 
+  /**
+   * Attach event listeners to pre-rendered SSR shadow DOM without re-rendering.
+   */
+  _hydrateInteractivity() {
+    const copyBtn = this.shadowRoot.querySelector('.copy-button')
+    if (copyBtn) copyBtn.addEventListener('click', () => this.copyCode())
+
+    const expandBtn = this.shadowRoot.querySelector('.expand-button')
+    if (expandBtn) expandBtn.addEventListener('click', () => this.toggleCollapsed())
+
+    const shareBtn = this.shadowRoot.querySelector('.share-button')
+    if (shareBtn) {
+      shareBtn.addEventListener('click', (e) => {
+        e.stopPropagation()
+        this.toggleShareMenu()
+      })
+    }
+
+    const shareCodepen = this.shadowRoot.querySelector('.share-codepen')
+    if (shareCodepen) shareCodepen.addEventListener('click', () => this.openInCodePen())
+
+    const downloadBtn = this.shadowRoot.querySelector('.download-button')
+    if (downloadBtn) downloadBtn.addEventListener('click', () => this.downloadCode())
+  }
+
   render() {
     const code = (this._codeContent || this.textContent).trim()
     const rawLines = code.split('\n')
@@ -1492,7 +1532,9 @@ customElements.define('code-block', CodeBlock)
 class CodeBlockGroup extends HTMLElement {
   constructor() {
     super()
-    this.attachShadow({ mode: 'open' })
+    if (!this.shadowRoot) {
+      this.attachShadow({ mode: 'open' })
+    }
     this._activeIndex = 0
     this._showShareMenu = false
     this._handleOutsideClick = this._handleOutsideClick.bind(this)

@@ -609,6 +609,48 @@
         </tbody>
       </table>
 
+      <h3>Server-Side Rendering (SSR)</h3>
+      <p>Pre-render code blocks at build time for static sites. Import from <code>@profpowell/code-block/ssr</code>.</p>
+
+      <h4>Functions</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Function</th>
+            <th>Returns</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>prerenderCodeBlock(options)</code></td>
+            <td><code>string</code></td>
+            <td>Pre-render a single code block. Returns complete <code>&lt;code-block data-ssr&gt;</code> HTML with Declarative Shadow DOM.</td>
+          </tr>
+          <tr>
+            <td><code>prerenderCodeBlocksInHtml(html)</code></td>
+            <td><code>string</code></td>
+            <td>Process an HTML string, pre-rendering all <code>&lt;code-block&gt;</code> elements. Skips blocks with <code>src</code> or <code>data-ssr</code> attributes.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>SSR Attributes</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>data-ssr</code></td>
+            <td>Added automatically by the SSR module. Tells the client-side component to skip re-rendering and hydrate interactivity only.</td>
+          </tr>
+        </tbody>
+      </table>
+
       <h3>Events</h3>
       <table class="api-table">
         <thead>
