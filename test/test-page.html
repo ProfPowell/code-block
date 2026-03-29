@@ -183,5 +183,19 @@ const groupAuto = true;
   <!-- External file with explicit language -->
   <code-block src="fixtures/sample.js" language="typescript" id="external-src-lang-block"></code-block>
 
+  <!-- Textarea content source (SSG/JSDOM compatibility) -->
+  <code-block language="javascript" id="textarea-block">
+    <textarea>// Import CSS
+import 'vanilla-breeze/css';
+console.log('Hello');</textarea>
+  </code-block>
+
+  <!-- Textarea with HTML content (no entity escaping needed) -->
+  <code-block language="html" id="textarea-html-block">
+    <textarea><div class="container">
+  <p>Hello World</p>
+</div></textarea>
+  </code-block>
+
 </body>
 </html>

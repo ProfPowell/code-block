@@ -180,6 +180,95 @@ Additional languages can be added by importing them from highlight.js.
 | `toggleCollapsed()` | `void` | Toggle collapsed state |
 | `render()` | `void` | Re-render the component |
 
+### CSS Custom Properties
+
+The component exposes 60+ CSS custom properties for full theme control. Properties marked "theme-aware" adapt automatically to light/dark mode.
+
+#### Container & Layout
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--cb-bg` | theme-aware | Outer container background |
+| `--cb-code-bg` | theme-aware | Code area background |
+| `--cb-border-color` | theme-aware | Border color used throughout |
+| `--cb-border-radius` | `8px` | Outer container border radius |
+| `--cb-margin` | `1rem 0` | Component outer margin |
+| `--cb-shadow` | theme-aware | Box shadow on dropdown menus |
+
+#### Typography
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--cb-font-family` | `Consolas, Monaco, Courier New, monospace` | Code font |
+| `--cb-ui-font-family` | `-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif` | UI font (buttons, menus) |
+| `--cb-font-size` | `0.875rem` | Base code font size |
+| `--cb-text-color` | theme-aware | Default code text color |
+| `--cb-line-height` | `1.6` | Code line height |
+
+#### Header
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--cb-header-bg` | theme-aware | Header bar background |
+| `--cb-header-padding` | `0.5rem 1rem` | Header padding |
+| `--cb-label-color` | theme-aware | Language label and icon color |
+| `--cb-filename-color` | theme-aware | Filename text color |
+
+#### Buttons
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--cb-button-bg` | theme-aware | Button background |
+| `--cb-button-color` | theme-aware | Button text color |
+| `--cb-button-border` | theme-aware | Button border color |
+| `--cb-button-border-width` | `1px` | Button border width |
+| `--cb-button-border-style` | `solid` | Button border style (`solid`, `none`, etc.) |
+| `--cb-button-radius` | `4px` | Border radius for copy and action buttons |
+| `--cb-button-padding` | `4px 12px` | Copy button padding |
+| `--cb-button-font-size` | `0.75rem` | Copy button font size |
+| `--cb-button-hover-bg` | theme-aware | Copy button hover background |
+| `--cb-button-hover-border` | theme-aware | Copy button hover border color |
+| `--cb-action-button-hover-bg` | theme-aware | Icon button hover background |
+| `--cb-success-color` | `#238636` | Copied-success state color |
+| `--cb-error-color` | `#da3633` | Copy-failed state color |
+| `--cb-focus-color` | theme-aware | Focus ring color |
+
+#### Code Area & Line Numbers
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--cb-code-padding` | `1rem` | Code area and gutter padding |
+| `--cb-line-numbers-bg` | theme-aware | Line-numbers gutter background |
+| `--cb-line-numbers-color` | theme-aware | Line-numbers text color |
+
+#### Syntax Highlighting
+
+| Property | Default (Light / Dark) | Description |
+|----------|----------------------|-------------|
+| `--cb-keyword` | `#d73a49` / `#ff7b72` | Keywords |
+| `--cb-string` | `#22863a` / `#a5d6ff` | Strings |
+| `--cb-comment` | theme-aware | Comments |
+| `--cb-function` | `#6f42c1` / `#d2a8ff` | Function names |
+| `--cb-number` | `#005cc5` / `#79c0ff` | Numbers |
+| `--cb-attribute` | `#005cc5` / `#79c0ff` | HTML/XML attributes |
+| `--cb-tag` | `#22863a` / `#7ee787` | HTML/XML tags |
+| `--cb-meta` | `#e36209` / `#ffa657` | Meta/preprocessor tokens |
+| `--cb-builtin` | `#d73a49` / `#ffa198` | Built-in names |
+
+See `docs/api.html` for the complete reference including diff, expand/collapse, scrollbar, highlight, and focus-mode properties.
+
+#### Example: Vanilla Breeze Integration
+
+```css
+code-block {
+  --cb-button-radius: 0;
+  --cb-button-border-style: none;
+  --cb-border-radius: 0;
+  --cb-ui-font-family: 'Inter', sans-serif;
+  --cb-font-family: 'JetBrains Mono', monospace;
+}
+```
+
 ### Programmatic Usage
 
 ```javascript

@@ -890,3 +890,75 @@ test.describe('code-block - External File Loading (src attribute)', () => {
     expect(result.hasErrorMessage).toBe(true)
   })
 })
+
+test.describe('code-block - Textarea Content Source', () => {
+  test('textarea content is rendered as code', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const result = await page.evaluate(() => {
+      const el = document.querySelector('#textarea-block')
+      const code = el?.getCode?.()
+      return {
+        hasContent: code?.length > 0,
+        containsImport: code?.includes("import 'vanilla-breeze/css'"),
+        containsComment: code?.includes('// Import CSS')
+      }
+    })
+    expect(result.hasContent).toBe(true)
+    expect(result.containsImport).toBe(true)
+    expect(result.containsComment).toBe(true)
+  })
+
+  test('textarea is removed from DOM after connectedCallback', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const textareaExists = await page.evaluate(() => {
+      const el = document.querySelector('#textarea-block')
+      return el?.querySelector('textarea') !== null
+    })
+    expect(textareaExists).toBe(false)
+  })
+
+  test('textarea content has syntax highlighting', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const hasHighlighting = await page.evaluate(() => {
+      const el = document.querySelector('#textarea-block')
+      return el?.shadowRoot?.querySelector('[class*="hljs-"]') !== null
+    })
+    expect(hasHighlighting).toBe(true)
+  })
+
+  test('textarea with HTML content works without entity escaping', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const result = await page.evaluate(() => {
+      const el = document.querySelector('#textarea-html-block')
+      const code = el?.getCode?.()
+      return {
+        hasContent: code?.length > 0,
+        containsDiv: code?.includes('<div'),
+        containsParagraph: code?.includes('<p>')
+      }
+    })
+    expect(result.hasContent).toBe(true)
+    expect(result.containsDiv).toBe(true)
+    expect(result.containsParagraph).toBe(true)
+  })
+
+  test('getCode returns correct content from textarea source', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const code = await page.evaluate(() => {
+      const el = document.querySelector('#textarea-block')
+      return el?.getCode?.()
+    })
+    expect(code).toContain("import 'vanilla-breeze/css'")
+    expect(code).toContain('console.log')
+  })
+})

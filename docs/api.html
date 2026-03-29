@@ -117,6 +117,431 @@
       </table>
 
       <h3>CSS Custom Properties</h3>
+
+      <h4>Container &amp; Layout</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-bg</code></td>
+            <td>theme-aware</td>
+            <td>Outer container background.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-code-bg</code></td>
+            <td>theme-aware</td>
+            <td>Code area background.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-border-color</code></td>
+            <td>theme-aware</td>
+            <td>Border color used throughout the component.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-border-radius</code></td>
+            <td><code>8px</code></td>
+            <td>Border radius of the outer container.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-margin</code></td>
+            <td><code>1rem 0</code></td>
+            <td>Outer margin of the component.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-shadow</code></td>
+            <td>theme-aware</td>
+            <td>Box shadow on dropdown menus.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Typography</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-font-family</code></td>
+            <td><code>Consolas, Monaco, Courier New, monospace</code></td>
+            <td>Font for code text and filename.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-ui-font-family</code></td>
+            <td><code>-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif</code></td>
+            <td>Font for UI elements (buttons, menus, expand bar).</td>
+          </tr>
+          <tr>
+            <td><code>--cb-font-size</code></td>
+            <td><code>0.875rem</code></td>
+            <td>Base font size for code.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-text-color</code></td>
+            <td>theme-aware</td>
+            <td>Default text color for code.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-line-height</code></td>
+            <td><code>1.6</code></td>
+            <td>Line height for code lines and line numbers.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Header</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-header-bg</code></td>
+            <td>theme-aware</td>
+            <td>Background color of the header bar.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-header-padding</code></td>
+            <td><code>0.5rem 1rem</code></td>
+            <td>Padding inside the header bar.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-label-color</code></td>
+            <td>theme-aware</td>
+            <td>Color for language labels and action button icons.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-filename-color</code></td>
+            <td>theme-aware</td>
+            <td>Color for the filename text.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Copy &amp; Action Buttons</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-button-bg</code></td>
+            <td>theme-aware</td>
+            <td>Button background color.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-button-color</code></td>
+            <td>theme-aware</td>
+            <td>Button text color.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-button-border</code></td>
+            <td>theme-aware</td>
+            <td>Button border color.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-button-border-width</code></td>
+            <td><code>1px</code></td>
+            <td>Button border width.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-button-border-style</code></td>
+            <td><code>solid</code></td>
+            <td>Button border style (e.g., <code>solid</code>, <code>none</code>, <code>dashed</code>).</td>
+          </tr>
+          <tr>
+            <td><code>--cb-button-radius</code></td>
+            <td><code>4px</code></td>
+            <td>Border radius for copy and action buttons.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-button-padding</code></td>
+            <td><code>4px 12px</code></td>
+            <td>Padding inside the copy button.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-button-font-size</code></td>
+            <td><code>0.75rem</code></td>
+            <td>Font size for the copy button.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-button-hover-bg</code></td>
+            <td>theme-aware</td>
+            <td>Copy button background on hover.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-button-hover-border</code></td>
+            <td>theme-aware</td>
+            <td>Copy button border color on hover.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-action-button-hover-bg</code></td>
+            <td>theme-aware</td>
+            <td>Icon button (share/download) background on hover.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-success-color</code></td>
+            <td><code>#238636</code></td>
+            <td>Color for the "Copied!" success state.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-error-color</code></td>
+            <td><code>#da3633</code></td>
+            <td>Color for the copy-failed state.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-focus-color</code></td>
+            <td>theme-aware</td>
+            <td>Focus ring color for interactive elements.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Code Area</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-code-padding</code></td>
+            <td><code>1rem</code></td>
+            <td>Padding inside the code area and line-numbers gutter.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-max-height</code></td>
+            <td>none</td>
+            <td>Maximum height before scrolling (set via <code>max-height</code> attribute).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Line Numbers</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-line-numbers-bg</code></td>
+            <td>theme-aware</td>
+            <td>Background of the line-numbers gutter.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-line-numbers-color</code></td>
+            <td>theme-aware</td>
+            <td>Text color for line numbers.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-line-numbers-highlight-color</code></td>
+            <td>theme-aware</td>
+            <td>Text color for highlighted line numbers.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Line Highlighting &amp; Focus Mode</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-highlight-bg</code></td>
+            <td>theme-aware</td>
+            <td>Background color for highlighted lines.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-highlight-border</code></td>
+            <td>theme-aware</td>
+            <td>Left border accent on highlighted lines.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-highlight-gutter</code></td>
+            <td>theme-aware</td>
+            <td>Background of highlighted line-number cells.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-focus-dim-opacity</code></td>
+            <td><code>0.4</code></td>
+            <td>Opacity for non-highlighted lines in focus mode.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-focus-blur</code></td>
+            <td><code>0.5px</code></td>
+            <td>Blur applied to non-highlighted lines in focus mode.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Diff</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-diff-add-bg</code></td>
+            <td>theme-aware</td>
+            <td>Background for added lines.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-diff-add-border</code></td>
+            <td>theme-aware</td>
+            <td>Left border for added lines.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-diff-add-color</code></td>
+            <td>theme-aware</td>
+            <td>Line-number color for added lines.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-diff-add-gutter</code></td>
+            <td>theme-aware</td>
+            <td>Gutter background for added lines.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-diff-add-text</code></td>
+            <td>theme-aware</td>
+            <td>Text color for added-line markers.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-diff-remove-bg</code></td>
+            <td>theme-aware</td>
+            <td>Background for removed lines.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-diff-remove-border</code></td>
+            <td>theme-aware</td>
+            <td>Left border for removed lines.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-diff-remove-color</code></td>
+            <td>theme-aware</td>
+            <td>Line-number color for removed lines.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-diff-remove-gutter</code></td>
+            <td>theme-aware</td>
+            <td>Gutter background for removed lines.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-diff-remove-text</code></td>
+            <td>theme-aware</td>
+            <td>Text color for removed-line markers.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Expand / Collapse</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-expand-bg</code></td>
+            <td>theme-aware</td>
+            <td>Background of the expand/collapse bar.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-expand-color</code></td>
+            <td>theme-aware</td>
+            <td>Text color of the expand/collapse bar.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-expand-hover-bg</code></td>
+            <td>theme-aware</td>
+            <td>Hover background of the expand/collapse bar.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Scrollbar</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-scrollbar-track</code></td>
+            <td>theme-aware</td>
+            <td>Scrollbar track background.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-scrollbar-thumb</code></td>
+            <td>theme-aware</td>
+            <td>Scrollbar thumb color.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-scrollbar-thumb-hover</code></td>
+            <td>theme-aware</td>
+            <td>Scrollbar thumb hover color.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Menus</h4>
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--cb-menu-radius</code></td>
+            <td><code>8px</code></td>
+            <td>Border radius for dropdown menus.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Syntax Highlighting Colors</h4>
       <table class="api-table">
         <thead>
           <tr>
@@ -128,94 +553,58 @@
         </thead>
         <tbody>
           <tr>
-            <td><code>--cb-border-radius</code></td>
-            <td><code>8px</code></td>
-            <td><code>8px</code></td>
-            <td>Border radius of the code block container.</td>
-          </tr>
-          <tr>
-            <td><code>--cb-header-bg</code></td>
-            <td><code>#f6f8fa</code></td>
-            <td><code>#161b22</code></td>
-            <td>Background color of the header bar.</td>
-          </tr>
-          <tr>
-            <td><code>--cb-code-bg</code></td>
-            <td><code>#ffffff</code></td>
-            <td><code>#0d1117</code></td>
-            <td>Background color of the code area.</td>
-          </tr>
-          <tr>
-            <td><code>--cb-border-color</code></td>
-            <td><code>#d0d7de</code></td>
-            <td><code>#30363d</code></td>
-            <td>Border color around the code block.</td>
-          </tr>
-          <tr>
-            <td><code>--cb-text-color</code></td>
-            <td><code>#24292f</code></td>
-            <td><code>#c9d1d9</code></td>
-            <td>Default text color for code.</td>
-          </tr>
-          <tr>
-            <td><code>--cb-label-color</code></td>
-            <td><code>#57606a</code></td>
-            <td><code>#8b949e</code></td>
-            <td>Color for filename and language labels.</td>
-          </tr>
-          <tr>
-            <td><code>--cb-line-number-color</code></td>
-            <td><code>#6e7781</code></td>
-            <td><code>#6e7681</code></td>
-            <td>Color for line numbers.</td>
-          </tr>
-          <tr>
-            <td><code>--cb-highlight-bg</code></td>
-            <td><code>#fff8c5</code></td>
-            <td><code>#2d333b</code></td>
-            <td>Background color for highlighted lines.</td>
-          </tr>
-          <tr>
             <td><code>--cb-keyword</code></td>
-            <td><code>#cf222e</code></td>
+            <td><code>#d73a49</code></td>
             <td><code>#ff7b72</code></td>
-            <td>Color for language keywords.</td>
+            <td>Keywords (<code>if</code>, <code>return</code>, <code>class</code>, etc.).</td>
           </tr>
           <tr>
             <td><code>--cb-string</code></td>
-            <td><code>#0a3069</code></td>
+            <td><code>#22863a</code></td>
             <td><code>#a5d6ff</code></td>
-            <td>Color for string literals.</td>
+            <td>String literals.</td>
           </tr>
           <tr>
             <td><code>--cb-comment</code></td>
-            <td><code>#6e7781</code></td>
-            <td><code>#8b949e</code></td>
-            <td>Color for comments.</td>
+            <td>theme-aware</td>
+            <td>theme-aware</td>
+            <td>Comments.</td>
           </tr>
           <tr>
             <td><code>--cb-function</code></td>
-            <td><code>#8250df</code></td>
+            <td><code>#6f42c1</code></td>
             <td><code>#d2a8ff</code></td>
-            <td>Color for function names.</td>
+            <td>Function names.</td>
           </tr>
           <tr>
             <td><code>--cb-number</code></td>
-            <td><code>#0550ae</code></td>
+            <td><code>#005cc5</code></td>
             <td><code>#79c0ff</code></td>
-            <td>Color for numeric literals.</td>
+            <td>Numeric literals.</td>
           </tr>
           <tr>
-            <td><code>--cb-operator</code></td>
-            <td><code>#cf222e</code></td>
-            <td><code>#ff7b72</code></td>
-            <td>Color for operators.</td>
+            <td><code>--cb-attribute</code></td>
+            <td><code>#005cc5</code></td>
+            <td><code>#79c0ff</code></td>
+            <td>HTML/XML attributes.</td>
           </tr>
           <tr>
-            <td><code>--cb-class</code></td>
-            <td><code>#953800</code></td>
+            <td><code>--cb-tag</code></td>
+            <td><code>#22863a</code></td>
+            <td><code>#7ee787</code></td>
+            <td>HTML/XML tag names.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-meta</code></td>
+            <td><code>#e36209</code></td>
             <td><code>#ffa657</code></td>
-            <td>Color for class names.</td>
+            <td>Meta/preprocessor tokens.</td>
+          </tr>
+          <tr>
+            <td><code>--cb-builtin</code></td>
+            <td><code>#d73a49</code></td>
+            <td><code>#ffa198</code></td>
+            <td>Built-in names.</td>
           </tr>
         </tbody>
       </table>

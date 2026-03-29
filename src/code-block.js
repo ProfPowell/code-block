@@ -148,8 +148,14 @@ export class CodeBlock extends HTMLElement {
   }
 
   connectedCallback() {
-    // Capture the original text content before rendering
-    this._codeContent = this.textContent
+    // Check for <textarea> content source (SSG/JSDOM-safe)
+    const textarea = this.querySelector('textarea')
+    if (textarea) {
+      this._codeContent = textarea.value || textarea.textContent
+      textarea.remove()
+    } else {
+      this._codeContent = this.textContent
+    }
 
     // If src attribute is set, load from external URL
     if (this.src) {
@@ -707,7 +713,7 @@ export class CodeBlock extends HTMLElement {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.5rem 1rem;
+        padding: var(--cb-header-padding, 0.5rem 1rem);
         background: var(--cb-header-bg, var(--_cb-header-bg));
         border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
         gap: 1rem;
@@ -742,21 +748,23 @@ export class CodeBlock extends HTMLElement {
 
       .copy-button {
         background: var(--cb-button-bg, var(--_cb-button-bg));
-        border: 1px solid var(--cb-button-border, ${isDark ? '#30363d' : '#d1d5da'});
-        border-radius: 4px;
-        padding: 4px 12px;
-        font-size: 0.75rem;
+        border-width: var(--cb-button-border-width, 1px);
+        border-style: var(--cb-button-border-style, solid);
+        border-color: var(--cb-button-border, ${isDark ? '#30363d' : '#d1d5da'});
+        border-radius: var(--cb-button-radius, 4px);
+        padding: var(--cb-button-padding, 4px 12px);
+        font-size: var(--cb-button-font-size, 0.75rem);
         font-weight: 500;
         color: var(--cb-button-color, var(--_cb-button-color));
         cursor: pointer;
         transition: all 0.2s ease;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
         flex-shrink: 0;
       }
 
       .copy-button:hover {
         background: var(--cb-button-hover-bg, ${isDark ? '#30363d' : '#f3f4f6'});
-        border-color: ${isDark ? '#8b949e' : '#959da5'};
+        border-color: var(--cb-button-hover-border, ${isDark ? '#8b949e' : '#959da5'});
       }
 
       .copy-button:focus {
@@ -796,12 +804,12 @@ export class CodeBlock extends HTMLElement {
         justify-content: center;
         color: var(--cb-label-color, ${isDark ? '#8b949e' : '#57606a'});
         transition: all 0.15s ease;
-        border-radius: 4px;
+        border-radius: var(--cb-button-radius, 4px);
       }
 
       .action-button:hover {
         color: var(--cb-button-color, var(--_cb-button-color));
-        background: ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'};
+        background: var(--cb-action-button-hover-bg, ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'});
       }
 
       .action-button:active {
@@ -830,8 +838,8 @@ export class CodeBlock extends HTMLElement {
         right: 0;
         background: var(--cb-header-bg, var(--_cb-header-bg));
         border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-radius: var(--cb-menu-radius, 8px);
+        box-shadow: var(--cb-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
         min-width: 160px;
         z-index: 1000;
         overflow: hidden;
@@ -852,7 +860,7 @@ export class CodeBlock extends HTMLElement {
         cursor: pointer;
         transition: background 0.15s ease;
         border-bottom: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
       }
 
       .share-menu-item:last-child {
@@ -880,13 +888,13 @@ export class CodeBlock extends HTMLElement {
       }
 
       .line-numbers {
-        padding: 1rem 0;
+        padding: var(--cb-code-padding, 1rem) 0;
         text-align: right;
         user-select: none;
         background: var(--cb-line-numbers-bg, ${isDark ? '#161b22' : '#f6f8fa'});
         border-right: 1px solid var(--cb-border-color, var(--_cb-border-color));
         color: var(--cb-line-numbers-color, ${isDark ? '#484f58' : '#959da5'});
-        line-height: 1.6;
+        line-height: var(--cb-line-height, 1.6);
         flex-shrink: 0;
       }
 
@@ -913,12 +921,12 @@ export class CodeBlock extends HTMLElement {
         font-family: inherit;
         color: var(--cb-text-color, var(--_cb-text-color));
         background: transparent;
-        padding: 1rem;
+        padding: var(--cb-code-padding, 1rem);
       }
 
       .code-line {
         display: block;
-        line-height: 1.6;
+        line-height: var(--cb-line-height, 1.6);
         padding: 0 0.5rem;
         margin: 0 -0.5rem;
         white-space: pre;
@@ -1096,7 +1104,7 @@ export class CodeBlock extends HTMLElement {
         font-size: 0.8rem;
         font-weight: 500;
         cursor: pointer;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: var(--cb-ui-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
         transition: background 0.2s;
       }
 
@@ -1696,14 +1704,14 @@ class CodeBlockGroup extends HTMLElement {
         padding: 0;
         background: transparent;
         border: none;
-        border-radius: 4px;
+        border-radius: var(--cb-button-radius, 4px);
         color: var(--cb-label-color, ${isDark ? '#8b949e' : '#57606a'});
         cursor: pointer;
         transition: background 0.15s, color 0.15s;
       }
 
       .action-button:hover {
-        background: ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'};
+        background: var(--cb-action-button-hover-bg, ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'});
         color: var(--cb-text-color, var(--_cb-text-color));
       }
 
@@ -1730,8 +1738,8 @@ class CodeBlockGroup extends HTMLElement {
         padding: 0.25rem 0;
         background: var(--cb-bg, ${isDark ? '#21262d' : '#fff'});
         border: 1px solid var(--cb-border-color, var(--_cb-border-color));
-        border-radius: 6px;
-        box-shadow: 0 8px 24px ${isDark ? 'rgba(0,0,0,0.4)' : 'rgba(0,0,0,0.12)'};
+        border-radius: var(--cb-menu-radius, 6px);
+        box-shadow: var(--cb-shadow, 0 8px 24px ${isDark ? 'rgba(0,0,0,0.4)' : 'rgba(0,0,0,0.12)'});
         z-index: 100;
         opacity: 0;
         visibility: hidden;
