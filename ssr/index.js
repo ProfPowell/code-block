@@ -534,7 +534,7 @@ function getStyles(isDark) {
 
       :host([max-height]) .code-container::-webkit-scrollbar-thumb {
         background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
-        border-radius: 4px;
+        border-radius: var(--cb-button-radius, 4px);
       }
 
       :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {

@@ -6174,7 +6174,7 @@ class Hn extends HTMLElement {
 
       :host([max-height]) .code-container::-webkit-scrollbar-thumb {
         background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
-        border-radius: 4px;
+        border-radius: var(--cb-button-radius, 4px);
       }
 
       :host([max-height]) .code-container::-webkit-scrollbar-thumb:hover {
@@ -6461,7 +6461,7 @@ class zn extends HTMLElement {
 
       .tabs::-webkit-scrollbar-thumb {
         background: var(--cb-scrollbar-thumb, var(--_cb-scrollbar-thumb));
-        border-radius: 2px;
+        border-radius: var(--cb-button-radius, 4px);
       }
 
       .tab {
@@ -6501,7 +6501,7 @@ class zn extends HTMLElement {
         display: inline-block;
         padding: 0.125rem 0.375rem;
         background: ${e ? "rgba(110, 118, 129, 0.4)" : "rgba(175, 184, 193, 0.4)"};
-        border-radius: 4px;
+        border-radius: var(--cb-button-radius, 4px);
         font-size: 0.6875rem;
         font-weight: 600;
         text-transform: uppercase;
