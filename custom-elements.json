@@ -189,6 +189,11 @@
             },
             {
               "kind": "method",
+              "name": "_hydrateInteractivity",
+              "description": "Attach event listeners to pre-rendered SSR shadow DOM without re-rendering."
+            },
+            {
+              "kind": "method",
               "name": "toggleCollapsed"
             },
             {

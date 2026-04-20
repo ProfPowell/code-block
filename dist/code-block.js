@@ -39,7 +39,7 @@ function mn() {
     }), /** @type {T} */
     c;
   }
-  const s = "</span>", l = (t) => !!t.scope, b = (t, { prefix: o }) => {
+  const i = "</span>", l = (t) => !!t.scope, h = (t, { prefix: o }) => {
     if (t.startsWith("language:"))
       return t.replace("language:", "language-");
     if (t.includes(".")) {
@@ -51,7 +51,7 @@ function mn() {
     }
     return `${o}${t}`;
   };
-  class g {
+  class p {
     /**
      * Creates a new HTMLRenderer
      *
@@ -74,7 +74,7 @@ function mn() {
      * @param {Node} node */
     openNode(o) {
       if (!l(o)) return;
-      const c = b(
+      const c = h(
         o.scope,
         { prefix: this.classPrefix }
       );
@@ -85,7 +85,7 @@ function mn() {
      *
      * @param {Node} node */
     closeNode(o) {
-      l(o) && (this.buffer += s);
+      l(o) && (this.buffer += i);
     }
     /**
      * returns the accumulated buffer
@@ -187,7 +187,7 @@ function mn() {
       c && (_.scope = `language:${c}`), this.add(_);
     }
     toHTML() {
-      return new g(this, this.options).value();
+      return new p(this, this.options).value();
     }
     finalize() {
       return this.closeAllNodes(), !0;
@@ -228,16 +228,16 @@ function mn() {
     return t.map((_) => {
       c += 1;
       const P = c;
-      let U = k(_), h = "";
+      let U = k(_), b = "";
       for (; U.length > 0; ) {
         const u = V.exec(U);
         if (!u) {
-          h += U;
+          b += U;
           break;
         }
-        h += U.substring(0, u.index), U = U.substring(u.index + u[0].length), u[0][0] === "\\" && u[1] ? h += "\\" + String(Number(u[1]) + P) : (h += u[0], u[0] === "(" && c++);
+        b += U.substring(0, u.index), U = U.substring(u.index + u[0].length), u[0][0] === "\\" && u[1] ? b += "\\" + String(Number(u[1]) + P) : (b += u[0], u[0] === "(" && c++);
       }
-      return h;
+      return b;
     }).map((_) => `(${_})`).join(o);
   }
   const z = /\b\B/, ie = "[a-zA-Z]\\w*", F = "[a-zA-Z_]\\w*", ee = "\\b\\d+(\\.\\d+)?", ne = "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)", ae = "\\b(0b[01]+)", K = "!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~", Z = (t = {}) => {
@@ -476,8 +476,8 @@ function mn() {
         We(t[U], o, U)
       );
     }), _;
-    function P(U, h) {
-      o && (h = h.map((u) => u.toLowerCase())), h.forEach(function(u) {
+    function P(U, b) {
+      o && (b = b.map((u) => u.toLowerCase())), b.forEach(function(u) {
         const E = u.split("|");
         _[E[0]] = [U, Ht(E[0], E[1])];
       });
@@ -498,10 +498,10 @@ function mn() {
   }, Ne = new Error();
   function Xe(t, o, { key: c }) {
     let _ = 0;
-    const P = t[c], U = {}, h = {};
+    const P = t[c], U = {}, b = {};
     for (let u = 1; u <= o.length; u++)
-      h[u + _] = P[u], U[u + _] = !0, _ += B(o[u - 1]);
-    t[c] = h, t[c]._emit = U, t[c]._multi = !0;
+      b[u + _] = P[u], U[u + _] = !0, _ += B(o[u - 1]);
+    t[c] = b, t[c]._emit = U, t[c]._multi = !0;
   }
   function Ft(t) {
     if (Array.isArray(t.begin)) {
@@ -528,9 +528,9 @@ function mn() {
     jt(t), typeof t.beginScope == "string" && (t.beginScope = { _wrap: t.beginScope }), typeof t.endScope == "string" && (t.endScope = { _wrap: t.endScope }), Ft(t), Gt(t);
   }
   function Zt(t) {
-    function o(h, u) {
+    function o(b, u) {
       return new RegExp(
-        k(h),
+        k(b),
         "m" + (t.case_insensitive ? "i" : "") + (t.unicodeRegex ? "u" : "") + (u ? "g" : "")
       );
     }
@@ -589,16 +589,16 @@ function mn() {
         return q && (this.regexIndex += q.position + 1, this.regexIndex === this.count && this.considerAll()), q;
       }
     }
-    function P(h) {
+    function P(b) {
       const u = new _();
-      return h.contains.forEach((E) => u.addRule(E.begin, { rule: E, type: "begin" })), h.terminatorEnd && u.addRule(h.terminatorEnd, { type: "end" }), h.illegal && u.addRule(h.illegal, { type: "illegal" }), u;
+      return b.contains.forEach((E) => u.addRule(E.begin, { rule: E, type: "begin" })), b.terminatorEnd && u.addRule(b.terminatorEnd, { type: "end" }), b.illegal && u.addRule(b.illegal, { type: "illegal" }), u;
     }
-    function U(h, u) {
+    function U(b, u) {
       const E = (
         /** @type CompiledMode */
-        h
+        b
       );
-      if (h.isCompiled) return E;
+      if (b.isCompiled) return E;
       [
         Ot,
         // do this early so compiler extensions generally don't have to worry about
@@ -606,27 +606,27 @@ function mn() {
         $t,
         Kt,
         Dt
-      ].forEach((G) => G(h, u)), t.compilerExtensions.forEach((G) => G(h, u)), h.__beforeBegin = null, [
+      ].forEach((G) => G(b, u)), t.compilerExtensions.forEach((G) => G(b, u)), b.__beforeBegin = null, [
         It,
         // do this later so compiler extensions that come earlier have access to the
         // raw array if they wanted to perhaps manipulate it, etc.
         Lt,
         // default to 1 relevance if not specified
         Bt
-      ].forEach((G) => G(h, u)), h.isCompiled = !0;
+      ].forEach((G) => G(b, u)), b.isCompiled = !0;
       let q = null;
-      return typeof h.keywords == "object" && h.keywords.$pattern && (h.keywords = Object.assign({}, h.keywords), q = h.keywords.$pattern, delete h.keywords.$pattern), q = q || /\w+/, h.keywords && (h.keywords = We(h.keywords, t.case_insensitive)), E.keywordPatternRe = o(q, !0), u && (h.begin || (h.begin = /\B|\b/), E.beginRe = o(E.begin), !h.end && !h.endsWithParent && (h.end = /\B|\b/), h.end && (E.endRe = o(E.end)), E.terminatorEnd = k(E.end) || "", h.endsWithParent && u.terminatorEnd && (E.terminatorEnd += (h.end ? "|" : "") + u.terminatorEnd)), h.illegal && (E.illegalRe = o(
+      return typeof b.keywords == "object" && b.keywords.$pattern && (b.keywords = Object.assign({}, b.keywords), q = b.keywords.$pattern, delete b.keywords.$pattern), q = q || /\w+/, b.keywords && (b.keywords = We(b.keywords, t.case_insensitive)), E.keywordPatternRe = o(q, !0), u && (b.begin || (b.begin = /\B|\b/), E.beginRe = o(E.begin), !b.end && !b.endsWithParent && (b.end = /\B|\b/), b.end && (E.endRe = o(E.end)), E.terminatorEnd = k(E.end) || "", b.endsWithParent && u.terminatorEnd && (E.terminatorEnd += (b.end ? "|" : "") + u.terminatorEnd)), b.illegal && (E.illegalRe = o(
         /** @type {RegExp | string} */
-        h.illegal
-      )), h.contains || (h.contains = []), h.contains = [].concat(...h.contains.map(function(G) {
-        return Wt(G === "self" ? h : G);
-      })), h.contains.forEach(function(G) {
+        b.illegal
+      )), b.contains || (b.contains = []), b.contains = [].concat(...b.contains.map(function(G) {
+        return Wt(G === "self" ? b : G);
+      })), b.contains.forEach(function(G) {
         U(
           /** @type Mode */
           G,
           E
         );
-      }), h.starts && U(h.starts, u), E.matcher = P(E), E;
+      }), b.starts && U(b.starts, u), E.matcher = P(E), E;
     }
     if (t.compilerExtensions || (t.compilerExtensions = []), t.contains && t.contains.includes("self"))
       throw new Error("ERR: contains `self` is not supported at the top-level of a language.  See documentation.");
@@ -652,7 +652,7 @@ function mn() {
   const Pe = a, Qe = r, Je = Symbol("nomatch"), Xt = 7, et = function(t) {
     const o = /* @__PURE__ */ Object.create(null), c = /* @__PURE__ */ Object.create(null), _ = [];
     let P = !0;
-    const U = "Could not find the language '{}', did you forget to load/include a language module?", h = { disableAutodetect: !0, name: "Plain text", contains: [] };
+    const U = "Could not find the language '{}', did you forget to load/include a language module?", b = { disableAutodetect: !0, name: "Plain text", contains: [] };
     let u = {
       ignoreUnescapedHTML: !1,
       throwUnescapedHTML: !1,
@@ -665,23 +665,23 @@ function mn() {
       // https://github.com/highlightjs/highlight.js/issues/1086
       __emitter: C
     };
-    function E(i) {
-      return u.noHighlightRe.test(i);
+    function E(s) {
+      return u.noHighlightRe.test(s);
     }
-    function q(i) {
-      let m = i.className + " ";
-      m += i.parentNode ? i.parentNode.className : "";
+    function q(s) {
+      let m = s.className + " ";
+      m += s.parentNode ? s.parentNode.className : "";
       const A = u.languageDetectRe.exec(m);
       if (A) {
         const I = ge(A[1]);
-        return I || (Ye(U.replace("{}", A[1])), Ye("Falling back to no-highlight mode for this block.", i)), I ? A[1] : "no-highlight";
+        return I || (Ye(U.replace("{}", A[1])), Ye("Falling back to no-highlight mode for this block.", s)), I ? A[1] : "no-highlight";
       }
       return m.split(/\s+/).find((I) => E(I) || ge(I));
     }
-    function G(i, m, A) {
+    function G(s, m, A) {
       let I = "", j = "";
-      typeof m == "object" ? (I = i, A = m.ignoreIllegals, j = m.language) : (_e("10.7.0", "highlight(lang, code, ...args) has been deprecated."), _e("10.7.0", `Please use highlight(code, options) instead.
-https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === void 0 && (A = !0);
+      typeof m == "object" ? (I = s, A = m.ignoreIllegals, j = m.language) : (_e("10.7.0", "highlight(lang, code, ...args) has been deprecated."), _e("10.7.0", `Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277`), j = s, I = m), A === void 0 && (A = !0);
       const le = {
         code: I,
         language: j
@@ -690,10 +690,10 @@ https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === 
       const pe = le.result ? le.result : we(le.language, le.code, A);
       return pe.code = le.code, Te("after:highlight", pe), pe;
     }
-    function we(i, m, A, I) {
+    function we(s, m, A, I) {
       const j = /* @__PURE__ */ Object.create(null);
-      function le(d, p) {
-        return d.keywords[p];
+      function le(d, g) {
+        return d.keywords[g];
       }
       function pe() {
         if (!y.keywords) {
@@ -702,21 +702,21 @@ https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === 
         }
         let d = 0;
         y.keywordPatternRe.lastIndex = 0;
-        let p = y.keywordPatternRe.exec(L), w = "";
-        for (; p; ) {
-          w += L.substring(d, p.index);
-          const M = ue.case_insensitive ? p[0].toLowerCase() : p[0], Q = le(y, M);
+        let g = y.keywordPatternRe.exec(L), w = "";
+        for (; g; ) {
+          w += L.substring(d, g.index);
+          const M = ue.case_insensitive ? g[0].toLowerCase() : g[0], Q = le(y, M);
           if (Q) {
             const [he, gn] = Q;
             if (X.addText(w), w = "", j[M] = (j[M] || 0) + 1, j[M] <= Xt && (Oe += gn), he.startsWith("_"))
-              w += p[0];
+              w += g[0];
             else {
               const pn = ue.classNameAliases[he] || he;
-              de(p[0], pn);
+              de(g[0], pn);
             }
           } else
-            w += p[0];
-          d = y.keywordPatternRe.lastIndex, p = y.keywordPatternRe.exec(L);
+            w += g[0];
+          d = y.keywordPatternRe.lastIndex, g = y.keywordPatternRe.exec(L);
         }
         w += L.substring(d), X.addText(w);
       }
@@ -737,30 +737,30 @@ https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === 
       function se() {
         y.subLanguage != null ? Ce() : pe(), L = "";
       }
-      function de(d, p) {
-        d !== "" && (X.startScope(p), X.addText(d), X.endScope());
+      function de(d, g) {
+        d !== "" && (X.startScope(g), X.addText(d), X.endScope());
       }
-      function rt(d, p) {
+      function rt(d, g) {
         let w = 1;
-        const M = p.length - 1;
+        const M = g.length - 1;
         for (; w <= M; ) {
           if (!d._emit[w]) {
             w++;
             continue;
           }
-          const Q = ue.classNameAliases[d[w]] || d[w], he = p[w];
+          const Q = ue.classNameAliases[d[w]] || d[w], he = g[w];
           Q ? de(he, Q) : (L = he, pe(), L = ""), w++;
         }
       }
-      function ot(d, p) {
-        return d.scope && typeof d.scope == "string" && X.openNode(ue.classNameAliases[d.scope] || d.scope), d.beginScope && (d.beginScope._wrap ? (de(L, ue.classNameAliases[d.beginScope._wrap] || d.beginScope._wrap), L = "") : d.beginScope._multi && (rt(d.beginScope, p), L = "")), y = Object.create(d, { parent: { value: y } }), y;
+      function ot(d, g) {
+        return d.scope && typeof d.scope == "string" && X.openNode(ue.classNameAliases[d.scope] || d.scope), d.beginScope && (d.beginScope._wrap ? (de(L, ue.classNameAliases[d.beginScope._wrap] || d.beginScope._wrap), L = "") : d.beginScope._multi && (rt(d.beginScope, g), L = "")), y = Object.create(d, { parent: { value: y } }), y;
       }
-      function st(d, p, w) {
+      function st(d, g, w) {
         let M = J(d.endRe, w);
         if (M) {
           if (d["on:end"]) {
             const Q = new e(d);
-            d["on:end"](p, Q), Q.isMatchIgnored && (M = !1);
+            d["on:end"](g, Q), Q.isMatchIgnored && (M = !1);
           }
           if (M) {
             for (; d.endsParent && d.parent; )
@@ -769,67 +769,67 @@ https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === 
           }
         }
         if (d.endsWithParent)
-          return st(d.parent, p, w);
+          return st(d.parent, g, w);
       }
       function ln(d) {
         return y.matcher.regexIndex === 0 ? (L += d[0], 1) : (je = !0, 0);
       }
       function dn(d) {
-        const p = d[0], w = d.rule, M = new e(w), Q = [w.__beforeBegin, w["on:begin"]];
+        const g = d[0], w = d.rule, M = new e(w), Q = [w.__beforeBegin, w["on:begin"]];
         for (const he of Q)
           if (he && (he(d, M), M.isMatchIgnored))
-            return ln(p);
-        return w.skip ? L += p : (w.excludeBegin && (L += p), se(), !w.returnBegin && !w.excludeBegin && (L = p)), ot(w, d), w.returnBegin ? 0 : p.length;
+            return ln(g);
+        return w.skip ? L += g : (w.excludeBegin && (L += g), se(), !w.returnBegin && !w.excludeBegin && (L = g)), ot(w, d), w.returnBegin ? 0 : g.length;
       }
       function un(d) {
-        const p = d[0], w = m.substring(d.index), M = st(y, d, w);
+        const g = d[0], w = m.substring(d.index), M = st(y, d, w);
         if (!M)
           return Je;
         const Q = y;
-        y.endScope && y.endScope._wrap ? (se(), de(p, y.endScope._wrap)) : y.endScope && y.endScope._multi ? (se(), rt(y.endScope, d)) : Q.skip ? L += p : (Q.returnEnd || Q.excludeEnd || (L += p), se(), Q.excludeEnd && (L = p));
+        y.endScope && y.endScope._wrap ? (se(), de(g, y.endScope._wrap)) : y.endScope && y.endScope._multi ? (se(), rt(y.endScope, d)) : Q.skip ? L += g : (Q.returnEnd || Q.excludeEnd || (L += g), se(), Q.excludeEnd && (L = g));
         do
           y.scope && X.closeNode(), !y.skip && !y.subLanguage && (Oe += y.relevance), y = y.parent;
         while (y !== M.parent);
-        return M.starts && ot(M.starts, d), Q.returnEnd ? 0 : p.length;
+        return M.starts && ot(M.starts, d), Q.returnEnd ? 0 : g.length;
       }
       function bn() {
         const d = [];
-        for (let p = y; p !== ue; p = p.parent)
-          p.scope && d.unshift(p.scope);
-        d.forEach((p) => X.openNode(p));
+        for (let g = y; g !== ue; g = g.parent)
+          g.scope && d.unshift(g.scope);
+        d.forEach((g) => X.openNode(g));
       }
       let Me = {};
-      function it(d, p) {
-        const w = p && p[0];
+      function it(d, g) {
+        const w = g && g[0];
         if (L += d, w == null)
           return se(), 0;
-        if (Me.type === "begin" && p.type === "end" && Me.index === p.index && w === "") {
-          if (L += m.slice(p.index, p.index + 1), !P) {
-            const M = new Error(`0 width match regex (${i})`);
-            throw M.languageName = i, M.badRule = Me.rule, M;
+        if (Me.type === "begin" && g.type === "end" && Me.index === g.index && w === "") {
+          if (L += m.slice(g.index, g.index + 1), !P) {
+            const M = new Error(`0 width match regex (${s})`);
+            throw M.languageName = s, M.badRule = Me.rule, M;
           }
           return 1;
         }
-        if (Me = p, p.type === "begin")
-          return dn(p);
-        if (p.type === "illegal" && !A) {
+        if (Me = g, g.type === "begin")
+          return dn(g);
+        if (g.type === "illegal" && !A) {
           const M = new Error('Illegal lexeme "' + w + '" for mode "' + (y.scope || "<unnamed>") + '"');
           throw M.mode = y, M;
-        } else if (p.type === "end") {
-          const M = un(p);
+        } else if (g.type === "end") {
+          const M = un(g);
           if (M !== Je)
             return M;
         }
-        if (p.type === "illegal" && w === "")
+        if (g.type === "illegal" && w === "")
           return L += `
 `, 1;
-        if (Ge > 1e5 && Ge > p.index * 3)
+        if (Ge > 1e5 && Ge > g.index * 3)
           throw new Error("potential infinite loop, way more iterations than matches");
         return L += w, w.length;
       }
-      const ue = ge(i);
+      const ue = ge(s);
       if (!ue)
-        throw me(U.replace("{}", i)), new Error('Unknown language: "' + i + '"');
+        throw me(U.replace("{}", s)), new Error('Unknown language: "' + s + '"');
       const hn = Zt(ue);
       let Fe = "", y = I || hn;
       const ct = {}, X = new u.__emitter(u);
@@ -843,13 +843,13 @@ https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === 
             Ge++, je ? je = !1 : y.matcher.considerAll(), y.matcher.lastIndex = ve;
             const d = y.matcher.exec(m);
             if (!d) break;
-            const p = m.substring(ve, d.index), w = it(p, d);
+            const g = m.substring(ve, d.index), w = it(g, d);
             ve = d.index + w;
           }
           it(m.substring(ve));
         }
         return X.finalize(), Fe = X.toHTML(), {
-          language: i,
+          language: s,
           value: Fe,
           relevance: Oe,
           illegal: !1,
@@ -859,7 +859,7 @@ https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === 
       } catch (d) {
         if (d.message && d.message.includes("Illegal"))
           return {
-            language: i,
+            language: s,
             value: Pe(m),
             illegal: !0,
             relevance: 0,
@@ -874,7 +874,7 @@ https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === 
           };
         if (P)
           return {
-            language: i,
+            language: s,
             value: Pe(m),
             illegal: !1,
             relevance: 0,
@@ -885,20 +885,20 @@ https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === 
         throw d;
       }
     }
-    function Ue(i) {
+    function Ue(s) {
       const m = {
-        value: Pe(i),
+        value: Pe(s),
         illegal: !1,
         relevance: 0,
-        _top: h,
+        _top: b,
         _emitter: new u.__emitter(u)
       };
-      return m._emitter.addText(i), m;
+      return m._emitter.addText(s), m;
     }
-    function He(i, m) {
+    function He(s, m) {
       m = m || u.languages || Object.keys(o);
-      const A = Ue(i), I = m.filter(ge).filter(at).map(
-        (se) => we(se, i, !1)
+      const A = Ue(s), I = m.filter(ge).filter(at).map(
+        (se) => we(se, s, !1)
       );
       I.unshift(A);
       const j = I.sort((se, de) => {
@@ -913,40 +913,40 @@ https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === 
       }), [le, pe] = j, Ce = le;
       return Ce.secondBest = pe, Ce;
     }
-    function Vt(i, m, A) {
+    function Vt(s, m, A) {
       const I = m && c[m] || A;
-      i.classList.add("hljs"), i.classList.add(`language-${I}`);
+      s.classList.add("hljs"), s.classList.add(`language-${I}`);
     }
-    function ze(i) {
+    function ze(s) {
       let m = null;
-      const A = q(i);
+      const A = q(s);
       if (E(A)) return;
       if (Te(
         "before:highlightElement",
-        { el: i, language: A }
-      ), i.dataset.highlighted) {
-        console.log("Element previously highlighted. To highlight again, first unset `dataset.highlighted`.", i);
+        { el: s, language: A }
+      ), s.dataset.highlighted) {
+        console.log("Element previously highlighted. To highlight again, first unset `dataset.highlighted`.", s);
         return;
       }
-      if (i.children.length > 0 && (u.ignoreUnescapedHTML || (console.warn("One of your code blocks includes unescaped HTML. This is a potentially serious security risk."), console.warn("https://github.com/highlightjs/highlight.js/wiki/security"), console.warn("The element with unescaped HTML:"), console.warn(i)), u.throwUnescapedHTML))
+      if (s.children.length > 0 && (u.ignoreUnescapedHTML || (console.warn("One of your code blocks includes unescaped HTML. This is a potentially serious security risk."), console.warn("https://github.com/highlightjs/highlight.js/wiki/security"), console.warn("The element with unescaped HTML:"), console.warn(s)), u.throwUnescapedHTML))
         throw new Yt(
           "One of your code blocks includes unescaped HTML.",
-          i.innerHTML
+          s.innerHTML
         );
-      m = i;
+      m = s;
       const I = m.textContent, j = A ? G(I, { language: A, ignoreIllegals: !0 }) : He(I);
-      i.innerHTML = j.value, i.dataset.highlighted = "yes", Vt(i, A, j.language), i.result = {
+      s.innerHTML = j.value, s.dataset.highlighted = "yes", Vt(s, A, j.language), s.result = {
         language: j.language,
         // TODO: remove with version 11.0
         re: j.relevance,
         relevance: j.relevance
-      }, j.secondBest && (i.secondBest = {
+      }, j.secondBest && (s.secondBest = {
         language: j.secondBest.language,
         relevance: j.secondBest.relevance
-      }), Te("after:highlightElement", { el: i, result: j, text: I });
+      }), Te("after:highlightElement", { el: s, result: j, text: I });
     }
-    function Qt(i) {
-      u = Qe(u, i);
+    function Qt(s) {
+      u = Qe(u, s);
     }
     const Jt = () => {
       Re(), _e("10.6.0", "initHighlighting() deprecated.  Use highlightAll() now.");
@@ -956,74 +956,74 @@ https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === 
     }
     let tt = !1;
     function Re() {
-      function i() {
+      function s() {
         Re();
       }
       if (document.readyState === "loading") {
-        tt || window.addEventListener("DOMContentLoaded", i, !1), tt = !0;
+        tt || window.addEventListener("DOMContentLoaded", s, !1), tt = !0;
         return;
       }
       document.querySelectorAll(u.cssSelector).forEach(ze);
     }
-    function tn(i, m) {
+    function tn(s, m) {
       let A = null;
       try {
         A = m(t);
       } catch (I) {
-        if (me("Language definition for '{}' could not be registered.".replace("{}", i)), P)
+        if (me("Language definition for '{}' could not be registered.".replace("{}", s)), P)
           me(I);
         else
           throw I;
-        A = h;
+        A = b;
       }
-      A.name || (A.name = i), o[i] = A, A.rawDefinition = m.bind(null, t), A.aliases && nt(A.aliases, { languageName: i });
+      A.name || (A.name = s), o[s] = A, A.rawDefinition = m.bind(null, t), A.aliases && nt(A.aliases, { languageName: s });
     }
-    function nn(i) {
-      delete o[i];
+    function nn(s) {
+      delete o[s];
       for (const m of Object.keys(c))
-        c[m] === i && delete c[m];
+        c[m] === s && delete c[m];
     }
     function an() {
       return Object.keys(o);
     }
-    function ge(i) {
-      return i = (i || "").toLowerCase(), o[i] || o[c[i]];
+    function ge(s) {
+      return s = (s || "").toLowerCase(), o[s] || o[c[s]];
     }
-    function nt(i, { languageName: m }) {
-      typeof i == "string" && (i = [i]), i.forEach((A) => {
+    function nt(s, { languageName: m }) {
+      typeof s == "string" && (s = [s]), s.forEach((A) => {
         c[A.toLowerCase()] = m;
       });
     }
-    function at(i) {
-      const m = ge(i);
+    function at(s) {
+      const m = ge(s);
       return m && !m.disableAutodetect;
     }
-    function rn(i) {
-      i["before:highlightBlock"] && !i["before:highlightElement"] && (i["before:highlightElement"] = (m) => {
-        i["before:highlightBlock"](
+    function rn(s) {
+      s["before:highlightBlock"] && !s["before:highlightElement"] && (s["before:highlightElement"] = (m) => {
+        s["before:highlightBlock"](
           Object.assign({ block: m.el }, m)
         );
-      }), i["after:highlightBlock"] && !i["after:highlightElement"] && (i["after:highlightElement"] = (m) => {
-        i["after:highlightBlock"](
+      }), s["after:highlightBlock"] && !s["after:highlightElement"] && (s["after:highlightElement"] = (m) => {
+        s["after:highlightBlock"](
           Object.assign({ block: m.el }, m)
         );
       });
     }
-    function on(i) {
-      rn(i), _.push(i);
+    function on(s) {
+      rn(s), _.push(s);
     }
-    function sn(i) {
-      const m = _.indexOf(i);
+    function sn(s) {
+      const m = _.indexOf(s);
       m !== -1 && _.splice(m, 1);
     }
-    function Te(i, m) {
-      const A = i;
+    function Te(s, m) {
+      const A = s;
       _.forEach(function(I) {
         I[A] && I[A](m);
       });
     }
-    function cn(i) {
-      return _e("10.7.0", "highlightBlock will be removed entirely in v12.0"), _e("10.7.0", "Please use highlightElement now."), ze(i);
+    function cn(s) {
+      return _e("10.7.0", "highlightBlock will be removed entirely in v12.0"), _e("10.7.0", "Please use highlightElement now."), ze(s);
     }
     Object.assign(t, {
       highlight: G,
@@ -1055,8 +1055,8 @@ https://github.com/highlightjs/highlight.js/issues/2277`), j = i, I = m), A === 
       optional: R,
       anyNumberOfTimes: N
     };
-    for (const i in ke)
-      typeof ke[i] == "object" && n(ke[i]);
+    for (const s in ke)
+      typeof ke[s] == "object" && n(ke[s]);
     return Object.assign(t, ke), t;
   }, ye = et({});
   return ye.newInstance = () => et({}), Ke = ye, ye.HighlightJS = ye, ye.default = ye, Ke;
@@ -1212,10 +1212,10 @@ function gt(n) {
   const e = n.regex, a = (T, { after: te }) => {
     const oe = "</" + T[0].slice(1);
     return T.input.indexOf(oe, te) !== -1;
-  }, r = dt, s = {
+  }, r = dt, i = {
     begin: "<>",
     end: "</>"
-  }, l = /<[A-Za-z0-9\\._:-]+\s*\/>/, b = {
+  }, l = /<[A-Za-z0-9\\._:-]+\s*\/>/, h = {
     begin: /<[A-Za-z0-9\\._:-]+/,
     end: /\/[A-Za-z0-9\\._:-]+>|\/>/,
     /**
@@ -1247,7 +1247,7 @@ function gt(n) {
         return;
       }
     }
-  }, g = {
+  }, p = {
     $pattern: dt,
     keyword: En,
     literal: _n,
@@ -1274,7 +1274,7 @@ function gt(n) {
     className: "subst",
     begin: "\\$\\{",
     end: "\\}",
-    keywords: g,
+    keywords: p,
     contains: []
     // defined later
   }, N = {
@@ -1385,7 +1385,7 @@ function gt(n) {
     // it from ending too early by matching another }
     begin: /\{/,
     end: /\}/,
-    keywords: g,
+    keywords: p,
     contains: [
       "self"
     ].concat(J)
@@ -1395,7 +1395,7 @@ function gt(n) {
     {
       begin: /(\s*)\(/,
       end: /\)/,
-      keywords: g,
+      keywords: p,
       contains: ["self"].concat(V)
     }
   ]), z = {
@@ -1406,7 +1406,7 @@ function gt(n) {
     end: /\)/,
     excludeBegin: !0,
     excludeEnd: !0,
-    keywords: g,
+    keywords: p,
     contains: H
   }, ie = {
     variants: [
@@ -1566,7 +1566,7 @@ function gt(n) {
   return {
     name: "JavaScript",
     aliases: ["js", "jsx", "mjs", "cjs"],
-    keywords: g,
+    keywords: p,
     // this will be extended by TypeScript
     exports: { PARAMS_CONTAINS: H, CLASS_REFERENCE: F },
     illegal: /#(?![$_A-z])/,
@@ -1628,7 +1628,7 @@ function gt(n) {
                     end: /\)/,
                     excludeBegin: !0,
                     excludeEnd: !0,
-                    keywords: g,
+                    keywords: p,
                     contains: H
                   }
                 ]
@@ -1647,21 +1647,21 @@ function gt(n) {
           {
             // JSX
             variants: [
-              { begin: s.begin, end: s.end },
+              { begin: i.begin, end: i.end },
               { match: l },
               {
-                begin: b.begin,
+                begin: h.begin,
                 // we carefully check the opening tag to see if it truly
                 // is a tag and not a false positive
-                "on:begin": b.isTrulyOpeningTag,
-                end: b.end
+                "on:begin": h.isTrulyOpeningTag,
+                end: h.end
               }
             ],
             subLanguage: "xml",
             contains: [
               {
-                begin: b.begin,
-                end: b.end,
+                begin: h.begin,
+                end: h.end,
                 skip: !0,
                 contains: ["self"]
               }
@@ -2515,7 +2515,7 @@ const wn = (n) => ({
   "zoom"
 ].sort().reverse();
 function Mn(n) {
-  const e = n.regex, a = wn(n), r = { begin: /-(webkit|moz|ms|o)-(?=[a-z])/ }, s = "and or not only", l = /@-?\w[\w]*(-\w+)*/, b = "[a-zA-Z-][a-zA-Z0-9_-]*", g = [
+  const e = n.regex, a = wn(n), r = { begin: /-(webkit|moz|ms|o)-(?=[a-z])/ }, i = "and or not only", l = /@-?\w[\w]*(-\w+)*/, h = "[a-zA-Z-][a-zA-Z0-9_-]*", p = [
     n.APOS_STRING_MODE,
     n.QUOTE_STRING_MODE
   ];
@@ -2542,7 +2542,7 @@ function Mn(n) {
       },
       {
         className: "selector-class",
-        begin: "\\." + b,
+        begin: "\\." + h,
         relevance: 0
       },
       a.ATTRIBUTE_SELECTOR_MODE,
@@ -2573,7 +2573,7 @@ function Mn(n) {
           a.HEXCOLOR,
           a.IMPORTANT,
           a.CSS_NUMBER_MODE,
-          ...g,
+          ...p,
           // needed to highlight these as strings and to avoid issues with
           // illegal characters that might be inside urls that would tigger the
           // languages illegal stack
@@ -2584,7 +2584,7 @@ function Mn(n) {
             // from keywords
             keywords: { built_in: "url data-uri" },
             contains: [
-              ...g,
+              ...p,
               {
                 className: "string",
                 // any character other than `)` as in `url()` will be the start
@@ -2616,7 +2616,7 @@ function Mn(n) {
             relevance: 0,
             keywords: {
               $pattern: /[a-z-]+/,
-              keyword: s,
+              keyword: i,
               attribute: Nn.join(" ")
             },
             contains: [
@@ -2624,7 +2624,7 @@ function Mn(n) {
                 begin: /[a-z-]+(?=:)/,
                 className: "attribute"
               },
-              ...g,
+              ...p,
               a.CSS_NUMBER_MODE
             ]
           }
@@ -2638,7 +2638,7 @@ function Mn(n) {
   };
 }
 function Ae(n) {
-  const e = n.regex, a = e.concat(/[\p{L}_]/u, e.optional(/[\p{L}0-9_.-]*:/u), /[\p{L}0-9_.-]*/u), r = /[\p{L}0-9._:-]+/u, s = {
+  const e = n.regex, a = e.concat(/[\p{L}_]/u, e.optional(/[\p{L}0-9_.-]*:/u), /[\p{L}0-9_.-]*/u), r = /[\p{L}0-9._:-]+/u, i = {
     className: "symbol",
     begin: /&[a-z]+;|&#[0-9]+;|&#x[a-f0-9]+;/
   }, l = {
@@ -2650,10 +2650,10 @@ function Ae(n) {
         illegal: /\n/
       }
     ]
-  }, b = n.inherit(l, {
+  }, h = n.inherit(l, {
     begin: /\(/,
     end: /\)/
-  }), g = n.inherit(n.APOS_STRING_MODE, { className: "string" }), f = n.inherit(n.QUOTE_STRING_MODE, { className: "string" }), v = {
+  }), p = n.inherit(n.APOS_STRING_MODE, { className: "string" }), f = n.inherit(n.QUOTE_STRING_MODE, { className: "string" }), v = {
     endsWithParent: !0,
     illegal: /</,
     relevance: 0,
@@ -2674,12 +2674,12 @@ function Ae(n) {
               {
                 begin: /"/,
                 end: /"/,
-                contains: [s]
+                contains: [i]
               },
               {
                 begin: /'/,
                 end: /'/,
-                contains: [s]
+                contains: [i]
               },
               { begin: /[^\s"'=<>`]+/ }
             ]
@@ -2713,8 +2713,8 @@ function Ae(n) {
         contains: [
           l,
           f,
-          g,
-          b,
+          p,
+          h,
           {
             begin: /\[/,
             end: /\]/,
@@ -2725,9 +2725,9 @@ function Ae(n) {
                 end: />/,
                 contains: [
                   l,
-                  b,
+                  h,
                   f,
-                  g
+                  p
                 ]
               }
             ]
@@ -2744,7 +2744,7 @@ function Ae(n) {
         end: /\]\]>/,
         relevance: 10
       },
-      s,
+      i,
       // xml processing instructions
       {
         className: "meta",
@@ -2866,7 +2866,7 @@ function On(n) {
     "true",
     "false",
     "null"
-  ], s = {
+  ], i = {
     scope: "literal",
     beginKeywords: r.join(" ")
   };
@@ -2880,7 +2880,7 @@ function On(n) {
       e,
       a,
       n.QUOTE_STRING_MODE,
-      s,
+      i,
       n.C_NUMBER_MODE,
       n.C_LINE_COMMENT_MODE,
       n.C_BLOCK_COMMENT_MODE
@@ -2903,7 +2903,7 @@ function pt(n) {
         begin: /'[\w*@][\w*@ :()\./-]*':(?=[ \t]|$)/
       }
     ]
-  }, s = {
+  }, i = {
     className: "template-variable",
     variants: [
       {
@@ -2929,7 +2929,7 @@ function pt(n) {
         relevance: 0
       }
     ]
-  }, b = {
+  }, h = {
     className: "string",
     relevance: 0,
     variants: [
@@ -2941,9 +2941,9 @@ function pt(n) {
     ],
     contains: [
       n.BACKSLASH_ESCAPE,
-      s
+      i
     ]
-  }, g = n.inherit(b, { variants: [
+  }, p = n.inherit(h, { variants: [
     {
       begin: /'/,
       end: /'/,
@@ -3059,9 +3059,9 @@ function pt(n) {
     R,
     S,
     l,
-    b
+    h
   ], D = [...$];
-  return D.pop(), D.push(g), N.contains = D, {
+  return D.pop(), D.push(p), N.contains = D, {
     name: "YAML",
     case_insensitive: !0,
     aliases: ["yml"],
@@ -3072,16 +3072,16 @@ function In(n) {
   const e = n.regex, a = /(?![A-Za-z0-9])(?![$])/, r = e.concat(
     /[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/,
     a
-  ), s = e.concat(
+  ), i = e.concat(
     /(\\?[A-Z][a-z0-9_\x7f-\xff]+|\\?[A-Z]+(?=[A-Z][a-z0-9_\x7f-\xff])){1,}/,
     a
   ), l = e.concat(
     /[A-Z]+/,
     a
-  ), b = {
+  ), h = {
     scope: "variable",
     match: "\\$+" + r
-  }, g = {
+  }, p = {
     scope: "meta",
     variants: [
       { begin: /<\?php/, relevance: 10 },
@@ -3354,7 +3354,7 @@ function In(n) {
         e.concat(N, "+"),
         // to prevent built ins from being confused as the class constructor call
         e.concat("(?!", H(B).join("\\b|"), "\\b)"),
-        s
+        i
       ],
       scope: {
         1: "keyword",
@@ -3381,7 +3381,7 @@ function In(n) {
     },
     {
       match: [
-        s,
+        i,
         e.concat(
           /::/,
           e.lookahead(/(?!class\b)/)
@@ -3395,7 +3395,7 @@ function In(n) {
     },
     {
       match: [
-        s,
+        i,
         e.concat(
           "::",
           e.lookahead(/(?!class\b)/)
@@ -3405,7 +3405,7 @@ function In(n) {
     },
     {
       match: [
-        s,
+        i,
         /::/,
         /class/
       ],
@@ -3424,7 +3424,7 @@ function In(n) {
     keywords: V,
     contains: [
       ee,
-      b,
+      h,
       F,
       n.C_BLOCK_COMMENT_MODE,
       R,
@@ -3456,7 +3456,7 @@ function In(n) {
     begin: e.concat(
       /#\[\s*\\?/,
       e.either(
-        s,
+        i,
         l
       )
     ),
@@ -3490,7 +3490,7 @@ function In(n) {
       {
         scope: "meta",
         variants: [
-          { match: s },
+          { match: i },
           { match: l }
         ]
       }
@@ -3528,12 +3528,12 @@ function In(n) {
           ]
         }
       },
-      g,
+      p,
       {
         scope: "variable.language",
         match: /\$this\b/
       },
-      b,
+      h,
       ae,
       F,
       {
@@ -3573,7 +3573,7 @@ function In(n) {
             contains: [
               "self",
               Z,
-              b,
+              h,
               F,
               n.C_BLOCK_COMMENT_MODE,
               R,
@@ -3632,7 +3632,7 @@ function In(n) {
   };
 }
 function Ln(n) {
-  const e = n.regex, a = "HTTP/([32]|1\\.[01])", r = /[A-Za-z][A-Za-z0-9-]*/, s = {
+  const e = n.regex, a = "HTTP/([32]|1\\.[01])", r = /[A-Za-z][A-Za-z0-9-]*/, i = {
     className: "attribute",
     begin: e.concat("^", r, "(?=\\:\\s)"),
     starts: { contains: [
@@ -3647,7 +3647,7 @@ function Ln(n) {
       }
     ] }
   }, l = [
-    s,
+    i,
     {
       begin: "\\n\\n",
       starts: {
@@ -3709,7 +3709,7 @@ function Ln(n) {
         }
       },
       // to allow headers to work even without a preamble
-      n.inherit(s, { relevance: 0 })
+      n.inherit(i, { relevance: 0 })
     ]
   };
 }
@@ -3799,7 +3799,7 @@ function Be(n) {
       r
     ]
   });
-  const s = {
+  const i = {
     className: "subst",
     begin: /\$\(/,
     end: /\)/,
@@ -3815,7 +3815,7 @@ function Be(n) {
         2: "comment"
       }
     }
-  ), b = {
+  ), h = {
     begin: /<<-?\s*(?=\w+)/,
     starts: { contains: [
       n.END_SAME_AS_BEGIN({
@@ -3824,17 +3824,17 @@ function Be(n) {
         className: "string"
       })
     ] }
-  }, g = {
+  }, p = {
     className: "string",
     begin: /"/,
     end: /"/,
     contains: [
       n.BACKSLASH_ESCAPE,
       a,
-      s
+      i
     ]
   };
-  s.contains.push(g);
+  i.contains.push(p);
   const f = {
     match: /\\"/
   }, v = {
@@ -4138,9 +4138,9 @@ function Be(n) {
       R,
       k,
       l,
-      b,
+      h,
       D,
-      g,
+      p,
       f,
       v,
       C,
@@ -4184,7 +4184,7 @@ function ft(n) {
     "while",
     "with",
     "yield"
-  ], g = {
+  ], p = {
     $pattern: /[A-Za-z]\w+|__\w+__/,
     keyword: r,
     built_in: [
@@ -4288,7 +4288,7 @@ function ft(n) {
     className: "subst",
     begin: /\{/,
     end: /\}/,
-    keywords: g,
+    keywords: p,
     illegal: /#/
   }, C = {
     begin: /\{\{/,
@@ -4422,7 +4422,7 @@ function ft(n) {
     className: "comment",
     begin: e.lookahead(/# type:/),
     end: /$/,
-    keywords: g,
+    keywords: p,
     contains: [
       {
         // prevent keywords from coloring `type`
@@ -4449,7 +4449,7 @@ function ft(n) {
         end: /\)/,
         excludeBegin: !0,
         excludeEnd: !0,
-        keywords: g,
+        keywords: p,
         contains: [
           "self",
           f,
@@ -4472,7 +4472,7 @@ function ft(n) {
       "ipython"
     ],
     unicodeRegex: !0,
-    keywords: g,
+    keywords: p,
     illegal: /(<\/|\?)|=>/,
     contains: [
       f,
@@ -4694,10 +4694,10 @@ function Bn(n) {
   const e = n.regex, a = (T, { after: te }) => {
     const oe = "</" + T[0].slice(1);
     return T.input.indexOf(oe, te) !== -1;
-  }, r = Ie, s = {
+  }, r = Ie, i = {
     begin: "<>",
     end: "</>"
-  }, l = /<[A-Za-z0-9\\._:-]+\s*\/>/, b = {
+  }, l = /<[A-Za-z0-9\\._:-]+\s*\/>/, h = {
     begin: /<[A-Za-z0-9\\._:-]+/,
     end: /\/[A-Za-z0-9\\._:-]+>|\/>/,
     /**
@@ -4729,7 +4729,7 @@ function Bn(n) {
         return;
       }
     }
-  }, g = {
+  }, p = {
     $pattern: Ie,
     keyword: mt,
     literal: vt,
@@ -4756,7 +4756,7 @@ function Bn(n) {
     className: "subst",
     begin: "\\$\\{",
     end: "\\}",
-    keywords: g,
+    keywords: p,
     contains: []
     // defined later
   }, N = {
@@ -4867,7 +4867,7 @@ function Bn(n) {
     // it from ending too early by matching another }
     begin: /\{/,
     end: /\}/,
-    keywords: g,
+    keywords: p,
     contains: [
       "self"
     ].concat(J)
@@ -4877,7 +4877,7 @@ function Bn(n) {
     {
       begin: /(\s*)\(/,
       end: /\)/,
-      keywords: g,
+      keywords: p,
       contains: ["self"].concat(V)
     }
   ]), z = {
@@ -4888,7 +4888,7 @@ function Bn(n) {
     end: /\)/,
     excludeBegin: !0,
     excludeEnd: !0,
-    keywords: g,
+    keywords: p,
     contains: H
   }, ie = {
     variants: [
@@ -5048,7 +5048,7 @@ function Bn(n) {
   return {
     name: "JavaScript",
     aliases: ["js", "jsx", "mjs", "cjs"],
-    keywords: g,
+    keywords: p,
     // this will be extended by TypeScript
     exports: { PARAMS_CONTAINS: H, CLASS_REFERENCE: F },
     illegal: /#(?![$_A-z])/,
@@ -5110,7 +5110,7 @@ function Bn(n) {
                     end: /\)/,
                     excludeBegin: !0,
                     excludeEnd: !0,
-                    keywords: g,
+                    keywords: p,
                     contains: H
                   }
                 ]
@@ -5129,21 +5129,21 @@ function Bn(n) {
           {
             // JSX
             variants: [
-              { begin: s.begin, end: s.end },
+              { begin: i.begin, end: i.end },
               { match: l },
               {
-                begin: b.begin,
+                begin: h.begin,
                 // we carefully check the opening tag to see if it truly
                 // is a tag and not a false positive
-                "on:begin": b.isTrulyOpeningTag,
-                end: b.end
+                "on:begin": h.isTrulyOpeningTag,
+                end: h.end
               }
             ],
             subLanguage: "xml",
             contains: [
               {
-                begin: b.begin,
-                end: b.end,
+                begin: h.begin,
+                end: h.end,
                 skip: !0,
                 contains: ["self"]
               }
@@ -5200,7 +5200,7 @@ function Bn(n) {
   };
 }
 function St(n) {
-  const e = n.regex, a = Bn(n), r = Ie, s = [
+  const e = n.regex, a = Bn(n), r = Ie, i = [
     "any",
     "void",
     "number",
@@ -5221,16 +5221,16 @@ function St(n) {
       1: "keyword",
       3: "title.class"
     }
-  }, b = {
+  }, h = {
     beginKeywords: "interface",
     end: /\{/,
     excludeEnd: !0,
     keywords: {
       keyword: "interface extends",
-      built_in: s
+      built_in: i
     },
     contains: [a.exports.CLASS_REFERENCE]
-  }, g = {
+  }, p = {
     className: "meta",
     relevance: 10,
     begin: /^\s*['"]use strict['"]/
@@ -5252,7 +5252,7 @@ function St(n) {
     $pattern: Ie,
     keyword: mt.concat(f),
     literal: vt,
-    built_in: wt.concat(s),
+    built_in: wt.concat(i),
     "variable.language": xt
   }, C = {
     className: "meta",
@@ -5279,10 +5279,10 @@ function St(n) {
   ]), a.contains = a.contains.concat([
     C,
     l,
-    b,
+    h,
     N
     // Added for optional property assignment highlighting
-  ]), k(a, "shebang", n.SHEBANG()), k(a, "use_strict", g);
+  ]), k(a, "shebang", n.SHEBANG()), k(a, "use_strict", p);
   const R = a.contains.find((S) => S.label === "func.def");
   return R.relevance = 0, Object.assign(a, {
     name: "TypeScript",
@@ -5408,12 +5408,12 @@ class Hn extends HTMLElement {
           throw new Error(`HTTP ${a.status}: ${a.statusText}`);
         const r = await a.text();
         if (this._codeContent = r, !this.hasAttribute("language")) {
-          const s = this._detectLanguageFromUrl(e);
-          s && this.setAttribute("language", s);
+          const i = this._detectLanguageFromUrl(e);
+          i && this.setAttribute("language", i);
         }
         if (!this.hasAttribute("filename")) {
-          const s = e.split("/").pop().split("?")[0];
-          s && this.setAttribute("filename", s);
+          const i = e.split("/").pop().split("?")[0];
+          i && this.setAttribute("filename", i);
         }
         this._isLoading = !1, this.render(), this.dispatchEvent(new CustomEvent("code-loaded", {
           detail: { url: e, code: r },
@@ -5456,8 +5456,8 @@ class Hn extends HTMLElement {
       md: "markdown",
       markdown: "markdown",
       txt: "plaintext"
-    }, s = e.split("/").pop().split("?")[0].split("#")[0].split(".").pop().toLowerCase();
-    return a[s] || null;
+    }, i = e.split("/").pop().split("?")[0].split("#")[0].split(".").pop().toLowerCase();
+    return a[i] || null;
   }
   /**
    * Render loading state while fetching external content
@@ -5579,11 +5579,11 @@ class Hn extends HTMLElement {
     const e = this.getAttribute("highlight-lines");
     if (!e) return /* @__PURE__ */ new Set();
     const a = /* @__PURE__ */ new Set(), r = e.split(",");
-    for (const s of r) {
-      const l = s.trim();
+    for (const i of r) {
+      const l = i.trim();
       if (l.includes("-")) {
-        const [b, g] = l.split("-").map(Number);
-        for (let f = b; f <= g; f++)
+        const [h, p] = l.split("-").map(Number);
+        for (let f = h; f <= p; f++)
           a.add(f);
       } else
         a.add(Number(l));
@@ -5628,24 +5628,22 @@ class Hn extends HTMLElement {
     return this.getAttribute("src") || "";
   }
   async copyCode() {
-    const e = (this._codeContent || this.textContent).trim(), a = document.createElement("div");
-    a.innerHTML = e;
-    const r = a.textContent, s = this.shadowRoot.querySelector(".copy-button"), l = this.copyText, b = this.copiedText;
+    const e = (this._codeContent || this.textContent).trim(), a = this.shadowRoot.querySelector(".copy-button"), r = this.copyText, i = this.copiedText;
     try {
-      await navigator.clipboard.writeText(r), s.textContent = b, s.classList.add("copied"), s.setAttribute("aria-label", "Code copied to clipboard");
-    } catch (g) {
-      console.error("Failed to copy code:", g), s.textContent = "Failed", s.classList.add("failed"), s.setAttribute("aria-label", "Failed to copy code");
+      await navigator.clipboard.writeText(e), a.textContent = i, a.classList.add("copied"), a.setAttribute("aria-label", "Code copied to clipboard");
+    } catch (l) {
+      console.error("Failed to copy code:", l), a.textContent = "Failed", a.classList.add("failed"), a.setAttribute("aria-label", "Failed to copy code");
     }
     setTimeout(() => {
-      s.textContent = l, s.classList.remove("copied", "failed"), s.setAttribute("aria-label", "Copy code to clipboard");
+      a.textContent = r, a.classList.remove("copied", "failed"), a.setAttribute("aria-label", "Copy code to clipboard");
     }, 2e3);
   }
   /**
    * Download code as a file
    */
   downloadCode() {
-    const e = this.getCode(), a = this.filename || `code.${this._getFileExtension()}`, r = new Blob([e], { type: "text/plain" }), s = URL.createObjectURL(r), l = document.createElement("a");
-    l.href = s, l.download = a, document.body.appendChild(l), l.click(), document.body.removeChild(l), URL.revokeObjectURL(s);
+    const e = this.getCode(), a = this.filename || `code.${this._getFileExtension()}`, r = new Blob([e], { type: "text/plain" }), i = URL.createObjectURL(r), l = document.createElement("a");
+    l.href = i, l.download = a, document.body.appendChild(l), l.click(), document.body.removeChild(l), URL.revokeObjectURL(i);
   }
   /**
    * Get file extension based on language
@@ -5714,10 +5712,10 @@ class Hn extends HTMLElement {
       editors: "111"
     };
     ["html", "markup", "xhtml", "xml", "svg"].includes(a) ? (r.html = e, r.editors = "100") : a === "css" ? (r.css = e, r.editors = "010") : ["javascript", "js"].includes(a) ? (r.js = e, r.editors = "001") : (r.html = `<pre><code>${this.escapeHtml(e)}</code></pre>`, r.editors = "100");
-    const s = document.createElement("form");
-    s.action = "https://codepen.io/pen/define", s.method = "POST", s.target = "_blank";
+    const i = document.createElement("form");
+    i.action = "https://codepen.io/pen/define", i.method = "POST", i.target = "_blank";
     const l = document.createElement("input");
-    l.type = "hidden", l.name = "data", l.value = JSON.stringify(r), s.appendChild(l), document.body.appendChild(s), s.submit(), document.body.removeChild(s), this.toggleShareMenu();
+    l.type = "hidden", l.name = "data", l.value = JSON.stringify(r), i.appendChild(l), document.body.appendChild(i), i.submit(), document.body.removeChild(i), this.toggleShareMenu();
   }
   getStyles() {
     const e = this.theme === "dark";
@@ -6212,13 +6210,13 @@ class Hn extends HTMLElement {
    */
   renderPlaceholder() {
     const e = (this._codeContent || this.textContent).trim(), a = e.split(`
-`), s = this.escapeHtml(e).split(`
-`).map((f) => `<span class="code-line">${f || " "}</span>`).join(""), l = this.showLines ? `<div class="line-numbers" aria-hidden="true">${a.map((f, v) => `<span>${v + 1}</span>`).join("")}</div>` : "", b = this.filename ? `<span class="label">${this.escapeHtml(this.language.toUpperCase())}</span><span class="filename">${this.escapeHtml(this.filename)}</span>` : `<span class="label">${this.escapeHtml(this.label)}</span>`;
+`), i = this.escapeHtml(e).split(`
+`).map((f) => `<span class="code-line">${f || " "}</span>`).join(""), l = this.showLines ? `<div class="line-numbers" aria-hidden="true">${a.map((f, v) => `<span>${v + 1}</span>`).join("")}</div>` : "", h = this.filename ? `<span class="label">${this.escapeHtml(this.language.toUpperCase())}</span><span class="filename">${this.escapeHtml(this.filename)}</span>` : `<span class="label">${this.escapeHtml(this.label)}</span>`;
     this.shadowRoot.innerHTML = `
       <style>${this.getStyles()}</style>
       <div class="header">
         <div class="label-container" id="code-label">
-          ${b}
+          ${h}
         </div>
         <div class="header-actions">
           <button class="copy-button" aria-label="${this.copyText}">${this.copyText}</button>
@@ -6227,12 +6225,12 @@ class Hn extends HTMLElement {
       <div class="code-wrapper">
         <div class="code-container">
           ${l}
-          <pre><code class="hljs">${s}</code></pre>
+          <pre><code class="hljs">${i}</code></pre>
         </div>
       </div>
     `;
-    const g = this.shadowRoot.querySelector(".copy-button");
-    g && g.addEventListener("click", () => this.copyCode());
+    const p = this.shadowRoot.querySelector(".copy-button");
+    p && p.addEventListener("click", () => this.copyCode());
   }
   /**
    * Attach event listeners to pre-rendered SSR shadow DOM without re-rendering.
@@ -6243,39 +6241,39 @@ class Hn extends HTMLElement {
     const a = this.shadowRoot.querySelector(".expand-button");
     a && a.addEventListener("click", () => this.toggleCollapsed());
     const r = this.shadowRoot.querySelector(".share-button");
-    r && r.addEventListener("click", (b) => {
-      b.stopPropagation(), this.toggleShareMenu();
+    r && r.addEventListener("click", (h) => {
+      h.stopPropagation(), this.toggleShareMenu();
     });
-    const s = this.shadowRoot.querySelector(".share-codepen");
-    s && s.addEventListener("click", () => this.openInCodePen());
+    const i = this.shadowRoot.querySelector(".share-codepen");
+    i && i.addEventListener("click", () => this.openInCodePen());
     const l = this.shadowRoot.querySelector(".download-button");
     l && l.addEventListener("click", () => this.downloadCode());
   }
   render() {
     const e = (this._codeContent || this.textContent).trim(), a = e.split(`
-`), r = this.highlightLines, s = this.language === "diff";
+`), r = this.highlightLines, i = this.language === "diff";
     let l;
     try {
       this.language && this.language !== "plaintext" && this.language !== "text" && this.language !== "txt" ? l = O.highlight(e, { language: this.language, ignoreIllegals: !0 }).value : l = this.escapeHtml(e);
     } catch {
       l = this.escapeHtml(e);
     }
-    const b = l.split(`
-`), g = b.map((F, ee) => {
+    const h = l.split(`
+`), p = h.map((F, ee) => {
       const ne = ee + 1, ae = r.has(ne), K = ["code-line"];
-      if (ae && K.push("highlighted"), s) {
+      if (ae && K.push("highlighted"), i) {
         const Z = a[ee] || "";
         Z.startsWith("+") && !Z.startsWith("+++") ? K.push("diff-add") : Z.startsWith("-") && !Z.startsWith("---") && K.push("diff-remove");
       }
       return `<span class="${K.join(" ")}">${F || " "}</span>`;
-    }).join(""), f = this.showLines ? `<div class="line-numbers" aria-hidden="true">${b.map((F, ee) => {
+    }).join(""), f = this.showLines ? `<div class="line-numbers" aria-hidden="true">${h.map((F, ee) => {
       const ne = ee + 1, ae = r.has(ne), K = [];
-      if (ae && K.push("highlighted"), s) {
+      if (ae && K.push("highlighted"), i) {
         const Z = a[ee] || "";
         Z.startsWith("+") && !Z.startsWith("+++") ? K.push("diff-add") : Z.startsWith("-") && !Z.startsWith("---") && K.push("diff-remove");
       }
       return `<span class="${K.join(" ")}">${ne}</span>`;
-    }).join("")}</div>` : "", v = this.filename ? `<span class="label">${this.escapeHtml(this.language.toUpperCase())}</span><span class="filename">${this.escapeHtml(this.filename)}</span>` : `<span class="label">${this.escapeHtml(this.label)}</span>`, C = this.hasAttribute("collapsed") || this.hasAttribute("max-lines"), k = b.length, x = this.maxLines, N = C && k > x, R = this.collapsed, S = R ? `calc(${x} * 1.6em + 2rem)` : "none", $ = this.maxHeight ? `--cb-max-height: ${this.maxHeight};` : "", D = R ? `max-height: ${S};` : "";
+    }).join("")}</div>` : "", v = this.filename ? `<span class="label">${this.escapeHtml(this.language.toUpperCase())}</span><span class="filename">${this.escapeHtml(this.filename)}</span>` : `<span class="label">${this.escapeHtml(this.label)}</span>`, C = this.hasAttribute("collapsed") || this.hasAttribute("max-lines"), k = h.length, x = this.maxLines, N = C && k > x, R = this.collapsed, S = R ? `calc(${x} * 1.6em + 2rem)` : "none", $ = this.maxHeight ? `--cb-max-height: ${this.maxHeight};` : "", D = R ? `max-height: ${S};` : "";
     this.shadowRoot.innerHTML = `
       <style>${this.getStyles()}</style>
       <div class="header">
@@ -6327,7 +6325,7 @@ class Hn extends HTMLElement {
       </div>
       <div class="code-container" role="region" aria-labelledby="code-label" style="${$}${D}">
         ${f}
-        <pre><code class="language-${this.language}" tabindex="0">${g}</code></pre>
+        <pre><code class="language-${this.language}" tabindex="0">${p}</code></pre>
       </div>
       ${N ? `
         <button class="expand-button" aria-expanded="${!R}">
@@ -6631,25 +6629,25 @@ class zn extends HTMLElement {
   render() {
     const e = this.codeBlocks;
     if (e.length === 0) return;
-    e.forEach((l, b) => {
-      l.setAttribute("theme", this.theme), b === this._activeIndex ? l.classList.add("active") : l.classList.remove("active");
+    e.forEach((l, h) => {
+      l.setAttribute("theme", this.theme), h === this._activeIndex ? l.classList.add("active") : l.classList.remove("active");
     });
-    const a = e.map((l, b) => {
-      const g = l.getAttribute("filename"), f = l.getAttribute("label"), v = l.getAttribute("language") || "plaintext", C = g || f || v.toUpperCase(), k = b === this._activeIndex;
+    const a = e.map((l, h) => {
+      const p = l.getAttribute("filename"), f = l.getAttribute("label"), v = l.getAttribute("language") || "plaintext", C = p || f || v.toUpperCase(), k = h === this._activeIndex;
       return `
         <button
           class="tab"
           role="tab"
           aria-selected="${k}"
-          aria-controls="panel-${b}"
+          aria-controls="panel-${h}"
           tabindex="${k ? "0" : "-1"}"
-          data-index="${b}"
+          data-index="${h}"
         >
           <span class="tab-label">${this.escapeHtml(C)}</span>
-          ${g ? `<span class="language-badge">${v}</span>` : ""}
+          ${p ? `<span class="language-badge">${v}</span>` : ""}
         </button>
       `;
-    }).join(""), s = this.showShare || this.showDownload ? `
+    }).join(""), i = this.showShare || this.showDownload ? `
       <div class="header-actions">
         ${this.showDownload ? `
           <button class="action-button download-button" aria-label="Download code" title="Download">
@@ -6693,7 +6691,7 @@ class zn extends HTMLElement {
         <div class="tabs" role="tablist" aria-label="Code files">
           ${a}
         </div>
-        ${s}
+        ${i}
       </div>
       <div class="content">
         <slot></slot>
@@ -6703,41 +6701,41 @@ class zn extends HTMLElement {
   setupEventListeners() {
     const e = this.shadowRoot.querySelector(".tabs");
     if (!e) return;
-    e.addEventListener("click", (b) => {
-      const g = b.target.closest(".tab");
-      if (g) {
-        const f = parseInt(g.dataset.index, 10);
+    e.addEventListener("click", (h) => {
+      const p = h.target.closest(".tab");
+      if (p) {
+        const f = parseInt(p.dataset.index, 10);
         this.activeIndex = f;
       }
-    }), e.addEventListener("keydown", (b) => {
-      const g = this.shadowRoot.querySelectorAll(".tab"), f = this._activeIndex;
+    }), e.addEventListener("keydown", (h) => {
+      const p = this.shadowRoot.querySelectorAll(".tab"), f = this._activeIndex;
       let v = f;
-      switch (b.key) {
+      switch (h.key) {
         case "ArrowLeft":
-          v = f > 0 ? f - 1 : g.length - 1;
+          v = f > 0 ? f - 1 : p.length - 1;
           break;
         case "ArrowRight":
-          v = f < g.length - 1 ? f + 1 : 0;
+          v = f < p.length - 1 ? f + 1 : 0;
           break;
         case "Home":
           v = 0;
           break;
         case "End":
-          v = g.length - 1;
+          v = p.length - 1;
           break;
         default:
           return;
       }
-      b.preventDefault(), this.activeIndex = v, g[v].focus();
+      h.preventDefault(), this.activeIndex = v, p[v].focus();
     });
     const a = this.shadowRoot.querySelector(".download-button");
     a && a.addEventListener("click", () => this.downloadCode());
     const r = this.shadowRoot.querySelector(".share-button");
-    r && r.addEventListener("click", (b) => {
-      b.stopPropagation(), this.toggleShareMenu();
+    r && r.addEventListener("click", (h) => {
+      h.stopPropagation(), this.toggleShareMenu();
     });
-    const s = this.shadowRoot.querySelector(".web-share-button");
-    s && s.addEventListener("click", () => {
+    const i = this.shadowRoot.querySelector(".web-share-button");
+    i && i.addEventListener("click", () => {
       this.shareViaWebAPI(), this.toggleShareMenu();
     });
     const l = this.shadowRoot.querySelector(".codepen-button");
@@ -6747,11 +6745,11 @@ class zn extends HTMLElement {
   }
   updateActiveTab() {
     const e = this.shadowRoot.querySelectorAll(".tab"), a = this.codeBlocks;
-    e.forEach((r, s) => {
-      const l = s === this._activeIndex;
+    e.forEach((r, i) => {
+      const l = i === this._activeIndex;
       r.setAttribute("aria-selected", l), r.setAttribute("tabindex", l ? "0" : "-1");
-    }), a.forEach((r, s) => {
-      s === this._activeIndex ? r.classList.add("active") : r.classList.remove("active");
+    }), a.forEach((r, i) => {
+      i === this._activeIndex ? r.classList.add("active") : r.classList.remove("active");
     }), this.dispatchEvent(
       new CustomEvent("tab-change", {
         detail: { index: this._activeIndex, block: a[this._activeIndex] },
@@ -6790,8 +6788,8 @@ class zn extends HTMLElement {
     const a = this.shadowRoot.querySelector(".share-container");
     if (a && !e.composedPath().includes(a)) {
       this._showShareMenu = !1;
-      const r = this.shadowRoot.querySelector(".share-menu"), s = this.shadowRoot.querySelector(".share-button");
-      r && r.classList.remove("open"), s && s.setAttribute("aria-expanded", "false"), document.removeEventListener("click", this._handleOutsideClick);
+      const r = this.shadowRoot.querySelector(".share-menu"), i = this.shadowRoot.querySelector(".share-button");
+      r && r.classList.remove("open"), i && i.setAttribute("aria-expanded", "false"), document.removeEventListener("click", this._handleOutsideClick);
     }
   }
   /**
@@ -6807,7 +6805,7 @@ class zn extends HTMLElement {
   openInCodePen() {
     const e = this.codeBlocks;
     if (e.length === 0) return;
-    let a = "", r = "", s = "", l = "Code Block Group";
+    let a = "", r = "", i = "", l = "Code Block Group";
     e.forEach((C) => {
       const k = C.language, x = C.getCode(), N = C.filename;
       ["html", "markup", "xhtml", "xml", "svg"].includes(k) ? (a && (a += `
@@ -6816,24 +6814,24 @@ class zn extends HTMLElement {
 `), a += x) : k === "css" ? (r && (r += `
 
 `), N && (r += `/* ${N} */
-`), r += x) : ["javascript", "js"].includes(k) && (s && (s += `
+`), r += x) : ["javascript", "js"].includes(k) && (i && (i += `
 
-`), N && (s += `// ${N}
-`), s += x), (!l || l === "Code Block Group") && (l = N || C.label || "Code Block Group");
+`), N && (i += `// ${N}
+`), i += x), (!l || l === "Code Block Group") && (l = N || C.label || "Code Block Group");
     });
-    let b = "";
-    b += a ? "1" : "0", b += r ? "1" : "0", b += s ? "1" : "0";
-    const g = {
+    let h = "";
+    h += a ? "1" : "0", h += r ? "1" : "0", h += i ? "1" : "0";
+    const p = {
       title: l,
       description: "Code shared from code-block-group component",
       html: a,
       css: r,
-      js: s,
-      editors: b
+      js: i,
+      editors: h
     }, f = document.createElement("form");
     f.action = "https://codepen.io/pen/define", f.method = "POST", f.target = "_blank";
     const v = document.createElement("input");
-    v.type = "hidden", v.name = "data", v.value = JSON.stringify(g), f.appendChild(v), document.body.appendChild(f), f.submit(), document.body.removeChild(f);
+    v.type = "hidden", v.name = "data", v.value = JSON.stringify(p), f.appendChild(v), document.body.appendChild(f), f.submit(), document.body.removeChild(f);
   }
   /**
    * Share all blocks' code via Web Share API
@@ -6844,10 +6842,10 @@ class zn extends HTMLElement {
     if (e.length === 0) return;
     let a = "";
     e.forEach((r) => {
-      const s = r.filename || r.label || r.language, l = r.getCode();
+      const i = r.filename || r.label || r.language, l = r.getCode();
       a && (a += `
 
-`), a += `// === ${s} ===
+`), a += `// === ${i} ===
 ${l}`;
     });
     try {

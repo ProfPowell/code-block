@@ -523,17 +523,12 @@ export class CodeBlock extends HTMLElement {
   async copyCode() {
     const rawCode = (this._codeContent || this.textContent).trim()
 
-    // Unescape HTML entities
-    const tempDiv = document.createElement('div')
-    tempDiv.innerHTML = rawCode
-    const unescapedCode = tempDiv.textContent
-
     const button = this.shadowRoot.querySelector('.copy-button')
     const originalText = this.copyText
     const successText = this.copiedText
 
     try {
-      await navigator.clipboard.writeText(unescapedCode)
+      await navigator.clipboard.writeText(rawCode)
       button.textContent = successText
       button.classList.add('copied')
       button.setAttribute('aria-label', 'Code copied to clipboard')

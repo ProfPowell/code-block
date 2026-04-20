@@ -354,6 +354,27 @@ test.describe('code-block - Custom Copy Text', () => {
   })
 })
 
+test.describe('code-block - Copy preserves HTML tags', () => {
+  test('copying HTML code preserves tags in clipboard', async ({ page, context, browserName }) => {
+    test.skip(browserName === 'webkit', 'Clipboard API requires user gesture in WebKit')
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    await page.evaluate(() => {
+      const el = document.querySelector('#textarea-html-block')
+      const btn = el.shadowRoot.querySelector('.copy-button')
+      btn.click()
+    })
+    await page.waitForTimeout(200)
+
+    const clip = await page.evaluate(() => navigator.clipboard.readText())
+    expect(clip).toContain('<div class="container">')
+    expect(clip).toContain('<p>Hello World</p>')
+    expect(clip).toContain('</div>')
+  })
+})
+
 test.describe('code-block - Label', () => {
   test('custom label is displayed', async ({ page }) => {
     await page.goto(TEST_URL)
