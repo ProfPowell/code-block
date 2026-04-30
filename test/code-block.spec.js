@@ -115,6 +115,73 @@ test.describe('code-block - Line Numbers', () => {
     })
     expect(result.lineNumberCount).toBe(result.codeLineCount)
   })
+
+  test('start-line offsets the gutter numbers', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const numbers = await page.evaluate(() => {
+      const el = document.querySelector('#start-line-block')
+      const spans = el?.shadowRoot?.querySelectorAll('.line-numbers span')
+      return Array.from(spans || []).map((s) => s.textContent)
+    })
+    expect(numbers).toEqual(['42', '43', '44', '45', '46', '47', '48'])
+  })
+
+  test('end-line slices the visible content', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const result = await page.evaluate(() => {
+      const el = document.querySelector('#snippet-block')
+      const numbers = Array.from(el?.shadowRoot?.querySelectorAll('.line-numbers span') || []).map(
+        (s) => s.textContent
+      )
+      const lines = Array.from(el?.shadowRoot?.querySelectorAll('.code-line') || []).map((s) =>
+        s.textContent.trim()
+      )
+      return { numbers, lines, code: el.getCode() }
+    })
+    expect(result.numbers).toEqual(['2', '3', '4'])
+    expect(result.lines).toEqual(['const a = 1;', 'const b = 2;', 'const c = 3;'])
+    expect(result.code).toBe('const a = 1;\nconst b = 2;\nconst c = 3;')
+  })
+})
+
+test.describe('code-block - Multi-line spans (regression)', () => {
+  test('JS template literal substitutions stay inside their code-line', async ({ page }) => {
+    await page.goto(TEST_URL)
+    await waitForComponent(page)
+
+    const result = await page.evaluate(() => {
+      const el = document.querySelector('#template-literal-block')
+      const root = el?.shadowRoot
+      const codeLines = Array.from(root?.querySelectorAll('.code-line') || [])
+      const substs = Array.from(root?.querySelectorAll('.hljs-subst') || [])
+      // Every hljs-subst must be a descendant of exactly one .code-line
+      const allInsideOneLine = substs.every((s) => {
+        const ancestor = s.closest('.code-line')
+        return ancestor !== null
+      })
+      // No bare text leaking outside .code-line wrappers inside <code>
+      const codeEl = root?.querySelector('code')
+      const directText = codeEl
+        ? Array.from(codeEl.childNodes)
+            .filter((n) => n.nodeType === 3 && n.textContent.trim().length > 0)
+            .length
+        : -1
+      return {
+        codeLineCount: codeLines.length,
+        substCount: substs.length,
+        allInsideOneLine,
+        directText
+      }
+    })
+    expect(result.codeLineCount).toBe(6)
+    expect(result.substCount).toBeGreaterThanOrEqual(2)
+    expect(result.allInsideOneLine).toBe(true)
+    expect(result.directText).toBe(0)
+  })
 })
 
 test.describe('code-block - Line Highlighting', () => {

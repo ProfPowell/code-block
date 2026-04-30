@@ -63,13 +63,19 @@
             <td><code>start-line</code></td>
             <td>number</td>
             <td><code>1</code></td>
-            <td>Starting line number when <code>show-lines</code> is enabled.</td>
+            <td>The first line number shown in the gutter. Subsequent lines increment from this value (e.g. <code>start-line="42"</code> displays as 42, 43, 44…).</td>
+          </tr>
+          <tr>
+            <td><code>end-line</code></td>
+            <td>number</td>
+            <td>—</td>
+            <td>When set, only the slice from <code>start-line</code> through <code>end-line</code> is rendered. Useful for displaying a specific excerpt of a larger source while preserving its original line numbers.</td>
           </tr>
           <tr>
             <td><code>highlight-lines</code></td>
             <td>string</td>
             <td>—</td>
-            <td>Lines to highlight. Comma-separated list of line numbers or ranges. Example: <code>"1,3-5,8"</code></td>
+            <td>Lines to highlight. Comma-separated list of line numbers or ranges. Example: <code>"1,3-5,8"</code>. Values match the <strong>displayed</strong> (absolute) numbers — with <code>start-line="42"</code>, write <code>highlight-lines="44"</code> to highlight the line that displays as 44.</td>
           </tr>
           <tr>
             <td><code>theme</code></td>

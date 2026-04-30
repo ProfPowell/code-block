@@ -174,6 +174,95 @@ describe('prerenderCodeBlock', () => {
     assert.ok(html.includes('Copy Code'))
     assert.ok(html.includes('copy-text="Copy Code"'))
   })
+
+  it('start-line offsets gutter numbers', () => {
+    const html = prerenderCodeBlock({
+      code: 'a\nb\nc',
+      language: 'plaintext',
+      showLines: true,
+      startLine: 42,
+    })
+    assert.ok(html.includes('start-line="42"'))
+    assert.ok(html.includes('>42</span>'))
+    assert.ok(html.includes('>43</span>'))
+    assert.ok(html.includes('>44</span>'))
+    assert.ok(!html.includes('>1</span>'))
+  })
+
+  it('end-line slices content; gutter shows absolute numbers', () => {
+    const html = prerenderCodeBlock({
+      code: 'a\nb\nc\nd\ne',
+      language: 'plaintext',
+      showLines: true,
+      startLine: 2,
+      endLine: 4,
+    })
+    const codeLines = html.match(/<span class="[^"]*code-line[^"]*">[^<]*<\/span>/g) || []
+    assert.equal(codeLines.length, 3)
+    assert.ok(html.includes('>2</span>'))
+    assert.ok(html.includes('>3</span>'))
+    assert.ok(html.includes('>4</span>'))
+    assert.ok(!html.includes('>1</span>'))
+    assert.ok(!html.includes('>5</span>'))
+    assert.ok(html.includes('end-line="4"'))
+  })
+
+  it('preserves multi-line spans in JS template literals', () => {
+    const code = [
+      'function tpl(name, value) {',
+      '  return `<div class="item">',
+      '    <span>${name}</span>',
+      '    <span>${value}</span>',
+      '  </div>`;',
+      '}',
+    ].join('\n')
+    const html = prerenderCodeBlock({ code, language: 'javascript', showLines: true })
+    // Each .code-line must be balanced — no auto-closed spans leaking across lines.
+    const codeMatch = html.match(
+      /<code class="language-javascript"[^>]*>([\s\S]*?)<\/code>/
+    )
+    assert.ok(codeMatch, 'code element present')
+    const codeInner = codeMatch[1]
+    // Pull out each .code-line wrapper individually using a balanced walker.
+    const wrappers = []
+    let depth = 0
+    let buf = ''
+    let inWrapper = false
+    const re = /<\/?span[^>]*>|[^<]+/g
+    let m
+    while ((m = re.exec(codeInner)) !== null) {
+      const tok = m[0]
+      if (tok.startsWith('<span class="code-line')) {
+        if (depth === 0) {
+          inWrapper = true
+          buf = ''
+          depth = 1
+          continue
+        }
+      }
+      if (!inWrapper) continue
+      if (tok.startsWith('<span')) depth++
+      else if (tok === '</span>') {
+        depth--
+        if (depth === 0) {
+          wrappers.push(buf)
+          inWrapper = false
+          continue
+        }
+      }
+      buf += tok
+    }
+    assert.equal(wrappers.length, 6, 'one wrapper per code line')
+    // Each wrapper must have balanced <span> open/close counts.
+    for (const w of wrappers) {
+      const opens = (w.match(/<span\b/g) || []).length
+      const closes = (w.match(/<\/span>/g) || []).length
+      assert.equal(opens, closes, `balanced spans within line: ${w}`)
+    }
+    // Substitution spans must be present and balanced.
+    const subOpens = (codeInner.match(/<span class="hljs-subst">/g) || []).length
+    assert.ok(subOpens >= 2, 'hljs-subst spans present')
+  })
 })
 
 describe('prerenderCodeBlocksInHtml', () => {

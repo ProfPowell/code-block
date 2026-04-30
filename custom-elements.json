@@ -72,6 +72,16 @@
             },
             {
               "kind": "field",
+              "name": "startLine",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "endLine",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "filename",
               "readonly": true
             },
@@ -207,6 +217,15 @@
             },
             {
               "kind": "method",
+              "name": "_sliceLines",
+              "parameters": [
+                {
+                  "name": "lines"
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "setCode",
               "parameters": [
                 {
@@ -218,7 +237,7 @@
             {
               "kind": "method",
               "name": "getCode",
-              "description": "Get the current code content"
+              "description": "Get the visible code content (respects start-line/end-line slicing)."
             },
             {
               "kind": "method",
@@ -304,6 +323,12 @@
             },
             {
               "name": "show-lines"
+            },
+            {
+              "name": "start-line"
+            },
+            {
+              "name": "end-line"
             },
             {
               "name": "filename"

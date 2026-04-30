@@ -197,5 +197,29 @@ console.log('Hello');</textarea>
 </div></textarea>
   </code-block>
 
+  <!-- Custom start line -->
+  <code-block language="javascript" show-lines start-line="42" id="start-line-block">// line 42
+function handleSubmit(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData);
+  submitToAPI(data);
+}</code-block>
+
+  <!-- Snippet via end-line (slice) -->
+  <code-block language="javascript" show-lines start-line="2" end-line="4" id="snippet-block">const a = 1;
+const b = 2;
+const c = 3;
+const d = 4;
+const e = 5;</code-block>
+
+  <!-- Multi-line template literal (regression for span-aware splitter) -->
+  <code-block language="javascript" show-lines id="template-literal-block">function tpl(name, value) {
+  return `&lt;div class="item"&gt;
+    &lt;span&gt;${name}&lt;/span&gt;
+    &lt;span&gt;${value}&lt;/span&gt;
+  &lt;/div&gt;`;
+}</code-block>
+
 </body>
 </html>

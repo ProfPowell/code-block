@@ -159,6 +159,32 @@ function handleSubmit(event) {
       </code-block>
     </section>
 
+    <!-- SNIPPET WITH END-LINE -->
+    <section class="demo-section">
+      <h2>Snippet with <code>end-line</code></h2>
+      <p class="demo-description">Combine <code>start-line</code> and <code>end-line</code> to render only a slice of a longer source. The gutter shows the absolute line numbers; the copy button copies just the visible slice.</p>
+
+      <h3>Usage</h3>
+      <code-block language="html">&lt;code-block language="javascript" show-lines start-line="10" end-line="13" filename="app.js"&gt;
+function handleSubmit(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData);
+  submitToAPI(data);
+}
+&lt;/code-block&gt;</code-block>
+
+      <h3>Result</h3>
+      <code-block language="javascript" show-lines start-line="10" end-line="13" filename="app.js">
+function handleSubmit(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData);
+  submitToAPI(data);
+}
+      </code-block>
+    </section>
+
     <!-- LINE HIGHLIGHTING -->
     <section class="demo-section" id="line-highlighting">
       <h2>Line Highlighting</h2>

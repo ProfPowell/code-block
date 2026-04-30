@@ -83,6 +83,38 @@ function parseHighlightLines(attr) {
   return lines
 }
 
+/**
+ * Span-aware splitter — mirrors splitHighlightedByLine in src/code-block.js.
+ * Tracks open <span> tags so multi-line constructs (template literals,
+ * triple-quoted strings, multi-line comments) don't orphan child spans
+ * when the result is wrapped per-line.
+ */
+function splitHighlightedByLine(html) {
+  const re = /(<\/?span[^>]*>)|([^<]+)/g
+  const lines = ['']
+  const stack = []
+  let m
+  while ((m = re.exec(html)) !== null) {
+    const tag = m[1]
+    const text = m[2]
+    if (tag) {
+      if (tag.startsWith('</')) stack.pop()
+      else stack.push(tag)
+      lines[lines.length - 1] += tag
+    } else {
+      const parts = text.split('\n')
+      for (let i = 0; i < parts.length; i++) {
+        if (i > 0) {
+          lines[lines.length - 1] += '</span>'.repeat(stack.length)
+          lines.push(stack.join(''))
+        }
+        lines[lines.length - 1] += parts[i]
+      }
+    }
+  }
+  return lines
+}
+
 
 // --- CSS generation (mirrors src/code-block.js getStyles()) ---
 
@@ -588,6 +620,8 @@ const ICON_DOWNLOAD = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor
  * @param {string} [options.filename] - Filename shown in header
  * @param {string} [options.label] - Custom label (defaults to language name)
  * @param {boolean} [options.showLines=false] - Show line numbers
+ * @param {number} [options.startLine=1] - Starting line number (line numbers shown begin here)
+ * @param {number} [options.endLine] - End line number (slices content to [startLine..endLine])
  * @param {string} [options.highlightLines] - Lines to highlight, e.g. "2,4-6"
  * @param {boolean} [options.focusMode=false] - Dim non-highlighted lines
  * @param {boolean} [options.collapsed=false] - Start collapsed
@@ -608,6 +642,8 @@ export function prerenderCodeBlock(options) {
     filename = '',
     label,
     showLines = false,
+    startLine: startLineRaw,
+    endLine: endLineRaw,
     highlightLines: highlightLinesAttr,
     focusMode = false,
     collapsed = false,
@@ -622,11 +658,21 @@ export function prerenderCodeBlock(options) {
 
   const isDark = theme === 'dark'
   const trimmedCode = code.trim()
-  const rawLines = trimmedCode.split('\n')
+  const allRawLines = trimmedCode.split('\n')
   const highlightedLineSet = parseHighlightLines(highlightLinesAttr)
   const isDiff = language === 'diff'
 
+  const startLine =
+    Number.isFinite(startLineRaw) && startLineRaw >= 1 ? Math.floor(startLineRaw) : 1
+  const endLine =
+    Number.isFinite(endLineRaw) && endLineRaw >= startLine ? Math.floor(endLineRaw) : null
+  const count = endLine
+    ? Math.min(allRawLines.length, endLine - startLine + 1)
+    : allRawLines.length
+
   // --- Syntax highlighting ---
+  // Highlight the full source so multi-line constructs keep context; span-
+  // aware split handles spans straddling newlines, then slice for display.
   let highlightedCode
   try {
     if (language && language !== 'plaintext' && language !== 'text' && language !== 'txt') {
@@ -638,11 +684,14 @@ export function prerenderCodeBlock(options) {
     highlightedCode = escapeHtml(trimmedCode)
   }
 
+  const allLines = splitHighlightedByLine(highlightedCode)
+  const lines = allLines.slice(0, count)
+  const rawLines = allRawLines.slice(0, count)
+
   // --- Wrap lines ---
-  const lines = highlightedCode.split('\n')
   const wrappedLines = lines
     .map((line, i) => {
-      const lineNum = i + 1
+      const lineNum = startLine + i
       const classes = ['code-line']
       if (highlightedLineSet.has(lineNum)) classes.push('highlighted')
       if (isDiff) {
@@ -658,7 +707,7 @@ export function prerenderCodeBlock(options) {
   const lineNumbersHtml = showLines
     ? `<div class="line-numbers" aria-hidden="true">${lines
         .map((_, i) => {
-          const lineNum = i + 1
+          const lineNum = startLine + i
           const classes = []
           if (highlightedLineSet.has(lineNum)) classes.push('highlighted')
           if (isDiff) {
@@ -725,6 +774,8 @@ export function prerenderCodeBlock(options) {
   if (filename) attrs.push(`filename="${escapeHtml(filename)}"`)
   if (label) attrs.push(`label="${escapeHtml(label)}"`)
   if (showLines) attrs.push('show-lines')
+  if (startLine !== 1) attrs.push(`start-line="${startLine}"`)
+  if (endLine !== null) attrs.push(`end-line="${endLine}"`)
   if (highlightLinesAttr) attrs.push(`highlight-lines="${escapeHtml(highlightLinesAttr)}"`)
   if (focusMode) attrs.push('focus-mode')
   if (collapsed) attrs.push('collapsed')
@@ -803,6 +854,8 @@ export function prerenderCodeBlocksInHtml(html) {
       filename: getAttr('filename') || '',
       label: getAttr('label') || undefined,
       showLines: hasAttr('show-lines'),
+      startLine: getAttr('start-line') !== null ? parseInt(getAttr('start-line'), 10) : undefined,
+      endLine: getAttr('end-line') !== null ? parseInt(getAttr('end-line'), 10) : undefined,
       highlightLines: getAttr('highlight-lines') || undefined,
       focusMode: hasAttr('focus-mode'),
       collapsed: hasAttr('collapsed'),

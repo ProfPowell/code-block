@@ -46,6 +46,43 @@ hljs.registerLanguage('py', python)
 hljs.registerLanguage('typescript', typescript)
 hljs.registerLanguage('ts', typescript)
 
+/**
+ * Split highlight.js output by newlines while preserving multi-line spans.
+ *
+ * hljs emits <span class="hljs-…"> tags that can straddle '\n' (template
+ * literals, multi-line comments, triple-quoted strings, etc.). A naive
+ * `.split('\n')` per-line wrap produces unbalanced HTML — the browser auto-
+ * closes spans, breaking continuity and orphaning nested children.
+ *
+ * This walks the html, tracks open <span> tags, and on each newline closes
+ * all open spans, splits, and re-opens them on the new line.
+ */
+function splitHighlightedByLine(html) {
+  const re = /(<\/?span[^>]*>)|([^<]+)/g
+  const lines = ['']
+  const stack = []
+  let m
+  while ((m = re.exec(html)) !== null) {
+    const tag = m[1]
+    const text = m[2]
+    if (tag) {
+      if (tag.startsWith('</')) stack.pop()
+      else stack.push(tag)
+      lines[lines.length - 1] += tag
+    } else {
+      const parts = text.split('\n')
+      for (let i = 0; i < parts.length; i++) {
+        if (i > 0) {
+          lines[lines.length - 1] += '</span>'.repeat(stack.length)
+          lines.push(stack.join(''))
+        }
+        lines[lines.length - 1] += parts[i]
+      }
+    }
+  }
+  return lines
+}
+
 // --- Anti-FOUC: hide elements until custom element is defined ---
 if (typeof document !== 'undefined') {
   const _antiFlash = document.createElement('style')
@@ -380,6 +417,8 @@ export class CodeBlock extends HTMLElement {
       'theme',
       'data-page-theme',
       'show-lines',
+      'start-line',
+      'end-line',
       'filename',
       'highlight-lines',
       'collapsed',
@@ -443,6 +482,20 @@ export class CodeBlock extends HTMLElement {
 
   get showLines() {
     return this.hasAttribute('show-lines')
+  }
+
+  get startLine() {
+    const attr = this.getAttribute('start-line')
+    if (attr === null) return 1
+    const n = parseInt(attr, 10)
+    return Number.isFinite(n) && n >= 1 ? n : 1
+  }
+
+  get endLine() {
+    const attr = this.getAttribute('end-line')
+    if (attr === null) return null
+    const n = parseInt(attr, 10)
+    return Number.isFinite(n) && n >= 1 ? n : null
   }
 
   get filename() {
@@ -521,7 +574,7 @@ export class CodeBlock extends HTMLElement {
   }
 
   async copyCode() {
-    const rawCode = (this._codeContent || this.textContent).trim()
+    const rawCode = this.getCode()
 
     const button = this.shadowRoot.querySelector('.copy-button')
     const originalText = this.copyText
@@ -1187,23 +1240,20 @@ export class CodeBlock extends HTMLElement {
    */
   renderPlaceholder() {
     const code = (this._codeContent || this.textContent).trim()
-    const lines = code.split('\n')
-    const escapedCode = this.escapeHtml(code)
+    const allLines = code.split('\n')
+    const startLine = this.startLine
+    const lines = this._sliceLines(allLines)
+    const escapedLines = lines.map((line) => this.escapeHtml(line))
 
     // Simple wrapped lines without highlighting
-    const wrappedLines = escapedCode
-      .split('\n')
-      .map((line) => {
-        return `<span class="code-line">${line || ' '}</span>`
-      })
+    const wrappedLines = escapedLines
+      .map((line) => `<span class="code-line">${line || ' '}</span>`)
       .join('')
 
     // Generate line numbers if enabled
     const lineNumbersHtml = this.showLines
       ? `<div class="line-numbers" aria-hidden="true">${lines
-          .map((_, i) => {
-            return `<span>${i + 1}</span>`
-          })
+          .map((_, i) => `<span>${startLine + i}</span>`)
           .join('')}</div>`
       : ''
 
@@ -1264,11 +1314,19 @@ export class CodeBlock extends HTMLElement {
 
   render() {
     const code = (this._codeContent || this.textContent).trim()
-    const rawLines = code.split('\n')
+    const allRawLines = code.split('\n')
     const highlightedLines = this.highlightLines
     const isDiff = this.language === 'diff'
+    const startLine = this.startLine
+    const endLine = this.endLine
+    const count =
+      endLine && endLine >= startLine
+        ? Math.min(allRawLines.length, endLine - startLine + 1)
+        : allRawLines.length
 
-    // Apply syntax highlighting
+    // Apply syntax highlighting on the full source so multi-line constructs
+    // (template literals, triple-quoted strings) keep their context, then
+    // span-aware split so spans don't break across newlines.
     let highlightedCode
     try {
       if (
@@ -1287,11 +1345,14 @@ export class CodeBlock extends HTMLElement {
       highlightedCode = this.escapeHtml(code)
     }
 
-    // Split into lines and wrap each line for highlighting
-    const lines = highlightedCode.split('\n')
+    // Span-aware split, then slice to the visible range.
+    const allLines = splitHighlightedByLine(highlightedCode)
+    const lines = allLines.slice(0, count)
+    const rawLines = allRawLines.slice(0, count)
+
     const wrappedLines = lines
       .map((line, i) => {
-        const lineNum = i + 1
+        const lineNum = startLine + i
         const isHighlighted = highlightedLines.has(lineNum)
         const classes = ['code-line']
 
@@ -1315,7 +1376,7 @@ export class CodeBlock extends HTMLElement {
     const lineNumbersHtml = this.showLines
       ? `<div class="line-numbers" aria-hidden="true">${lines
           .map((_, i) => {
-            const lineNum = i + 1
+            const lineNum = startLine + i
             const isHighlighted = highlightedLines.has(lineNum)
             const classes = []
 
@@ -1496,6 +1557,14 @@ export class CodeBlock extends HTMLElement {
     return div.innerHTML
   }
 
+  _sliceLines(lines) {
+    const startLine = this.startLine
+    const endLine = this.endLine
+    const count =
+      endLine && endLine >= startLine ? Math.min(lines.length, endLine - startLine + 1) : lines.length
+    return lines.slice(0, count)
+  }
+
   /**
    * Update the code content programmatically
    */
@@ -1505,10 +1574,12 @@ export class CodeBlock extends HTMLElement {
   }
 
   /**
-   * Get the current code content
+   * Get the visible code content (respects start-line/end-line slicing).
    */
   getCode() {
-    return (this._codeContent || this.textContent).trim()
+    const code = (this._codeContent || this.textContent).trim()
+    if (!this.hasAttribute('start-line') && !this.hasAttribute('end-line')) return code
+    return this._sliceLines(code.split('\n')).join('\n')
   }
 
   /**

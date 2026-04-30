@@ -13,7 +13,7 @@ export declare class CodeBlock extends HTMLElement {
   /**
    * List of attributes to observe for changes
    */
-  static readonly observedAttributes: readonly ['language', 'label', 'theme', 'show-lines', 'filename', 'highlight-lines', 'collapsed', 'max-lines', 'max-height', 'wrap', 'copy-text', 'copied-text', 'show-share', 'show-download', 'lazy', 'focus-mode', 'src'];
+  static readonly observedAttributes: readonly ['language', 'label', 'theme', 'show-lines', 'start-line', 'end-line', 'filename', 'highlight-lines', 'collapsed', 'max-lines', 'max-height', 'wrap', 'copy-text', 'copied-text', 'show-share', 'show-download', 'lazy', 'focus-mode', 'src'];
 
   /**
    * Called when an observed attribute changes
@@ -50,6 +50,21 @@ export declare class CodeBlock extends HTMLElement {
    * @default false
    */
   readonly showLines: boolean;
+
+  /**
+   * Starting line number when `show-lines` is enabled.
+   * Set via the `start-line` attribute. Useful for displaying snippets
+   * from a larger source where the original line numbers matter.
+   * @default 1
+   */
+  readonly startLine: number;
+
+  /**
+   * End line number — when set, only lines [startLine..endLine] of the
+   * source are rendered. Line numbers in the gutter remain absolute.
+   * Set via the `end-line` attribute.
+   */
+  readonly endLine: number | null;
 
   /**
    * The filename displayed in the header (optional)
@@ -424,6 +439,8 @@ declare global {
           label?: string;
           theme?: 'light' | 'dark';
           'show-lines'?: boolean;
+          'start-line'?: number | string;
+          'end-line'?: number | string;
           filename?: string;
           'highlight-lines'?: string;
           collapsed?: boolean;
