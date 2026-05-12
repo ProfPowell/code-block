@@ -1,4 +1,7 @@
-- **v2.8.0** (Current)
+- **v2.9.0** (Current)
+	- Register additional `highlight.js` language modules: `markdown` / `md`, plus `nunjucks` / `njk` / `jinja` / `jinja2` aliased to `twig` (the closest grammar in the jinja family that hljs ships) and `astro` aliased to `xml` (Astro is HTML-flavored; no dedicated grammar exists). Eliminates "Could not find the language X" warnings from the SSR pre-render path for consumers using these languages.
+
+- **v2.8.0**
 	- Implement `start-line` attribute (was previously documented but a no-op): the gutter now begins numbering from the supplied value
 	- Add `end-line` attribute for rendering a slice of a longer source while preserving its absolute line numbers; copy/download return only the visible slice
 	- Fix multi-line span breakage in highlighted output — JS template literals, multi-line comments, and triple-quoted strings now keep their `hljs-*` spans (and any nested children like `hljs-subst`) properly contained within each `.code-line` wrapper

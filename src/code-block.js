@@ -17,6 +17,8 @@ import diff from 'highlight.js/lib/languages/diff'
 import bash from 'highlight.js/lib/languages/bash'
 import python from 'highlight.js/lib/languages/python'
 import typescript from 'highlight.js/lib/languages/typescript'
+import markdown from 'highlight.js/lib/languages/markdown'
+import twig from 'highlight.js/lib/languages/twig'
 
 // Register languages
 hljs.registerLanguage('javascript', javascript)
@@ -45,6 +47,19 @@ hljs.registerLanguage('python', python)
 hljs.registerLanguage('py', python)
 hljs.registerLanguage('typescript', typescript)
 hljs.registerLanguage('ts', typescript)
+hljs.registerLanguage('markdown', markdown)
+hljs.registerLanguage('md', markdown)
+/* No dedicated hljs grammar exists for Astro (HTML + JSX-like expressions
+   + --- frontmatter), so fall back to xml. Tag/attribute highlighting
+   works; frontmatter and ${expr} interpolation will read as plain. */
+hljs.registerLanguage('astro', xml)
+/* Nunjucks isn't shipped by highlight.js; twig is the closest cousin in
+   the jinja family (same {% %}, {{ }}, |filter syntax). Close enough for
+   doc-site code samples. */
+hljs.registerLanguage('nunjucks', twig)
+hljs.registerLanguage('njk', twig)
+hljs.registerLanguage('jinja', twig)
+hljs.registerLanguage('jinja2', twig)
 
 /**
  * Split highlight.js output by newlines while preserving multi-line spans.
