@@ -1,0 +1,57 @@
+/*
+ * Pre-upgrade styles for <code-block> and <code-block-group>.
+ *
+ * Load this in <head>, before the component script. It has to come from the
+ * page: by the time the component's own script runs, the elements are about to
+ * be defined and nothing has been painted, so JavaScript cannot style this
+ * moment. The code stays visible, so the page still works if the script is slow
+ * or fails to load.
+ *
+ * Values mirror the component's own :host and code styles, including its
+ * --cb-* tokens, to keep the shift at upgrade small. Server-rendered blocks
+ * ([data-ssr]) are skipped: they already have styles in their shadow root, and
+ * page rules would override :host.
+ */
+code-block:not(:defined):not([data-ssr]) {
+  display: block;
+  box-sizing: border-box;
+  margin: var(--cb-margin, 1rem 0);
+  padding: var(--cb-code-padding, 1rem);
+  /* Room for the header bar, so the block keeps its height at upgrade. */
+  padding-block-start: calc(var(--cb-code-padding, 1rem) + 2.625rem);
+  overflow-x: auto;
+  white-space: pre;
+  font-family: var(--cb-font-family, 'Consolas', 'Monaco', 'Courier New', monospace);
+  font-size: var(--cb-font-size, 0.875rem);
+  line-height: var(--cb-line-height, 1.6);
+  color: var(--cb-text-color, var(--color-text, inherit));
+  background: var(--cb-code-bg, var(--color-surface, transparent));
+  border: 1px solid var(--cb-border-color, var(--color-border, color-mix(in srgb, currentColor 20%, transparent)));
+  border-radius: var(--cb-border-radius, 8px);
+}
+
+/* The whitespace around a <textarea> content source is markup, not code. */
+code-block:not(:defined):not([data-ssr]):has(> textarea) {
+  white-space: normal;
+}
+
+code-block:not(:defined):not([data-ssr]) > textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  field-sizing: content;
+  padding: 0;
+  overflow-x: auto;
+  white-space: pre;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  resize: none;
+}
+
+/* Tabs need the script, so until then each block shows in turn. */
+code-block-group:not(:defined) {
+  display: block;
+}

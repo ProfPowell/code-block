@@ -228,6 +228,7 @@ The component exposes 60+ CSS custom properties for full theme control. Properti
 | `--cb-button-font-size` | `0.75rem` | Copy button font size |
 | `--cb-button-hover-bg` | theme-aware | Copy button hover background |
 | `--cb-button-hover-border` | theme-aware | Copy button hover border color |
+| `--cb-button-hover-color` | `--cb-button-color` | Copy button hover text color |
 | `--cb-action-button-hover-bg` | theme-aware | Icon button hover background |
 | `--cb-success-color` | `#238636` | Copied-success state color |
 | `--cb-error-color` | `#da3633` | Copy-failed state color |
@@ -288,6 +289,27 @@ const code = codeBlock.getCode();
 const languages = CodeBlock.getSupportedLanguages();
 console.log(`Supports ${languages.length} languages`);
 ```
+
+## Before the Script Loads
+
+Module scripts don't block rendering, so a page can paint before `<code-block>` is defined. Without styles, the code then shows as a line of inline text and jumps when the component upgrades. The component's script can't prevent this, because nothing can paint between it starting and it defining the element.
+
+Load the pre-upgrade stylesheet in `<head>` instead:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@profpowell/code-block/code-block.css">
+```
+
+With a bundler, import `@profpowell/code-block/code-block.css`. For the fastest first paint, inline the file's contents in a `<style>` element.
+
+The code stays visible and readable, so the page still works if the script is slow or fails to load. The stylesheet uses the same `--cb-*` properties as the component. Some differences remain until upgrade:
+
+- Space is reserved for the header, but the header itself, line numbers and syntax colors appear only after upgrade.
+- Whitespace shows exactly as written. Starting the code straight after the opening tag avoids a blank first line, which would also shift the block at upgrade.
+- Blocks in a `<code-block-group>` are stacked until the tabs appear, so groups get shorter at upgrade.
+- `<textarea>` content is editable until upgrade.
+
+Server-rendered blocks (`data-ssr`) already paint fully styled and don't need this stylesheet, and it leaves them alone. For those pages, it only matters for any blocks that aren't pre-rendered.
 
 ## Server-Side Rendering (SSR)
 

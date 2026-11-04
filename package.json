@@ -1,6 +1,6 @@
 {
   "name": "@profpowell/code-block",
-  "version": "2.9.0",
+  "version": "2.10.0",
   "description": "A code block web component with syntax highlighting (via highlight.js), copy functionality, line numbers, and theme support",
   "type": "module",
   "main": "dist/code-block.js",
@@ -15,7 +15,8 @@
     "./ssr": {
       "import": "./ssr/index.js",
       "default": "./ssr/index.js"
-    }
+    },
+    "./code-block.css": "./code-block.css"
   },
   "publishConfig" : { 
      "access": "public"
@@ -23,6 +24,7 @@
   "files": [
     "dist",
     "ssr",
+    "code-block.css",
     "code-block.d.ts",
     "custom-elements.json",
     "README.md",
@@ -64,7 +66,7 @@
   },
   "homepage": "https://profpowell.github.io/code-block/",
   "dependencies": {
-    "highlight.js": "^11.11.1"
+    "highlight.js": "^11.12.0"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",

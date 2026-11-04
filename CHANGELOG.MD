@@ -1,4 +1,11 @@
-- **v2.9.0** (Current)
+- **v2.10.0** (Current)
+	- Add `code-block.css`, an importable pre-upgrade stylesheet (`@profpowell/code-block/code-block.css`) that keeps code readable before the script loads or if it fails
+	- Remove the script-injected anti-flash rule, which could never take effect: it was only active within a single script run, when the browser cannot paint
+	- Honor `data-mode` on any ancestor, not just `<html>`, including changes after render. Fixes light line highlights and diff colors inside a dark region (and the reverse) with Vanilla Breeze scoped modes
+	- Add `--cb-button-hover-color` for copy button hover text. Vanilla Breeze's token bridge already set it, but nothing read it
+	- Update highlight.js to 11.12.0 and dev dependencies
+
+- **v2.9.0**
 	- Register additional `highlight.js` language modules: `markdown` / `md`, plus `nunjucks` / `njk` / `jinja` / `jinja2` aliased to `twig` (the closest grammar in the jinja family that hljs ships) and `astro` aliased to `xml` (Astro is HTML-flavored; no dedicated grammar exists). Eliminates "Could not find the language X" warnings from the SSR pre-render path for consumers using these languages.
 
 - **v2.8.0**

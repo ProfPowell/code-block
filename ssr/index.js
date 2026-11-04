@@ -213,6 +213,7 @@ function getStyles(isDark) {
       .copy-button:hover {
         background: var(--cb-button-hover-bg, ${isDark ? '#30363d' : '#f3f4f6'});
         border-color: var(--cb-button-hover-border, ${isDark ? '#8b949e' : '#959da5'});
+        color: var(--cb-button-hover-color, var(--cb-button-color, var(--_cb-button-color)));
       }
 
       .copy-button:focus {

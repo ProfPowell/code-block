@@ -98,17 +98,10 @@ function splitHighlightedByLine(html) {
   return lines
 }
 
-// --- Anti-FOUC: hide elements until custom element is defined ---
-if (typeof document !== 'undefined') {
-  const _antiFlash = document.createElement('style')
-  _antiFlash.textContent =
-    'code-block:not(:defined),code-block-group:not(:defined){display:block;opacity:0}'
-  document.head.appendChild(_antiFlash)
-}
-
 // --- Page-level dark mode observer (shared singleton) ---
 const _registeredInstances = new Set()
 let _pageObserver = null
+let _regionObserver = null
 let _currentPageDark = null
 
 function _detectPageDarkMode() {
@@ -135,6 +128,18 @@ function _detectPageDarkMode() {
   return null
 }
 
+// A data-mode on an element below <html> themes that region (Vanilla Breeze
+// re-derives its colour tokens there), so it outranks the page-level state.
+function _resolveMode(element, pageDark) {
+  const region = element.closest('[data-mode]')
+  if (region && region !== document.documentElement) {
+    const mode = region.getAttribute('data-mode')
+    if (mode === 'dark') return true
+    if (mode === 'light') return false
+  }
+  return pageDark
+}
+
 function _notifyInstances() {
   const newState = _detectPageDarkMode()
   if (newState === _currentPageDark) return
@@ -159,12 +164,26 @@ function _startObserving() {
   if (document.body) {
     _pageObserver.observe(document.body, observeOptions)
   }
+
+  // Separate because subtree must apply to data-mode only, not class or style.
+  _regionObserver = new MutationObserver(() => {
+    for (const instance of _registeredInstances) {
+      instance._onPageModeChange(_currentPageDark)
+    }
+  })
+  _regionObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-mode'],
+    subtree: true,
+  })
 }
 
 function _stopObserving() {
   if (_pageObserver) {
     _pageObserver.disconnect()
     _pageObserver = null
+    _regionObserver.disconnect()
+    _regionObserver = null
   }
 }
 
@@ -474,6 +493,7 @@ export class CodeBlock extends HTMLElement {
       this.removeAttribute('data-page-theme')
       return
     }
+    isDark = _resolveMode(this, isDark)
     if (isDark === true) {
       this.setAttribute('data-page-theme', 'dark')
     } else if (isDark === false) {
@@ -843,6 +863,7 @@ export class CodeBlock extends HTMLElement {
       .copy-button:hover {
         background: var(--cb-button-hover-bg, ${isDark ? '#30363d' : '#f3f4f6'});
         border-color: var(--cb-button-hover-border, ${isDark ? '#8b949e' : '#959da5'});
+        color: var(--cb-button-hover-color, var(--cb-button-color, var(--_cb-button-color)));
       }
 
       .copy-button:focus {
@@ -1658,6 +1679,7 @@ class CodeBlockGroup extends HTMLElement {
       this.removeAttribute('data-page-theme')
       return
     }
+    isDark = _resolveMode(this, isDark)
     if (isDark === true) {
       this.setAttribute('data-page-theme', 'dark')
     } else if (isDark === false) {
